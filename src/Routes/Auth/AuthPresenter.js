@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import styled from 'styled-components';
-import Input from '../Components/Input';
-import Button from '../Components/Button';
-import useInput from '../Hooks/useInput';
+import React from "react";
+import { Helmet } from "react-helmet";
+import styled from "styled-components";
+import Input from "../../Components/Input";
+import Button from "../../Components/Button";
 
 const Wrapper = styled.div`
   min-height: 80vh;
@@ -48,33 +47,55 @@ const Form = styled(Box)`
   }
 `;
 
-export default () => {
-  
-  const [action, setAction] = useState("logIn");
-  const username = useInput("");
-  const password = useInput("");
-  const name = useInput("");
-  const email = useInput("");
-
-  return (
-    <Wrapper>
-      <Form>
-        {action === "logIn" ? (
-          <form>
-            <Input placeholder={"Username"} {...username} />
-            <Input placeholder={"Password"} {...password} />
+export default ({
+  action,
+  username,
+  name,
+  email,
+  setAction,
+  secret,
+  onSubmit
+}) => (
+  <Wrapper>
+    <Form>
+      {action === "logIn" && (
+        <>
+          <Helmet>
+            <title>Log In | InstaPost</title>
+          </Helmet>
+          <form onSubmit={onSubmit}>
+            <Input placeholder={"Email"} {...email} type="email" />
             <Button text={"Log in"} />
           </form>
-        ) : (
-          <form>
+        </>
+      )}
+      {action === "signUp" && (
+        <>
+          <Helmet>
+            <title>Sign Up | InstaPost</title>
+          </Helmet>
+          <form onSubmit={onSubmit}>
             <Input placeholder={"Email"} {...email} type="email" />
             <Input placeholder={"Full Name"} {...name} />
             <Input placeholder={"Username"} {...username} />
-            <Input placeholder={"Password"} {...password} />
             <Button text={"Sign up"} />
           </form>
-        )}
-      </Form>
+        </>
+      )}
+      {action === "confirm" && (
+        <>
+          <Helmet>
+            <title>Confirm login | InstaPost</title>
+          </Helmet>
+          <form onSubmit={onSubmit}>
+            <Input placeholder="Paste your passcode" required {...secret} />
+            <Button text={"Confirm"} />
+          </form>
+        </>
+      )}
+    </Form>
+
+    {action !== "confirm" && (
       <StateChanger>
         {action === "logIn" ? (
           <>
@@ -88,6 +109,6 @@ export default () => {
           </>
         )}
       </StateChanger>
-    </Wrapper>
-  );
-}
+    )}
+  </Wrapper>
+);
