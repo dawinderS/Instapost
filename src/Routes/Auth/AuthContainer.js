@@ -79,7 +79,7 @@ export default () => {
             setTimeout(() => setAction("logIn"), 2500);
           }
         } catch (e) {
-          toast.error(e.message + 'lol');
+          toast.error(e.message.split(' ').slice(2).join(' '));
         }
       } else {
         toast.error("Email and username fields are required.");
