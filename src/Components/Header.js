@@ -63,8 +63,21 @@ const HeaderLink = styled(Link)`
   }
 `;
 
-export default () => {
+const ME = gql`
+  {
+    me {
+      username
+    }
+  }
+`;
+
+export default withRouter(({ history }) => {
   const search = useInput("");
+  const { data } = useQuery(ME);
+  const onSearchSubmit = e => {
+    e.preventDefault();
+    history.push(`/search?term=${search.value}`);
+  };
   return (
     <Header>
       <HeaderWrapper>
@@ -74,7 +87,7 @@ export default () => {
           </Link>
         </HeaderColumn>
         <HeaderColumn>
-          <form>
+          <form onSubmit={onSearchSubmit}>
             <SearchInput {...search} placeholder="Search" />
           </form>
         </HeaderColumn>
@@ -88,11 +101,17 @@ export default () => {
           <HeaderLink to="/notifications">
             <HeartEmpty />
           </HeaderLink>
-          <HeaderLink to="/username">
-            <User />
-          </HeaderLink>
+          {data === undefined || !data.me ? (
+            <HeaderLink to="/#">
+              <User />
+            </HeaderLink>
+          ) : (
+            <HeaderLink to={data.me.username}>
+              <User />
+            </HeaderLink>
+          )}
         </HeaderColumn>
       </HeaderWrapper>
     </Header>
   );
-};
+});
