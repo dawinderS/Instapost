@@ -61,7 +61,7 @@ export default ({
       {action === "logIn" && (
         <>
           <Helmet>
-            <title>Log In | InstaPost</title>
+            <title>Log In | Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder={"Email"} {...email} type="email" />
@@ -72,7 +72,7 @@ export default ({
       {action === "signUp" && (
         <>
           <Helmet>
-            <title>Sign Up | InstaPost</title>
+            <title>Sign Up | Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder={"Email"} {...email} type="email" />
@@ -85,7 +85,7 @@ export default ({
       {action === "confirm" && (
         <>
           <Helmet>
-            <title>Confirm login | InstaPost</title>
+            <title>Confirm login | Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <Input placeholder="Paste your passcode" required {...secret} />
