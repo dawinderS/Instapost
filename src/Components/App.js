@@ -9,6 +9,7 @@ import GlobalStyles from '../Styles/GlobalStyles';
 import Theme from '../Styles/Theme';
 import Routes from './Routes';
 import Footer from './Footer';
+import Header from './Header';
 
 const QUERY = gql`
   {
@@ -28,12 +29,19 @@ export default () => {
 
   return (
     <ThemeProvider theme={Theme}>
-      <Wrapper>
+      <>
         <GlobalStyles />
-        <Routes isLoggedIn={isLoggedIn} />
-        <Footer />
+        <Router>
+          <>
+            {isLoggedIn && <Header />}
+            <Wrapper>
+              <Routes isLoggedIn={isLoggedIn} />
+              <Footer />
+            </Wrapper>
+          </>
+        </Router>
         <ToastContainer position={toast.POSITION.TOP_CENTER} />
-      </Wrapper>
+      </>
     </ThemeProvider>
   );
 };
