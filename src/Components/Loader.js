@@ -7,7 +7,7 @@ const Animation = keyframes`
         opacity:0
     }
     50%{
-        opacity:1
+        opacity:0.5
     }
     100%{
         opacity:0;
@@ -16,10 +16,11 @@ const Animation = keyframes`
 
 const Loader = styled.div`
   animation: ${Animation} 1s linear infinite;
+  padding-top: 100px;
 `;
 
 export default () => (
   <Loader>
-    <Logo size={36} />
+    <Logo size={50} />
   </Loader>
 );

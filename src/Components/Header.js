@@ -7,7 +7,6 @@ import useInput from "../Hooks/useInput";
 import { Home, Compass, HeartEmpty, User, Logo } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 
-
 const Header = styled.header`
   width: 100%;
   border: 0;
@@ -20,7 +19,7 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 25px 0px;
+  padding: 13px 0px;
   z-index: 2;
 `;
 
@@ -29,6 +28,7 @@ const HeaderWrapper = styled.div`
   max-width: ${(props) => props.theme.maxWidth};
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 const HeaderColumn = styled.div`
@@ -100,7 +100,7 @@ export default withRouter(({ history }) => {
             <Compass />
           </HeaderLink>
           <HeaderLink to="/notifications">
-            <HeartEmpty />
+            <HeartEmpty size={22} />
           </HeaderLink>
           {data === undefined || !data.me ? (
             <HeaderLink to="/#">
