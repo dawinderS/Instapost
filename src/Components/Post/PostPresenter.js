@@ -14,7 +14,7 @@ const Post = styled.div`
 `;
 
 const Header = styled.header`
-  padding: 16px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
 `;
