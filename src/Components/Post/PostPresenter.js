@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-autosize-textarea";
+import moment from "moment";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
 import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
@@ -74,12 +75,14 @@ const Buttons = styled.div`
 const Timestamp = styled.span`
   font-weight: 400;
   text-transform: uppercase;
-  opacity: 0.5;
+  letter-spacing: 0.2px;
   display: block;
-  font-size: 11px;
+  color: rgba(var(--f52, 142, 142, 142), 1);
+  font-size: 10px;
   margin: 10px 0px;
-  padding-bottom: 10px;
-  border-bottom: ${(props) => props.theme.lightGreyColor} 1px solid;
+  padding-bottom: 11px;
+  padding-top: 3px;
+  border-bottom: rgba(var(--ce3, 239, 239, 239), 1) 1px solid;
 `;
 
 const Textarea = styled(TextareaAutosize)`
@@ -91,6 +94,7 @@ const Textarea = styled(TextareaAutosize)`
   &:focus {
     outline: none;
   }
+  padding: 6px 0px 2px 0px;
 `;
 
 const Comments = styled.ul`
@@ -168,7 +172,7 @@ export default ({
           ))}
         </Comments>
       )}
-      <Timestamp>{createdAt}</Timestamp>
+      <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
       <Textarea
         onKeyPress={onKeyPress}
         placeholder={"Add a comment..."}

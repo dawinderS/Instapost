@@ -36,10 +36,33 @@ export default () => {
     },
   });
 
+  const [confirmDemoMutation] = useMutation(CONFIRM_SECRET, {
+    variables: {
+      email: "demo@gmail.com",
+      secret: "demo",
+    },
+  });
+
   const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
   const clearErrors = () => {
     document.querySelector("input").value = "";
+  };
+
+  const onDemo = async e => {
+    e.preventDefault();
+    try {
+      const {
+        data: { confirmSecret: token },
+      } = await confirmDemoMutation();
+      if (token !== "" && token !== undefined) {
+        localLogInMutation({ variables: { token } });
+      } else {
+        throw Error();
+      }
+    } catch {
+      toast.error("Cannot confirm passcode, please try again");
+    }
   };
 
   const onSubmit = async e => {
@@ -112,6 +135,7 @@ export default () => {
       email={email}
       secret={secret}
       onSubmit={onSubmit}
+      onDemo={onDemo}
     />
   );
 };

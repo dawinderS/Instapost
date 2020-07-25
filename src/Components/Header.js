@@ -4,8 +4,9 @@ import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
 import { Home, Compass, HeartEmpty, User, Logo } from "./Icons";
-import { useQuery } from "react-apollo-hooks";
-import { ME } from "../SharedQueries";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import { ME, LOG_OUT } from "../SharedQueries";
+import Avatar from "./Avatar";
 
 const Header = styled.header`
   width: 100%;
@@ -19,7 +20,7 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 13px 0px;
+  padding: 12px 0px;
   z-index: 2;
 `;
 
@@ -42,6 +43,7 @@ const HeaderColumn = styled.div`
     margin-left: auto;
     text-align: right;
   }
+  padding-top: 2px;
 `;
 
 const SearchInput = styled(Input)`
@@ -62,6 +64,10 @@ const HeaderLink = styled(Link)`
   &:not(:last-child) {
     margin-right: 30px;
   }
+  img {
+    border-radius: 50%;
+    border: 1px solid grey;
+  }
 `;
 
 export default withRouter(({ history }) => {
@@ -71,6 +77,9 @@ export default withRouter(({ history }) => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
   };
+
+  const [logOut] = useMutation(LOG_OUT);
+
   return (
     <Header>
       <HeaderWrapper>
@@ -104,10 +113,11 @@ export default withRouter(({ history }) => {
             </HeaderLink>
           ) : (
             <HeaderLink to={data.me.username}>
-              <User />
+              <img src={data.me.avatar} width="23" height="23"/>
             </HeaderLink>
           )}
         </HeaderColumn>
+        {/* <div onClick={logOut}>log out</div> */}
       </HeaderWrapper>
     </Header>
   );

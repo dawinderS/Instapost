@@ -54,7 +54,8 @@ export default ({
   email,
   setAction,
   secret,
-  onSubmit
+  onSubmit,
+  onDemo
 }) => (
   <Wrapper>
     <Form>
@@ -67,6 +68,7 @@ export default ({
             <Input placeholder={"Email"} {...email} type="email" />
             <Button text={"Log in"} />
           </form>
+          <Button onClick={onDemo} text={"Demo log in"} />
         </>
       )}
       {action === "signUp" && (
