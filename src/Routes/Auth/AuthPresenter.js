@@ -3,9 +3,11 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
+import { DemoUser } from "../../Components/Icons";
+
 
 const Wrapper = styled.div`
-  min-height: 80vh;
+  min-height: 76vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,20 +23,23 @@ const Box = styled.div`
 
 const StateChanger = styled(Box)`
   text-align: center;
-  padding: 20px 0px;
+  padding: 23px 0px;
+  height: 63px;
 `;
 
 const Link = styled.span`
   color: ${(props) => props.theme.blueColor};
   cursor: pointer;
+  font-weight: 500;
 `;
 
 const Form = styled(Box)`
-  padding: 40px;
+  padding: 30px 40px;
   padding-bottom: 30px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   form {
     width: 100%;
+    max-height: 455px;
     input {
       width: 100%;
       &:not(:last-child) {
@@ -42,8 +47,70 @@ const Form = styled(Box)`
       }
     }
     button {
-      margin-top: 10px;
+      margin-top: 8px;
+      margin-bottom: 10px;
     }
+    img {
+      margin: 0px 0px 12px 40px;
+    }
+    p {
+      color: #8e8e8e;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+      margin: 10px 0px;
+      span {
+        font-weight: 600;
+      }
+    }
+  }
+`;
+
+const Text = styled.div`
+  color: #8e8e8e;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+`;
+
+const Or = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  div {
+    color: #8e8e8e;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 15px;
+  }
+  margin-top: 10px;
+  margin-bottom: 26px;
+`;
+
+const OrLine = styled.div`
+  height: 1px;
+  background-color: #dbdbdb;
+  width: 40%;
+`;
+
+const DemoLog = styled.div`
+  cursor: pointer;
+  font-size: 15px;
+  width: 100%;
+  color: #385185;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align items: center;
+  div {
+    height: 20px;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
   }
 `;
 
@@ -62,34 +129,48 @@ export default ({
       {action === "logIn" && (
         <>
           <Helmet>
-            <title>Log In | Instapost</title>
+              <title>Login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <Input placeholder={"Email"} {...email} type="email" />
-            <Button text={"Log in"} />
+            <img src="instalogo.png" width="180" />
+            <Text>Enter your username or email to receive your passcode.</Text>
+            <Input placeholder={"Username or email"} {...email} />
+            <Button text={"Log In"} />
           </form>
-          <Button onClick={onDemo} text={"Demo log in"} />
+          <Or>
+            <OrLine></OrLine>
+            <div>OR</div>
+            <OrLine></OrLine>
+          </Or>
+          <DemoLog onClick={onDemo}>
+            <DemoUser />
+            <div>Log in as Demo User</div>
+          </DemoLog>
         </>
       )}
       {action === "signUp" && (
         <>
           <Helmet>
-            <title>Sign Up | Instapost</title>
+              <title>Sign up • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
+            <img src="instalogo.png" width="180" />
+            <Text>Sign up to see photos and videos from your friends.</Text>
             <Input placeholder={"Email"} {...email} type="email" />
             <Input placeholder={"Full Name"} {...name} />
             <Input placeholder={"Username"} {...username} />
             <Button text={"Sign up"} />
+              <p>By signing up, you agree to contact me for <span>future job opportunities</span> :)</p>
           </form>
         </>
       )}
       {action === "confirm" && (
         <>
           <Helmet>
-            <title>Confirm login | Instapost</title>
+            <title>Confirm login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
+            <img src="instalogo.png" width="180" />
             <Input placeholder="Paste your passcode" required {...secret} />
             <Button text={"Confirm"} />
           </form>

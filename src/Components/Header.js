@@ -109,7 +109,7 @@ export default withRouter(({ history }) => {
           </HeaderLink>
           {data === undefined || !data.me ? (
             <HeaderLink to="/#">
-              <User />
+              <img src="profilePic.jpg" width="23" height="23" />
             </HeaderLink>
           ) : (
             <HeaderLink to={data.me.username}>

@@ -67,7 +67,8 @@ export default () => {
             comments={post.comments}
             createdAt={post.createdAt}
           />
-        ))}
+        ))
+      }
     </Wrapper>
   );
 };

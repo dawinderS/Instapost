@@ -5,12 +5,12 @@ export default {
   maxWidth: "935px",
   bgColor: "#FAFAFA",
   blackColor: "#262626",
-  darkGreyColor: "#999",
+  darkGreyColor: "#8e8e8e",
   lightGreyColor: "#c7c7c7",
   redColor: "#ED4956",
-  blueColor: "#3897f6",
+  blueColor: "#0095f6",
   darkBlueColor: "#003569",
-  boxBorder: "1px solid #e6e6e6",
+  boxBorder: "1px solid rgba(var(--ca6,219,219,219),1)",
   borderRadius: "4px",
   whiteBox: `border:${BOX_BORDER};
              border-radius:${BORDER_RADIUS};

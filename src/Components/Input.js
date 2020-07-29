@@ -7,9 +7,10 @@ const Container = styled.input`
   border: ${(props) => props.theme.boxBorder};
   border-radius: ${(props) => props.theme.borderRadius};
   background-color: ${(props) => props.theme.bgColor};
-  height: 35px;
-  font-size: 12px;
-  padding: 0px 15px;
+  height: 37px;
+  font-size: 13px;
+  padding: 0px 23px 0px 8px;
+  line-height: 18px;
 `;
 
 const Input = ({

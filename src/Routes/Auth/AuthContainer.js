@@ -46,7 +46,10 @@ export default () => {
   const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
   const clearErrors = () => {
-    document.querySelector("input").value = "";
+    const allInputs = document.querySelectorAll("input");
+    for (let i = 0; i < allInputs.length; i++) {
+      allInputs[i].value = "";
+    }
   };
 
   const onDemo = async e => {
@@ -61,7 +64,7 @@ export default () => {
         throw Error();
       }
     } catch {
-      toast.error("Cannot confirm passcode, please try again");
+      toast.error("Demo login is down, please log in with your own credentials.");
     }
   };
 
@@ -73,8 +76,10 @@ export default () => {
           const {
             data: { requestSecret }
           } = await requestSecretMutation();
-          if (!requestSecret) {
+          if (!requestSecret && email.value.includes('@')) {
             toast.error("The email you entered doesn't belong to an account. Please check your email and try again.");
+          } else if (!requestSecret) {
+            toast.error("The username you entered doesn't belong to an account. Please check your username and try again.");
           } else {
             toast.success("Check your inbox for your login passcode.");
             setAction("confirm");
