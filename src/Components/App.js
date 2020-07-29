@@ -21,6 +21,9 @@ const Wrapper = styled.div`
   margin: 0 auto;
   max-width: ${(props) => props.theme.maxWidth};
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 85vh;
 `;
 
 export default () => {

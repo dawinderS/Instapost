@@ -60,6 +60,7 @@ export default () => {
       } = await confirmDemoMutation();
       if (token !== "" && token !== undefined) {
         localLogInMutation({ variables: { token } });
+        window.location = "/";
       } else {
         throw Error();
       }
@@ -120,11 +121,12 @@ export default () => {
           } = await confirmSecretMutation();
           if (token !== "" && token !== undefined) {
             localLogInMutation({ variables: { token } });
+            window.location = "/";
           } else {
             throw Error();
           }
         } catch {
-          toast.error("Cannot confirm passcode, please try again");
+          toast.error("Incorrect passcode, please try again.");
         }
       }
     }

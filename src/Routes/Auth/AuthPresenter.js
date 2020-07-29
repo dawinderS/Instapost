@@ -51,7 +51,7 @@ const Form = styled(Box)`
       margin-bottom: 10px;
     }
     img {
-      margin: 0px 0px 12px 40px;
+      margin: 0px 0px 12px 43px;
     }
     p {
       color: #8e8e8e;
@@ -132,7 +132,7 @@ export default ({
               <title>Login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" />
+            <img src="instalogo.png" width="180" alt="instalogo" />
             <Text>Enter your username or email to receive your passcode.</Text>
             <Input placeholder={"Username or email"} {...email} />
             <Button text={"Log In"} />
@@ -154,7 +154,7 @@ export default ({
               <title>Sign up • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" />
+            <img src="instalogo.png" width="180" alt="instalogo" />
             <Text>Sign up to see photos and videos from your friends.</Text>
             <Input placeholder={"Email"} {...email} type="email" />
             <Input placeholder={"Full Name"} {...name} />
@@ -170,9 +170,10 @@ export default ({
             <title>Confirm login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" />
+            <img src="instalogo.png" width="180" alt="instalogo"/>
+            <Text>Please enter the passcode we have emailed you.</Text>
             <Input placeholder="Paste your passcode" required {...secret} />
-            <Button text={"Confirm"} />
+            <Button text={"Confirm to log in"} />
           </form>
         </>
       )}
