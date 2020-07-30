@@ -5,7 +5,6 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { DemoUser } from "../../Components/Icons";
 
-
 const Wrapper = styled.div`
   min-height: 76vh;
   display: flex;

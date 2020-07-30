@@ -10,7 +10,7 @@ import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
 const Post = styled.div`
   ${(props) => props.theme.whiteBox};
   width: 100%;
-  max-width: 600px;
+  max-width: 610px;
   margin-bottom: 25px;
   user-select: none;
   a {
@@ -46,7 +46,7 @@ const Files = styled.div`
 const File = styled.img`
   max-width: 100%;
   width: 100%;
-  height: 600px;
+  height: 610px;
   position: absolute;
   top: 0;
   background-size: cover;

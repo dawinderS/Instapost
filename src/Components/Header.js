@@ -6,7 +6,6 @@ import useInput from "../Hooks/useInput";
 import { Home, Compass, HeartEmpty, User, Logo } from "./Icons";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME, LOG_OUT } from "../SharedQueries";
-import Avatar from "./Avatar";
 
 const Header = styled.header`
   width: 100%;
@@ -20,7 +19,7 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px 0px;
+  padding: 11px 0px;
   z-index: 2;
 `;
 

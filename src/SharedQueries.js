@@ -5,6 +5,7 @@ export const ME = gql`
     me {
       username
       avatar
+      name
     }
   }
 `;
@@ -12,5 +13,16 @@ export const ME = gql`
 export const LOG_OUT = gql`
   mutation logUserOut {
     logUserOut @client
+  }
+`;
+
+export const SUGGESTED = gql`
+  {
+    suggested {
+      avatar
+      username
+      isFollowing
+      isSelf
+    }
   }
 `;
