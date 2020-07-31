@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Home, Compass, HeartEmpty, User, Logo } from "./Icons";
+import { Home, Compass, HeartEmpty, Logo } from "./Icons";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME, LOG_OUT } from "../SharedQueries";
 

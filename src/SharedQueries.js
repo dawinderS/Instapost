@@ -19,10 +19,11 @@ export const LOG_OUT = gql`
 export const SUGGESTED = gql`
   {
     suggested {
+      id
       avatar
       username
+      name
       isFollowing
-      isSelf
     }
   }
 `;

@@ -129,7 +129,9 @@ export default ({
 }) => (
   <Post>
     <Header>
-      <Avatar size="sm" url={avatar} />
+        <Link to={`/${username}`}>
+        <Avatar size="sm" url={avatar} />
+      </Link>
       <UserColumn>
         <Link to={`/${username}`}>
           <FatText text={username} />

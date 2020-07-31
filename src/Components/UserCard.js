@@ -6,7 +6,6 @@ import Avatar from "./Avatar";
 import FatText from "./FatText";
 import FollowButton from "./FollowButton/index";
 
-
 const Card = styled.div`
   ${(props) => props.theme.whiteBox}
   display:flex;

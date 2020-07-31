@@ -48,6 +48,10 @@ const Form = styled(Box)`
     button {
       margin-top: 8px;
       margin-bottom: 10px;
+      width: 100%;
+      text-align: center;
+      padding: 0px;
+      height: 30px;
     }
     img {
       margin: 0px 0px 12px 43px;
@@ -177,21 +181,26 @@ export default ({
         </>
       )}
     </Form>
-
-    {action !== "confirm" && (
       <StateChanger>
-        {action === "logIn" ? (
+        {action === "logIn" && (
           <>
             Don't have an account?{" "}
             <Link onClick={() => setAction("signUp")}>Sign up</Link>
           </>
-        ) : (
+        )} 
+        {action === "signUp" && (
           <>
             Have an account?{" "}
             <Link onClick={() => setAction("logIn")}>Log in</Link>
           </>
         )}
+        {action === "confirm" && (
+          <>
+            Return back to log in?{" "}
+            <Link onClick={() => setAction("logIn")}>Log in</Link>
+          </>
+        )}
+
       </StateChanger>
-    )}
   </Wrapper>
 );

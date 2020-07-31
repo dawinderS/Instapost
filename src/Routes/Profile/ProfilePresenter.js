@@ -83,10 +83,12 @@ export default ({ loading, data, logOut }) => {
         posts,
       },
     } = data;
+    let namee;
+    name ? namee = name : namee = '';
     return (
       <Wrapper>
         <Helmet>
-          <title>{username} | Instapost</title>
+          <title>{namee} ({"@" + username}) • Instapost</title>
         </Helmet>
         <Header>
           <HeaderColumn>

@@ -3,10 +3,11 @@ import { Helmet } from "rl-react-helmet";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
-import { ME, SUGGESTED } from "../SharedQueries";
+import { ME } from "../SharedQueries";
 import Loader from "../Components/Loader";
 import Post from "../Components/Post/index";
 import Avatar from "../Components/Avatar";
+import SuggestedCard from "../Components/SuggestionCard";
 
 const FEED_QUERY = gql`
   {
@@ -42,6 +43,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   min-height: 80vh;
+  max-width: 100%;
 `;
 
 const PostShow = styled.div`
@@ -56,13 +58,13 @@ const FeedSide = styled.div`
   flex-direction: column;
   width: 295px;
   position: fixed;
-  left: 750px;
+  margin-left: 640px;
 `;
 
 const UserFeed = styled.div`
   display: flex;
   height: 56px;
-  margin: 23px 0px 30px 5px;
+  margin: 23px 0px 23px 5px;
   align-items: center;
 `;
 
@@ -106,7 +108,6 @@ const Suggestions = styled.div`
 export default () => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
-  const suggested = useQuery(SUGGESTED);
   
   return (
     <Wrapper>
@@ -117,7 +118,7 @@ export default () => {
       {!loading &&
         data && data.seeFeed &&
         me.data && !me.loading &&
-        suggested.data && !suggested.loading &&
+        // suggested.data && !suggested.loading &&
         <>
           <PostShow> {
           data.seeFeed.map((post) => (
@@ -148,6 +149,7 @@ export default () => {
                 <span>Suggestions For You</span>
                 <p>See All</p>
               </span>
+              <SuggestedCard />
             </Suggestions>
           </FeedSide>
         </>
