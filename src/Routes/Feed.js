@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "rl-react-helmet";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
@@ -64,7 +65,12 @@ const FeedSide = styled.div`
 const UserFeed = styled.div`
   display: flex;
   height: 56px;
-  margin: 23px 0px 23px 5px;
+  margin: 23px 0px 21px 5px;
+  align-items: center;
+`;
+
+const UserLink = styled(Link)`
+  display: flex;
   align-items: center;
 `;
 
@@ -138,16 +144,20 @@ export default () => {
           </PostShow>
           <FeedSide>
             <UserFeed>
-              <Avatar size="md" url={me.data.me.avatar} />
-              <UserFeedText>
-                <div>{me.data.me.username}</div>
-                <span>{me.data.me.name}</span>
-              </UserFeedText>
+              <UserLink to={`/${me.data.me.username}`}>
+                <Avatar size="md" url={me.data.me.avatar} />
+                <UserFeedText>
+                  <div>{me.data.me.username}</div>
+                  <span>{me.data.me.name}</span>
+                </UserFeedText>
+              </UserLink>
             </UserFeed>
             <Suggestions>
               <span>
                 <span>Suggestions For You</span>
-                <p>See All</p>
+                <Link to="/suggested">
+                  <p>See All</p>
+                </Link>
               </span>
               <SuggestedCard />
             </Suggestions>

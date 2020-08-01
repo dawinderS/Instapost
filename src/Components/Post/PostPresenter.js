@@ -41,6 +41,7 @@ const Files = styled.div`
   flex-direction: column;
   align-items: stretch;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 const File = styled.img`
@@ -139,7 +140,7 @@ export default ({
         <Location>{location}</Location>
       </UserColumn>
     </Header>
-    <Files>
+    <Files onDoubleClick={toggleLike}>
       {files &&
         files.map((file, index) => (
           <File key={file.id} src={file.url} showing={index === currentItem} />
@@ -158,6 +159,11 @@ export default ({
       <Caption>
         <FatText text={username} /> {caption}
       </Caption>
+      {
+        (comments.length + selfComments.length > 3) &&
+       <span>View all {comments.length + selfComments.length} comments</span>
+      }
+      { console.log(comments)}
       {comments && (
         <Comments>
           {comments.map((comment) => (

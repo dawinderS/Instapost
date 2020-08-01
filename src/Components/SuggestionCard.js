@@ -16,7 +16,7 @@ const UserLink = styled(Link)`
 `;
 const EachCard = styled.div`
   display: flex;
-  padding: 8px 0px;
+  padding: 7px 0px;
   img {
     border-radius: 50%;
     background-size: cover;
