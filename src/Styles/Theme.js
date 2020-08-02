@@ -4,7 +4,7 @@ const BORDER_RADIUS = "4px";
 export default {
   maxWidth: "935px",
   bgColor: "#FAFAFA",
-  blackColor: "${(props) => props.theme.blackColor}",
+  blackColor: "#262626",
   darkGreyColor: "#8e8e8e",
   lightGreyColor: "#c7c7c7",
   redColor: "#ED4956",

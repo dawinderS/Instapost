@@ -57,7 +57,7 @@ export default withRouter(() => {
     <SuggestedCard>
       {
         !loading && data.suggested &&
-        data.suggested.slice(0,6).map((user) => (
+        data.suggested.slice(0,5).map((user) => (
           <EachCard key={user.id} >
             <UserLink to={`/${user.username}`}>
               <img width="32" height="32" src={user.avatar} />

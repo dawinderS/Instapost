@@ -36,9 +36,11 @@ const Location = styled.span`
 
 const Files = styled.div`
   position: relative;
-  padding-bottom: 100%;
+  padding-bottom: 60%;
+  // padding-bottom: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: stretch;
   flex-shrink: 0;
   cursor: pointer;
@@ -46,8 +48,9 @@ const Files = styled.div`
 
 const File = styled.img`
   max-width: 100%;
-  width: 100%;
-  height: 610px;
+  // width: 100%;
+  height: auto;
+  // height: 610px;
   position: absolute;
   top: 0;
   background-size: cover;
@@ -61,7 +64,11 @@ const Button = styled.span`
 `;
 
 const Meta = styled.div`
-  padding: 16px;
+  padding: 12px 16px 16px 16px;
+  p {
+    color: #8e8e8e;
+    cursor: pointer;
+  }
 `;
 
 const Buttons = styled.div`
@@ -80,7 +87,7 @@ const Timestamp = styled.span`
   display: block;
   color: rgba(var(--f52, 142, 142, 142), 1);
   font-size: 10px;
-  margin: 10px 0px;
+  margin: 8px 0px 10px 0px;
   padding-bottom: 11px;
   padding-top: 3px;
   border-bottom: rgba(var(--ce3, 239, 239, 239), 1) 1px solid;
@@ -99,7 +106,7 @@ const Textarea = styled(TextareaAutosize)`
 `;
 
 const Comments = styled.ul`
-  margin-top: 10px;
+  margin-top: 8px;
 `;
 
 const Comment = styled.li`
@@ -110,7 +117,10 @@ const Comment = styled.li`
 `;
 
 const Caption = styled.div`
-  margin: 10px 0px;
+  margin: 10px 0px 8px 0px;
+  span {
+    margin-right: 5px;
+  }
 `;
 
 export default ({
@@ -130,7 +140,7 @@ export default ({
 }) => (
   <Post>
     <Header>
-        <Link to={`/${username}`}>
+      <Link to={`/${username}`}>
         <Avatar size="sm" url={avatar} />
       </Link>
       <UserColumn>
@@ -157,24 +167,30 @@ export default ({
       </Buttons>
       <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
       <Caption>
-        <FatText text={username} /> {caption}
+        <Link to={`/${username}`}>
+          <FatText text={username} /> 
+        </Link>
+        {caption}
       </Caption>
       {
-        (comments.length + selfComments.length > 3) &&
-       <span>View all {comments.length + selfComments.length} comments</span>
+        (comments.length + selfComments.length > 2) &&
+       <p>View all {comments.length + selfComments.length} comments</p>
       }
-      { console.log(comments)}
       {comments && (
         <Comments>
-          {comments.map((comment) => (
+          {comments.slice(-2).map((comment) => (
             <Comment key={comment.id}>
-              <FatText text={comment.user.username} />
+              <Link to={`/${comment.user.username}`}>
+                <FatText text={comment.user.username} />
+              </Link>
               {comment.text}
             </Comment>
           ))}
           {selfComments.map((comment) => (
             <Comment key={comment.id}>
-              <FatText text={comment.user.username} />
+              <Link to={`/${comment.user.username}`}>
+                <FatText text={comment.user.username} />
+              </Link>
               {comment.text}
             </Comment>
           ))}
