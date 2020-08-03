@@ -10,8 +10,7 @@ import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
 const Post = styled.div`
   ${(props) => props.theme.whiteBox};
   width: 100%;
-  max-width: 610px;
-  margin-bottom: 25px;
+  margin-bottom: 50px;
   user-select: none;
   a {
     color: inherit;
@@ -36,21 +35,22 @@ const Location = styled.span`
 
 const Files = styled.div`
   position: relative;
-  padding-bottom: 60%;
-  // padding-bottom: 100%;
+  // padding-bottom: 60%;
+  padding-bottom: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
   flex-shrink: 0;
   cursor: pointer;
+  max-height: 608px;
 `;
 
 const File = styled.img`
-  max-width: 100%;
-  // width: 100%;
-  height: auto;
-  // height: 610px;
+  // max-width: 100%;
+  width: 100%;
+  // height: auto;
+  height: 608px;
   position: absolute;
   top: 0;
   background-size: cover;
@@ -64,7 +64,7 @@ const Button = styled.span`
 `;
 
 const Meta = styled.div`
-  padding: 12px 16px 16px 16px;
+  padding: 12px 16px 0px 16px;
   p {
     color: #8e8e8e;
     cursor: pointer;
@@ -87,22 +87,21 @@ const Timestamp = styled.span`
   display: block;
   color: rgba(var(--f52, 142, 142, 142), 1);
   font-size: 10px;
-  margin: 8px 0px 10px 0px;
-  padding-bottom: 11px;
+  margin: 8px 0px 0px 0px;
+  padding-bottom: 12px;
   padding-top: 3px;
-  border-bottom: rgba(var(--ce3, 239, 239, 239), 1) 1px solid;
 `;
 
 const Textarea = styled(TextareaAutosize)`
   border: none;
-  width: 100%;
+  width: 93%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   resize: none;
   font-size: 14px;
   &:focus {
     outline: none;
   }
-  padding: 6px 0px 2px 0px;
+  padding: 0;
 `;
 
 const Comments = styled.ul`
@@ -123,6 +122,20 @@ const Caption = styled.div`
   }
 `;
 
+const CommentHolder = styled.div`
+  display: flex;
+  height: 55px;
+  align-items: center;
+  border-top: rgba(var(--ce3, 239, 239, 239), 1) 1px solid;
+  padding: 0px 16px;
+  justify-content: space-between;
+  p {
+    color: #0095f6;;
+    font-weight: 600;
+    cursor: pointer;
+  }
+`;
+
 export default ({
   user: { username, avatar },
   location,
@@ -135,6 +148,7 @@ export default ({
   currentItem,
   toggleLike,
   onKeyPress,
+  onPostClick,
   comments,
   selfComments,
 }) => (
@@ -197,12 +211,15 @@ export default ({
         </Comments>
       )}
       <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+    </Meta>
+    <CommentHolder>
       <Textarea
         onKeyPress={onKeyPress}
         placeholder={"Add a comment..."}
         value={newComment.value}
         onChange={newComment.onChange}
       />
-    </Meta>
+      <p onClick={onPostClick}>Post</p>
+    </CommentHolder>
   </Post>
 );

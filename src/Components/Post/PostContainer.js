@@ -70,6 +70,20 @@ const PostContainer = ({
     return;
   };
 
+  const onPostClick = async (event) => {
+    event.preventDefault();
+    try {
+      const {
+        data: { addComment },
+      } = await addCommentMutation();
+      setSelfComments([...selfComments, addComment]);
+      comment.setValue("");
+    } catch {
+      toast.error("Cannot send comment, please try again.");
+    }
+    return;
+  };
+
   return (
     <PostPresenter
       user={user}
@@ -86,6 +100,7 @@ const PostContainer = ({
       currentItem={currentItem}
       toggleLike={toggleLike}
       onKeyPress={onKeyPress}
+      onPostClick={onPostClick}
       selfComments={selfComments}
     />
   );

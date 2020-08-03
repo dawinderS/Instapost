@@ -33,6 +33,7 @@ const SuggestedCard = styled.div`
   display: flex;
   flex-direction: column;
   padding: 7px 0px;
+  border-radius: 4px;
 `;
 
 const UserLink = styled(Link)`
