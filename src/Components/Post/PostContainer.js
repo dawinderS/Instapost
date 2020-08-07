@@ -11,6 +11,7 @@ const PostContainer = ({
   user,
   files,
   likeCount,
+  commentCount,
   isLiked,
   comments,
   createdAt,

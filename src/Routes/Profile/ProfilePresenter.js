@@ -9,7 +9,7 @@ import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
 
 const Wrapper = styled.div`
-  min-height: 100vh;
+  min-height: 80vh;
 `;
 
 const Header = styled.header`
@@ -55,9 +55,13 @@ const Bio = styled.p`
 
 const Posts = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 200px);
-  grid-template-rows: 200px;
-  grid-auto-rows: 200px;
+  width: 100%;
+  grid-template-columns: repeat(3, 32%);
+  // grid-template-rows: minmax(100px, 293px);
+  grid-template-rows: 293px;
+  grid-auto-rows: 293px;
+  justify-content: space-between;
+  row-gap: 25px;
 `;
 
 export default ({ loading, data, logOut }) => {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { HeartFull, CommentFull } from "./Icons";
 
-const Overlay = styled.div`
+const Overlay = styled.span`
   background-color: rgba(0, 0, 0, 0.25);
   width: 100%;
   height: 100%;
@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 `;
 
-const Number = styled.div`
+const Number = styled.span`
   color: white;
   display: flex;
   align-items: center;

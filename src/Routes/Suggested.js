@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Helmet } from "rl-react-helmet";
 import { useQuery } from "react-apollo-hooks";
 import { SUGGESTED } from "../SharedQueries";

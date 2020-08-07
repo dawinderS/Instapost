@@ -55,21 +55,20 @@ export default withRouter(() => {
 
   return (
     <SuggestedCard>
-      {
-        !loading && data.suggested &&
-        data.suggested.slice(0,5).map((user) => (
-          <EachCard key={user.id} >
+      {!loading &&
+        data.suggested &&
+        data.suggested.slice(0, 5).map((user) => (
+          <EachCard key={user.id}>
             <UserLink to={`/${user.username}`}>
-              <img width="32" height="32" src={user.avatar} />
+              <img width="32" height="32" src={user.avatar} alt="instalogo" />
               <div>
                 <span>{user.username}</span>
                 <p>{user.name}</p>
               </div>
             </UserLink>
-            <FollowButton id={user.id} isFollowing={ user.isFollowing } />
+            <FollowButton id={user.id} isFollowing={user.isFollowing} />
           </EachCard>
-        ))
-      }
+        ))}
     </SuggestedCard>
   );
 });

@@ -143,6 +143,7 @@ export default ({
   caption,
   isLiked,
   likeCount,
+  commentCount,
   createdAt,
   newComment,
   currentItem,
@@ -219,7 +220,12 @@ export default ({
         value={newComment.value}
         onChange={newComment.onChange}
       />
-      <p onClick={onPostClick}>Post</p>
+      <p id="postComment" onClick={onPostClick}>Post</p>
+
     </CommentHolder>
   </Post>
 );
+// const onTextEnter = () => {
+//   const post = document.getElementById("postComment");
+//   post.style.opacity = 1;
+// };
