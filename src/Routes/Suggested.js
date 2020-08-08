@@ -10,7 +10,7 @@ import Loader from "../Components/Loader";
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px 0px;
+  margin: 35px 0px;
   max-width: 100%;
 `;
 
@@ -19,21 +19,23 @@ const Holder = styled.div`
   flex-direction: column;
   h2 {
     padding: 0px 12px;
-    font-size: 17px;
+    font-size: 22px;
     line-height: 24px;
     font-weight: 600;
     font-color: #262626;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
 `;
 
 const SuggestedCard = styled.div`
-  width: 550px;
+  width: 500px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 7px 0px;
+  padding: 0px;
   border-radius: 4px;
+  max-height: 75vh;
+  overflow-y: scroll;
 `;
 
 const UserLink = styled(Link)`
@@ -48,7 +50,8 @@ const UserLink = styled(Link)`
 const EachCard = styled.div`
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid #dbdbdb;
   img {
     border-radius: 50%;
     background-size: cover;

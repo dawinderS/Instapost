@@ -74,7 +74,6 @@ const Posts = styled.div`
 
 export default () => {
   const { data, loading } = useQuery(EXPLORE_QUERY);
-  console.log(data);
 
   return (
     <Wrapper id="outside">

@@ -134,7 +134,7 @@ export default () => {
       {loading && <Loader />}
       {!loading &&
         data && data.seeFeed &&
-        me.data && !me.loading &&
+        me.data && !me.loading && me.data.me &&
         // suggested.data && !suggested.loading &&
         <>
           <PostShow> {
