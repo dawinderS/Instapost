@@ -4,52 +4,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
-import { ME } from "../SharedQueries";
+import { ME, FEED_QUERY } from "../SharedQueries";
 import Loader from "../Components/Loader";
 import Post from "../Components/Post/index";
 import Avatar from "../Components/Avatar";
 import SuggestedCard from "../Components/SuggestionCard";
-
-const FEED_QUERY = gql`
-  {
-    seeFeed {
-      id
-      location
-      caption
-      user {
-        id
-        avatar
-        username
-      }
-      files {
-        id
-        url
-      }
-      likeCount
-      commentCount
-      isLiked
-      likes {
-        id
-        user {
-          username
-          name
-          avatar
-          isFollowing
-        }
-      }
-      comments {
-        id
-        text
-        user {
-          id
-          username
-        }
-        createdAt
-      }
-      createdAt
-    }
-  }
-`;
 
 const Wrapper = styled.div`
   display: flex;

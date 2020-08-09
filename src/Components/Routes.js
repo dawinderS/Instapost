@@ -7,6 +7,7 @@ import Explore from "../Routes/Explore";
 import Search from "../Routes/Search/index";
 import Profile from "../Routes/Profile/index";
 import Suggested from "../Routes/Suggested";
+import Upload from "../Routes/Upload";
 import Notifications from "../Routes/Notifications";
 
 const LoggedInRoutes = () => (
@@ -15,6 +16,7 @@ const LoggedInRoutes = () => (
     <Route path="/explore" component={Explore} />
     <Route path="/suggested" component={Suggested} />
     <Route path="/search" component={Search} />
+    <Route path="/upload" component={Upload} />
     <Route path="/notifications" component={Notifications} />
     <Route path="/:username" component={Profile} />
     <Redirect from="*" to="/" />

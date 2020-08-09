@@ -52,9 +52,44 @@ export const ME = gql`
   }
 `;
 
-export const LOG_OUT = gql`
-  mutation logUserOut {
-    logUserOut @client
+export const FEED_QUERY = gql`
+  {
+    seeFeed {
+      id
+      location
+      caption
+      user {
+        id
+        avatar
+        username
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      commentCount
+      isLiked
+      likes {
+        id
+        user {
+          username
+          name
+          avatar
+          isFollowing
+        }
+      }
+      comments {
+        id
+        text
+        user {
+          id
+          username
+        }
+        createdAt
+      }
+      createdAt
+    }
   }
 `;
 
@@ -67,5 +102,11 @@ export const SUGGESTED = gql`
       name
       isFollowing
     }
+  }
+`;
+
+export const LOG_OUT = gql`
+  mutation logUserOut {
+    logUserOut @client
   }
 `;

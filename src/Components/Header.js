@@ -103,7 +103,7 @@ export default withRouter(({ history }) => {
           <HeaderLink to="/explore">
             <Compass />
           </HeaderLink>
-          <HeaderLink to="/explore">
+          <HeaderLink to="/upload">
             <Upload />
           </HeaderLink>
           <HeaderLink to="/notifications">
