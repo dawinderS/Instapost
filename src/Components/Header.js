@@ -21,6 +21,28 @@ const Header = styled.header`
   align-items: center;
   padding: 11px 0px;
   z-index: 2;
+  @media screen and (max-width: 770px) {
+    height: 6vh;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    img {
+      max-width: 24%;
+      height: auto;
+    }
+  }
+`;
+
+const MinLink = styled(Link)`
+  display: none;
+  @media screen and (max-width: 770px) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -29,6 +51,9 @@ const HeaderWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const HeaderColumn = styled.div`
@@ -81,6 +106,9 @@ export default withRouter(({ history }) => {
 
   return (
     <Header>
+      <MinLink to="/" replace>
+        <img src="instalogo.png" alt="instalogo" />
+      </MinLink>
       <HeaderWrapper>
         <HeaderColumn>
           <Link to="/" replace>
@@ -115,7 +143,7 @@ export default withRouter(({ history }) => {
             </HeaderLink>
           ) : (
             <HeaderLink to={data.me.username}>
-              <img src={data.me.avatar} width="23" height="23"/>
+              <img src={data.me.avatar} width="23" height="23" />
             </HeaderLink>
           )}
         </HeaderColumn>

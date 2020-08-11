@@ -13,6 +13,10 @@ const Wrapper = styled.div`
   justify-content: center;
   margin: 35px 0px;
   max-width: 100%;
+  @media screen and (max-width: 770px) {
+    margin: 0px;
+    width: 100%
+  }
 `;
 
 const Holder = styled.div`
@@ -26,6 +30,12 @@ const Holder = styled.div`
     font-color: #262626;
     margin-bottom: 15px;
   }
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    h2 {
+      display: none;
+    }
+  }
 `;
 
 const SuggestedCard = styled.div`
@@ -37,6 +47,11 @@ const SuggestedCard = styled.div`
   border-radius: 4px;
   max-height: 75vh;
   overflow-y: scroll;
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: none;
+  }
 `;
 
 const UserLink = styled(Link)`
@@ -48,41 +63,55 @@ const UserLink = styled(Link)`
     margin-left: 0;
   }
 `;
+const NameLink = styled(Link)`
+  font-weight: 600;
+  color: #262626;
+  margin-right: 4px;
+`;
+
 const EachCard = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 14px 18px;
+  justify-content: flex-start;
+  padding: 14px 20px;
   border-bottom: 1px solid #dbdbdb;
   img {
     border-radius: 0%;
     margin-left: auto;
   }
-  div {
-    margin-left: 13px;
-    display: flex;
+  span {
+    margin-left: 12px;
     align-items: center;
-    span {
-      font-size: 16px;
-      font-weight: 500;
-      color: #262626;
-      margin-right: 4px;
-    }
-    h1 {
-      font-size: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #262626;
+    margin-right: 20px;
+    .textholder {
+      margin: 0;
       font-weight: 400;
       line-height: 14px;
       color: #262626;
-      margin-top: 2px;
     }
-    p {
+    .notif-date {
       font-size: 13px;
       color: #8e8e8e;
-      margin-left: 5px;
+      margin: 0;
     }
   }
   button {
     margin-left: auto;
+  }
+  @media screen and (max-width: 770px) {
+    padding: 10px 15px;
+    border: none;
+    img {
+      height: 44px;
+      width: 44px;
+    }
+    span {
+      font-size: 14px;
+    }
   }
 `;
 
@@ -126,12 +155,13 @@ export default () => {
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.username}`}>
               <img width="36" height="36" src={notif.avatar} />
-              <div>
-                <span>{notif.username}</span>
-                <h1>started following you.</h1>
-                <p>{getDate(notif.createdAt)}</p>
-              </div>
             </UserLink>
+            <span>
+              <NameLink to={`/${notif.username}`}>{notif.username}</NameLink>
+              <span className="textholder">
+                started following you. <span className="notif-date">{getDate(notif.createdAt)}</span>
+              </span>
+            </span>
             <FollowButton id={notif.id} isFollowing={notif.isFollowing} />
           </EachCard>
         );
@@ -140,12 +170,14 @@ export default () => {
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.user.username}`}>
               <img width="36" height="36" src={notif.user.avatar} />
-              <div>
-                <span>{notif.user.username}</span>
-                <h1>liked your post.</h1>
-                <p>{getDate(notif.createdAt)}</p>
-              </div>
             </UserLink>
+            <span>
+              <NameLink to={`/${notif.user.username}`}>{notif.user.username}</NameLink>
+              <span className="textholder">
+                liked your post.{" "}
+                <span className="notif-date">{getDate(notif.createdAt)}</span>
+              </span>
+            </span>
             <img width="36" height="36" src={notif.post.files[0].url} />
           </EachCard>
         );
@@ -154,12 +186,16 @@ export default () => {
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.user.username}`}>
               <img width="36" height="36" src={notif.user.avatar} />
-              <div>
-                <span>{notif.user.username}</span>
-                <h1>commented on your post.</h1>
-                <p>{getDate(notif.createdAt)}</p>
-              </div>
             </UserLink>
+            <span>
+              <NameLink to={`/${notif.user.username}`}>
+                {notif.user.username}
+              </NameLink>
+              <span className="textholder">
+                commented on your post.{" "}
+                <span className="notif-date">{getDate(notif.createdAt)}</span>
+              </span>
+            </span>
             <img width="36" height="36" src={notif.post.files[0].url} />
           </EachCard>
         );

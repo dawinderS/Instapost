@@ -52,7 +52,7 @@ const EXPLORE_QUERY = gql`
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  min-height: 55vh;
+  min-height: 88vh;
   width: 100%;
 `;
 
@@ -69,6 +69,17 @@ const Posts = styled.div`
   grid-auto-rows: 293px;
   justify-content: space-between;
   row-gap: 25px;
+  @media screen and (max-width: 770px) {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 33.333333%);
+    // grid-template-columns: repeat(3, 33%);
+    grid-template-rows: 130px;
+    grid-auto-rows: 127px;
+    justify-content: space-between;
+    row-gap: 0px;
+    // row-gap: 2px;
+  }
 `;
 
 

@@ -10,6 +10,7 @@ import Theme from '../Styles/Theme';
 import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
+import Bottom from './Bottom';
 
 const QUERY = gql`
   {
@@ -23,7 +24,13 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 85vh;
+  @media screen and (min-width: 770px) {
+    min-height: 85vh;
+  }
+  @media screen and (max-width: 770px) {
+    min-height: 200px;
+    margin: 0;
+  }
 `;
 
 export default () => {
@@ -39,8 +46,9 @@ export default () => {
             {isLoggedIn && <Header />}
             <Wrapper>
               <Routes isLoggedIn={isLoggedIn} />
-            {!isLoggedIn &&  <Footer />}
+              {!isLoggedIn &&  <Footer />}
             </Wrapper>
+            {isLoggedIn && <Bottom />}
           </>
         </Router>
         <ToastContainer position={toast.POSITION.TOP_CENTER} />

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-// import { Image, ActivityIndicator, Alert } from "react-native";
+import { Helmet } from "rl-react-helmet";
 import styled, { keyframes } from "styled-components";
 import { gql } from "apollo-boost";
 import useInput from "../Hooks/useInput";
 import { useMutation } from "react-apollo-hooks";
 import { FEED_QUERY } from "../SharedQueries";
 import { toast } from "react-toastify";
-import Loader from "../Components/Loader";
 import Input from "../Components/Input";
+import { UploadPicture } from "../Components/Icons";
 
 const UPLOAD = gql`
   mutation upload($caption: String!, $files: [String!]!, $location: String) {
@@ -38,28 +38,27 @@ const UploadWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 20px;
-  margin: 54px 0;
+  padding-bottom: 20px;
+  // margin: 54px 0;
   background-color: white;
   text-align: center;
   img {
     opacity: 0;
-    height: 80vw;
-    max-height: 380px;
-    width: 80vw;
-    max-width: 380px;
+    height: 100vw;
+    max-height: 100%;
+    width: 100vw;
+    max-width: 100%;
     animation: ${fadeIn} 1s forwards;
     object-fit: cover;
     overflow: hidden;
-    border: #dfdfdf solid 1px;
     background-color: #fafafa;
     color: #262626;
   }
   .imageWrapper {
     height: 80vw;
-    max-height: 380px;
+    max-height: 100%;
     width: 80vw;
-    max-width: 380px;
+    max-width: 100%;
   }
   .labelWrapper {
     display: flex;
@@ -70,10 +69,13 @@ const UploadWrapper = styled.div`
     max-height: 380px;
     width: 80vw;
     max-width: 380px;
+    p {
+      margin-top: 20px;
+      font-size: 25px;
+      font-weight: 600;
+    }
   }
   & svg {
-    height: 20%;
-    width: 20%;
     margin: 0 auto;
     fill: #262626;
   }
@@ -86,29 +88,17 @@ const UploadWrapper = styled.div`
     border-radius: 5px;
     margin-bottom: 20px;
   }
-  label {
-    font-weight: bold;
-    width: 100%;
-    color: #262626;
-    margin-bottom: 5px;
-    text-align: left;
-    padding-left: 3px;
-    font-size: 14px;
-  }
   button {
     background-color: #0095f6;
     font-weight: bold;
     color: white;
     border: none;
-    width: 100%;
+    width: 89%;
+    margin: 0px 20px;
     border-radius: 5px;
     height: 30px;
     margin: 0;
-  }
-  button:hover {
-    background-color: #545972;
-    color: white;
-    border: none;
+    cursor: pointer;
   }
   .imageWrapper {
     display: flex;
@@ -135,7 +125,7 @@ const UploadWrapper = styled.div`
     margin-top: 20px;
     border: 1px solid #0095f6;
   }
-  @media screen and (min-width: 500px) {
+  @media screen and (min-width: 770px) {
     margin: 74px auto;
     border: 1px solid #dfdfdf;
     width: 500px;
@@ -146,6 +136,7 @@ const UploadWrapper = styled.div`
     width: 100%;
     height: 30px;
     margin-top: 20px;
+    margin: 0px 20px;
   }
   .custom-file-input::-webkit-file-upload-button {
     visibility: hidden;
@@ -154,7 +145,7 @@ const UploadWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    content: "Upload Photo";
+    content: "Upload Photos";
     color: white;
     height: 30px;
     background: #0095f6;
@@ -163,6 +154,7 @@ const UploadWrapper = styled.div`
     white-space: nowrap;
     cursor: pointer;
     font-weight: 700;
+    margin: 0px 20px;
   }
   .custom-file-input:hover::before {
     border-color: black;
@@ -201,7 +193,6 @@ export default ({ props }) => {
       return;
     }
     const formData = new FormData();
-    console.log(picture);
     formData.append("file", picture);
 
     try {
@@ -213,7 +204,6 @@ export default ({ props }) => {
           "content-type": "multipart/form-data",
         },
       });
-      console.log(location);
       const {
         data: { upload },
       } = await uploadMutation({
@@ -236,11 +226,14 @@ export default ({ props }) => {
 
   return (
     <UploadWrapper>
+      <Helmet>
+        <title>Upload • Instapost</title>
+      </Helmet>
       <div className="imageWrapper">
         {!picture ? (
           <div className="labelWrapper">
-            {/* <RiImageAddLine fill={"#262626"} stroke={"#262626"} /> */}
-            <p>Upload a Photo</p>
+            <UploadPicture size={100} />
+            <p>Upload Photos</p>
           </div>
         ) : (
           <img src={imagePreview} draggable={false} alt="User's Upload" />
@@ -248,7 +241,6 @@ export default ({ props }) => {
       </div>
       {picture ? (
         <>
-          <label htmlFor="caption">Add a Caption:</label>
           <Input placeholder={"Caption"} {...captionInput} />
           <Input placeholder={"Location"} {...locationInput} />
           <button style={{ marginBottom: "6px" }} onClick={handleSubmit}>
@@ -263,9 +255,8 @@ export default ({ props }) => {
         accept=".jpg, .gif, .png, .gif"
         onChange={onDrop}
       />
-
       <button className="goback-button" onClick={goBack}>
-        Go back
+        Return to homepage
       </button>
     </UploadWrapper>
   );

@@ -10,6 +10,9 @@ const Footer = styled.footer`
   font-size: 12px;
   margin: 50px 0px;
   margin-top: auto;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const List = styled.ul`

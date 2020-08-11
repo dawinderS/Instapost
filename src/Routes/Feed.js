@@ -15,6 +15,10 @@ const Wrapper = styled.div`
   justify-content: space-between;
   min-height: 80vh;
   max-width: 100%;
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    min-height: 88vh;
+  }
 `;
 
 const PostShow = styled.div`
@@ -22,6 +26,10 @@ const PostShow = styled.div`
   flex-direction: column;
   align-items: center;
   min-width: 610px;
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    max-height: 88vh;
+  }
 `;
 
 const FeedSide = styled.div`
@@ -30,6 +38,9 @@ const FeedSide = styled.div`
   width: 295px;
   position: fixed;
   margin-left: 640px;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const UserFeed = styled.div`
