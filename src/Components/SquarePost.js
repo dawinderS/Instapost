@@ -15,6 +15,9 @@ const Overlay = styled.span`
   svg {
     fill: white;
   }
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const Container = styled.div`

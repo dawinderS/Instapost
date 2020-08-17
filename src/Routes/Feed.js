@@ -2,7 +2,6 @@ import React from "react";
 import { Helmet } from "rl-react-helmet";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME, FEED_QUERY } from "../SharedQueries";
 import Loader from "../Components/Loader";
@@ -18,6 +17,8 @@ const Wrapper = styled.div`
   @media screen and (max-width: 770px) {
     width: 100%;
     min-height: 88vh;
+    max-height: 88vh;
+    justify-content: flex-start;
   }
 `;
 
@@ -29,6 +30,7 @@ const PostShow = styled.div`
   @media screen and (max-width: 770px) {
     width: 100%;
     max-height: 88vh;
+    max-width: 100%;
   }
 `;
 
@@ -92,6 +94,40 @@ const Suggestions = styled.div`
   }
 `;
 
+const MinHeader = styled.header`
+  width: 100%;
+  border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border-bottom: ${(props) => props.theme.boxBorder};
+  border-radius: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 0px;
+  z-index: 2;
+  height: 6vh;
+  max-height: 44px;
+  min-height: 44px;
+  img {
+    max-width: 24%;
+    height: auto;
+  }
+  @media screen and (min-width: 770px) {
+    display: none;
+  }
+`;
+
+const MinLink = styled(Link)`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default () => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
@@ -102,6 +138,11 @@ export default () => {
         <title>Instapost</title>
       </Helmet>
       {loading && <Loader />}
+      <MinHeader>
+        <MinLink to="/" replace>
+          <img src="instalogo.png" alt="instalogo" />
+        </MinLink>
+      </MinHeader>
       {!loading &&
         data && data.seeFeed &&
         me.data && !me.loading && me.data.me &&

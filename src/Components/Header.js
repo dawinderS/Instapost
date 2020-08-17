@@ -22,26 +22,7 @@ const Header = styled.header`
   padding: 11px 0px;
   z-index: 2;
   @media screen and (max-width: 770px) {
-    height: 6vh;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    img {
-      max-width: 24%;
-      height: auto;
-    }
-  }
-`;
-
-const MinLink = styled(Link)`
-  display: none;
-  @media screen and (max-width: 770px) {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: none;
   }
 `;
 
@@ -106,9 +87,6 @@ export default withRouter(({ history }) => {
 
   return (
     <Header>
-      <MinLink to="/" replace>
-        <img src="instalogo.png" alt="instalogo" />
-      </MinLink>
       <HeaderWrapper>
         <HeaderColumn>
           <Link to="/" replace>
@@ -132,7 +110,7 @@ export default withRouter(({ history }) => {
             <Compass />
           </HeaderLink>
           <HeaderLink to="/upload">
-            <Upload />
+            <Upload size={22} />
           </HeaderLink>
           <HeaderLink to="/notifications">
             <HeartEmpty size={22} />

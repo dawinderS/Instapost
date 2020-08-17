@@ -93,6 +93,32 @@ export const FEED_QUERY = gql`
   }
 `;
 
+export const GET_USER = gql`
+  query seeUser($username: String!) {
+    seeUser(username: $username) {
+      id
+      avatar
+      username
+      name
+      isFollowing
+      isSelf
+      bio
+      followingCount
+      followersCount
+      postsCount
+      posts {
+        id
+        files {
+          url
+        }
+        likeCount
+        commentCount
+        createdAt
+      }
+    }
+  }
+`;
+
 export const SUGGESTED = gql`
   {
     suggested {

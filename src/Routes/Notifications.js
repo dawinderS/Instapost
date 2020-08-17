@@ -7,6 +7,7 @@ import moment from "moment";
 import { ME } from "../SharedQueries";
 import FollowButton from "../Components/FollowButton/index";
 import Loader from "../Components/Loader";
+import { FollowUsers, NextButton } from "../Components/Icons";
 
 const Wrapper = styled.div`
   display: flex;
@@ -45,12 +46,42 @@ const SuggestedCard = styled.div`
   flex-direction: column;
   padding: 0px;
   border-radius: 4px;
-  max-height: 75vh;
+  max-height: 80vh;
   overflow-y: scroll;
   @media screen and (max-width: 770px) {
     width: 100%;
-    max-height: 88vh;
-    overflow-y: none;
+    min-height: 89vh;
+    max-height: 89vh;
+    overflow-y: auto;
+  }
+`;
+
+const SuggestedFollowers = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 14px 20px;
+  border-bottom: 1px solid #dbdbdb;
+  align-items: center;
+`;
+
+const SuggestedLink = styled(Link)`
+  color: #262626;
+  font-size: 16px;
+  span {
+    margin-left: 15px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    span {
+      margin: 0;
+      margin-top: 5px;
+      font-weight: 400;
+      font-size: 14px;
+      color: #8e8e8e;
+    }
+  }
+  div {
+    margin-left: auto;
   }
 `;
 
@@ -112,6 +143,33 @@ const EachCard = styled.div`
     span {
       font-size: 14px;
     }
+  }
+`;
+
+const MinHeader = styled.header`
+  width: 100%;
+  border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  border-bottom: ${(props) => props.theme.boxBorder};
+  border-radius: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 11px 0px;
+  z-index: 2;
+  height: 6vh;
+  max-height: 44px;
+  min-height: 44px;
+  div {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+  }
+  @media screen and (min-width: 770px) {
+    display: none;
   }
 `;
 
@@ -208,12 +266,25 @@ export default () => {
       <Helmet>
         <title>Instapost</title>
       </Helmet>
+      <MinHeader>
+        <div>Notifications</div>
+      </MinHeader>
       {loading && <Loader />}
       {!loading && data.me && (
         <Holder>
           <h2>Notifications</h2>
           <SuggestedCard>
-            {console.log(notifs)}
+            <SuggestedLink to="/suggested">
+              <SuggestedFollowers>
+                <FollowUsers size={45} />
+                <span>
+                  Suggestions for you<span>Follow new users</span>
+                </span>
+                <div>
+                  <NextButton />
+                </div>
+              </SuggestedFollowers>
+            </SuggestedLink>
             {notifs}
           </SuggestedCard>
         </Holder>

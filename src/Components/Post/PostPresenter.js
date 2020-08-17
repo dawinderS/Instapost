@@ -15,6 +15,10 @@ const Post = styled.div`
   a {
     color: inherit;
   }
+  @media screen and (max-width: 770px) {
+    margin: 0;
+    height: 88vh;
+  }
 `;
 
 const Header = styled.header`
@@ -44,6 +48,11 @@ const Files = styled.div`
   flex-shrink: 0;
   cursor: pointer;
   max-height: 608px;
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+  }
 `;
 
 const File = styled.img`
@@ -154,7 +163,7 @@ export default ({
   selfComments,
 }) => (
   <Post>
-    <Header>
+    {/* <Header>
       <Link to={`/${username}`}>
         <Avatar size="sm" url={avatar} />
       </Link>
@@ -222,7 +231,7 @@ export default ({
       />
       <p id="postComment" onClick={onPostClick}>Post</p>
 
-    </CommentHolder>
+    </CommentHolder> */}
   </Post>
 );
 // const onTextEnter = () => {

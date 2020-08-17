@@ -9,6 +9,7 @@ import Profile from "../Routes/Profile/index";
 import Suggested from "../Routes/Suggested";
 import Upload from "../Routes/Upload";
 import Notifications from "../Routes/Notifications";
+import EditProfile from "../Routes/EditProfile";
 
 const LoggedInRoutes = () => (
   <Switch>
@@ -18,6 +19,7 @@ const LoggedInRoutes = () => (
     <Route path="/search" component={Search} />
     <Route path="/upload" component={Upload} />
     <Route path="/notifications" component={Notifications} />
+    <Route path="/editprofile" component={EditProfile} />
     <Route path="/:username" component={Profile} />
     <Redirect from="*" to="/" />
   </Switch>

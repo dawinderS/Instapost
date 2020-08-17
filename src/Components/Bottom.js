@@ -10,7 +10,9 @@ const Bottom = styled.div`
     display: none;
   }
   @media screen and (max-width: 770px) {
-    height: 6vh;
+    height: 5.5vh;
+    max-height: 44px;
+    min-height: 44px;
     z-index: 10;
     border: 0;
     position: fixed;

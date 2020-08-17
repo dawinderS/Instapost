@@ -5,11 +5,12 @@ import { Helmet } from "rl-react-helmet";
 import styled, { keyframes } from "styled-components";
 import { gql } from "apollo-boost";
 import useInput from "../Hooks/useInput";
-import { useMutation } from "react-apollo-hooks";
-import { FEED_QUERY } from "../SharedQueries";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import { ME, FEED_QUERY, GET_USER } from "../SharedQueries";
 import { toast } from "react-toastify";
 import Input from "../Components/Input";
-import { UploadPicture } from "../Components/Icons";
+import TextareaAutosize from "react-autosize-textarea";
+import { UploadPicture, HeaderBackButton } from "../Components/Icons";
 
 const UPLOAD = gql`
   mutation upload($caption: String!, $files: [String!]!, $location: String) {
@@ -22,14 +23,36 @@ const UPLOAD = gql`
 `;
 
 const fadeIn = keyframes`
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+`;
+
+const Textarea = styled(TextareaAutosize)`
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 0;
+  border: 1px solid #dbdbdb;
+  border-left: none;
+  border-right: none;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 12px 15px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  resize: none;
+  font-size: 14px;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const UploadWrapper = styled.div`
@@ -38,25 +61,39 @@ const UploadWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-bottom: 20px;
-  // margin: 54px 0;
   background-color: white;
   text-align: center;
+  overflow-y: scroll;
+  @media screen and (max-width: 770px) {
+    padding-bottom: 20px;
+  }
   img {
     opacity: 0;
-    height: 100vw;
-    max-height: 100%;
+    // max-width: 100vw;
+    // min-width: 80vw;
     width: 100vw;
-    max-width: 100%;
+    min-width: 100vw;
+    height: auto;
+    max-height: 60vh;
     animation: ${fadeIn} 1s forwards;
     object-fit: cover;
     overflow: hidden;
     background-color: #fafafa;
     color: #262626;
+    @media screen and (min-width: 770px) {
+      height: auto;
+      max-height: 60vh;
+      width: auto;
+      max-width: 100%;
+      min-width: 100%;
+      // min-width: 400px;
+    }
   }
   .imageWrapper {
-    height: 80vw;
-    max-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // height: 400px;
     width: 80vw;
     max-width: 100%;
   }
@@ -70,8 +107,8 @@ const UploadWrapper = styled.div`
     width: 80vw;
     max-width: 380px;
     p {
-      margin-top: 20px;
-      font-size: 25px;
+      margin-bottom: 30px;
+      font-size: 30px;
       font-weight: 600;
     }
   }
@@ -79,34 +116,18 @@ const UploadWrapper = styled.div`
     margin: 0 auto;
     fill: #262626;
   }
-  textarea {
-    resize: none;
-    padding: 6px 10px;
-    min-height: 77px;
-    width: 100%;
-    border: #dfdfdf 1px solid;
-    border-radius: 5px;
-    margin-bottom: 20px;
-  }
   button {
     background-color: #0095f6;
     font-weight: bold;
     color: white;
     border: none;
-    width: 89%;
+    width: 100%;
     margin: 0px 20px;
-    border-radius: 5px;
-    height: 30px;
+    height: 40px;
     margin: 0;
     cursor: pointer;
-  }
-  .imageWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
-    width: 100%;
-    margin-bottom: 20px;
+    outline: none;
+    font-size: 14px;
   }
   .fileUploader {
     width: 100%;
@@ -120,50 +141,190 @@ const UploadWrapper = styled.div`
     border-radius: 0;
   }
   .goback-button {
-    color: #0095f6;
+    color: grey;
     background-color: white;
-    margin-top: 20px;
-    border: 1px solid #0095f6;
+    border: none;
+    @media screen and (max-width: 770px) {
+      display: none;
+    }
   }
   @media screen and (min-width: 770px) {
-    margin: 74px auto;
+    margin: 10px auto;
     border: 1px solid #dfdfdf;
     width: 500px;
     border-radius: 3px;
   }
   .custom-file-input {
     color: transparent;
-    width: 100%;
-    height: 30px;
-    margin-top: 20px;
-    margin: 0px 20px;
+    height: 40px;
+    font-size: 14px;
   }
+  .custom-file-input2 {
+    color: transparent;
+    display:flex;
+    align-items: center;
+    // height: 40px;
+    font-size: 14px;
+    margin: 0;
+    width: 50%;
+    @media screen and (max-width: 770px) {
+      border: 1px solid #dbdbdb;
+    }
+  }
+
   .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  .custom-file-input2::-webkit-file-upload-button {
     visibility: hidden;
   }
   .custom-file-input::before {
     display: flex;
     justify-content: center;
     align-items: center;
-    content: "Upload Photos";
+    content: "Select Photo";
     color: white;
-    height: 30px;
+    height: 40px;
     background: #0095f6;
-    border-radius: 5px;
     outline: none;
     white-space: nowrap;
     cursor: pointer;
     font-weight: 700;
-    margin: 0px 20px;
   }
-  .custom-file-input:hover::before {
-    border-color: black;
+  .custom-file-input2::before {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    content: "Change Photo";
+    color: grey;
+    height: 40px;
+    background: #fff;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: 700;
   }
   .custom-file-input:active {
     outline: 0;
   }
   .custom-file-input:active::before {
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+  .custom-file-2:active {
+    outline: 0;
+  }
+  .custom-file-input2:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+`;
+
+const BeforeBtns = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  margin-top 15px;
+  border-top: 1px solid #dbdbdb;
+  button {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+  }
+  input {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    @media screen and (max-width: 770px) {
+      width: 100%;
+      border-radius: 3px;
+    }
+  }
+  @media screen and (max-width: 770px) {
+    width: 80%;
+  }
+`;
+const BeforeBtns2 = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 15px;
+  border-top: 1px solid #dbdbdb;
+  button {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+    height: 44px;
+  }
+  input {
+    width: 50%;
+    margin: 0;
+    padding: 0;
+  }
+  @media screen and (max-width: 770px) {
+    margin-top: 25px;
+    border: none;
+  }
+`;
+
+const MinHeader = styled.header`
+  width: 100%;
+  border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border-bottom: ${(props) => props.theme.boxBorder};
+  border-radius: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px;
+  z-index: 2;
+  height: 5.5vh;
+  max-height: 44px;
+  min-height: 44px;
+  svg {
+    margin: 0;
+    transform: rotate(270deg);
+  }
+  div {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+  }
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    width: 20%;
+    display: flex;
+    p {
+      margin-left: auto;
+      color: #0095f6;
+    }
+  }
+  @media screen and (min-width: 770px) {
+    display: none;
+  }
+`;
+
+const InputHolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+  width: 100%;
+  input {
+    margin-top: 15px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    height: 44px;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 0px 15px;
+  }
+  @media screen and (max-width: 770px) {
+    background-color: #fff;
   }
 `;
 
@@ -174,17 +335,20 @@ export default ({ props }) => {
   const captionInput = useInput("");
   const locationInput = useInput("");
   const history = useHistory();
+  const me = useQuery(ME);
   const [uploadMutation] = useMutation(UPLOAD, {
-    refetchQueries: () => [{ query: FEED_QUERY }],
+    refetchQueries: () => [{ query: FEED_QUERY }, { query: GET_USER, variables: { username: me.data.me.username } }],
   });
 
   const onDrop = (e) => {
     setPicture(e.target.files[0]);
-    setImagePreview(URL.createObjectURL(e.target.files[0]));
+    if (e.target.files[0]) {
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+    }
   };
   
   const goBack = (e) => {
-    history.push("/");
+    history.goBack();
   };
 
   const handleSubmit = async () => {
@@ -229,35 +393,67 @@ export default ({ props }) => {
       <Helmet>
         <title>Upload • Instapost</title>
       </Helmet>
+      <MinHeader>
+        <span onClick={goBack}>
+          <HeaderBackButton />
+        </span>
+        <div>New Post</div>
+        {!picture && <span>{/* <p onClick={onDrop}>Select</p> */}</span>}
+        {picture && (
+          <span>
+            <p onClick={handleSubmit}>Share</p>
+          </span>
+        )}
+      </MinHeader>
       <div className="imageWrapper">
         {!picture ? (
           <div className="labelWrapper">
-            <UploadPicture size={100} />
-            <p>Upload Photos</p>
+            <p>Share a new post</p>
+            <UploadPicture size={140} />
           </div>
         ) : (
           <img src={imagePreview} draggable={false} alt="User's Upload" />
         )}
       </div>
       {picture ? (
-        <>
-          <Input placeholder={"Caption"} {...captionInput} />
-          <Input placeholder={"Location"} {...locationInput} />
-          <button style={{ marginBottom: "6px" }} onClick={handleSubmit}>
-            Upload
-          </button>
-        </>
+        <InputHolder>
+          {/* <Input
+            className="captionInput"
+            placeholder={"Write a caption..."}
+            {...captionInput}
+          /> */}
+          <Textarea
+            placeholder={"Write a caption..."}
+            value={captionInput.value}
+            onChange={captionInput.onChange}
+          />
+          <Input placeholder={"Add Location"} {...locationInput} />
+          <BeforeBtns2>
+            <input
+              className="custom-file-input2"
+              type="file"
+              multiple={false}
+              accept=".jpg, .gif, .png, .gif"
+              onChange={onDrop}
+            />
+            <button onClick={handleSubmit}>Share</button>
+          </BeforeBtns2>
+        </InputHolder>
       ) : null}
-      <input
-        className="custom-file-input"
-        type="file"
-        multiple={false}
-        accept=".jpg, .gif, .png, .gif"
-        onChange={onDrop}
-      />
-      <button className="goback-button" onClick={goBack}>
-        Return to homepage
-      </button>
+      {!picture && (
+        <BeforeBtns>
+          <button className="goback-button" onClick={goBack}>
+            Cancel
+          </button>
+          <input
+            className="custom-file-input"
+            type="file"
+            multiple={false}
+            accept=".jpg, .gif, .png, .gif"
+            onChange={onDrop}
+          />
+        </BeforeBtns>
+      )}
     </UploadWrapper>
   );
 };

@@ -28,7 +28,9 @@ const Wrapper = styled.div`
     min-height: 85vh;
   }
   @media screen and (max-width: 770px) {
-    min-height: 200px;
+    height: 89vh;
+    max-width: 100%;
+    width: 100%;
     margin: 0;
   }
 `;

@@ -15,6 +15,9 @@ const Container = styled.button`
   cursor: pointer;
   height: 28px;
   padding: 1px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Button = ({ text, onClick }) => (
