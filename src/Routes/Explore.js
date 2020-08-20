@@ -67,6 +67,7 @@ const Explore = styled.div`
 const Posts = styled.div`
   display: grid;
   width: 100%;
+  margin-bottom: 45px;
   grid-template-columns: repeat(3, 32%);
   // grid-template-rows: minmax(100px, 293px);
   grid-template-rows: 293px;

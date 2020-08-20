@@ -348,7 +348,7 @@ export default ({ props }) => {
   };
   
   const goBack = (e) => {
-    history.goBack();
+    history.push("/");
   };
 
   const handleSubmit = async () => {

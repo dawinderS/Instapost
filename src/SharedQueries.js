@@ -3,9 +3,14 @@ import { gql } from "apollo-boost";
 export const ME = gql`
   {
     me {
+      id
       username
       avatar
       name
+      email
+      bio
+      phone
+      gender
       followers {
         id
         name
@@ -103,6 +108,37 @@ export const GET_USER = gql`
       isFollowing
       isSelf
       bio
+      phone
+      gender
+      email
+      followingCount
+      followersCount
+      postsCount
+      posts {
+        id
+        files {
+          url
+        }
+        likeCount
+        commentCount
+        createdAt
+      }
+    }
+  }
+`;
+export const GET_USER_BY_ID = gql`
+  query seeUserById($id: String!) {
+    seeUserById(id: $id) {
+      id
+      avatar
+      username
+      name
+      isFollowing
+      isSelf
+      bio
+      phone
+      gender
+      email
       followingCount
       followersCount
       postsCount
