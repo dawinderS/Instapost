@@ -34,6 +34,10 @@ const HeaderLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+  }
 `;
 
 export default withRouter(() => {

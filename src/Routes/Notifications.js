@@ -46,7 +46,7 @@ const SuggestedCard = styled.div`
   flex-direction: column;
   padding: 0px;
   border-radius: 4px;
-  max-height: 80vh;
+  max-height: 75vh;
   overflow-y: scroll;
   @media screen and (max-width: 770px) {
     width: 100%;
@@ -276,7 +276,7 @@ export default () => {
           <SuggestedCard>
             <SuggestedLink to="/suggested">
               <SuggestedFollowers>
-                <FollowUsers size={45} />
+                <FollowUsers size={40} />
                 <span>
                   Suggestions for you<span>Follow new users</span>
                 </span>

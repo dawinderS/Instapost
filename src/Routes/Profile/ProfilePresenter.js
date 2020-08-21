@@ -7,6 +7,7 @@ import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
+import { FollowUsers } from "../../Components/Icons";
 
 const Wrapper = styled.div`
   min-height: 80vh;
@@ -239,7 +240,7 @@ const MinTopHeader = styled.header`
     
   }
   div {
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 600;
     text-align: center;
   }
@@ -293,7 +294,13 @@ export default ({ loading, data, logOut }) => {
         <MinTopHeader>
           <span></span>
           <div>{username}</div>
-          <span>{/* <p onClick={onDrop}>Select</p> */}</span>
+          <span>
+            <p>
+              <Link to="/suggested">
+                <FollowUsers />
+              </Link>
+            </p>
+          </span>
         </MinTopHeader>
         <Header>
           <HeaderColumn>

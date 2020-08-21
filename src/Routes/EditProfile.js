@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "rl-react-helmet";
 import { Link, withRouter, useHistory } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
@@ -8,6 +9,26 @@ import TextareaAutosize from "react-autosize-textarea";
 import { ME, GET_USER_BY_ID } from "../SharedQueries";
 import { toast } from "react-toastify";
 import Loader from "../Components/Loader";
+import Modal from "react-modal";
+
+Modal.setAppElement('#root');
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "10px",
+    padding: "0",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    zIndex: "20",
+  },
+};
 
 const EDITUSER = gql`
   mutation editUser($avatar: String, $name: String, $username: String, $bio: String, $phone: Int, $gender: String) {
@@ -31,7 +52,7 @@ const Textarea = styled(TextareaAutosize)`
   background-color: #fff;
   border-radius: 0;
   border: 1px solid #dbdbdb;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 18px;
   padding: 5px 10px;
   min-height: 100px;
@@ -40,6 +61,14 @@ const Textarea = styled(TextareaAutosize)`
   resize: none;
   &:focus {
     outline: none;
+  }
+  @media screen and (max-width: 770px) {
+    margin: 0;
+    border: none;
+    padding: 0;
+    min-height: 36px;
+    min-height: 10px;
+    color: #262626;
   }
 `;
 
@@ -101,11 +130,16 @@ const MinLink = styled(Link)`
 const FormOuter = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 700px;
-  max-height: 82vh;
+  min-height: 70vh;
+  max-height: 85vh;
   background-color: #fff;
   border: 1px solid #dbdbdb;
   padding: 35px;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
 `;
 
 const CompletePart = styled.div`
@@ -124,11 +158,25 @@ const FirstPart = styled.div`
   font-size: 16px;
   font-weight: 600;
   color: #262626;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+    cursor: pointer;
+  }
+  span {
+    font-size: 30px;
+    font-weight: 300;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #dbdbdb;
+  }
 `;
 
 const SecondPart = styled.div`
   width: 70%;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   input {
     display: flex;
     align-items: center;
@@ -142,6 +190,20 @@ const SecondPart = styled.div`
     line-height: 18px;
     outline: none;
     border: 1px solid #dbdbdb;
+  }
+  h1 {
+    font-size: 20px;
+    line-height: 22px;
+    font-weight: 400;
+    margin-bottom: 5px;
+  }
+  p {
+    width:50%;
+    color: #0095f6;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 600;
+    cursor: pointer;
   }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -184,6 +246,155 @@ const Buttons = styled.div`
   }
 `;
 
+const MinMiddle = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 0px;
+
+  @media screen and (min-width: 770px) {
+    display: none;
+  }
+`;
+
+const MinPicShow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+    cursor: pointer;
+  }
+  p {
+    color: #0095f6;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 10px 0px 15px 0px;
+  }
+`;
+
+const MinInputs = styled.div`
+  width: 100%;
+  display: flex;
+  padding: 0px 15px;
+  flex-direction: column;
+  border-top: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
+`;
+
+const BothInputs = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  #no-border {
+    border: none;
+  }
+`;
+
+const LeftInput = styled.div`
+  display: flex;
+  width: 30%;
+  padding: 12px 0px;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 400;
+  color: #262626;
+`;
+const RightInput = styled.div`
+  display: flex;
+  width: 70%;
+  padding: 12px 0px;
+  border-bottom: 1px solid #dbdbdb;
+  input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: #262626;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 18px;
+    outline: none;
+    border: none;
+    padding: 0;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+`;
+
+const RandomText = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  padding: 15px 0px;
+  border-top: 1px solid #dbdbdb;
+`;
+
+const ModalWrapper = styled.div`
+  width: 260px;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    width: 100%;
+    margin: 24px 0px 24px 0px;
+    text-align: center;
+    font-size: 18px;
+    line-height 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+  #uploadbtn {
+    display: none;
+  }
+  #uploadbtnlabel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid #dbdbdb;
+    cursor: pointer;
+    min-height: 48px;
+    padding: 4px 0px;
+    text-align: center;
+  }
+  #profupload {
+    color: #0095f6;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  #profremove {
+    color: #ed4956;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  #profcancel {
+    color: #000000;
+    font-size: 14px;
+  }
+`;
+
 export default withRouter(({ }) => {
   const [loadingA, setLoadingA] = useState(false);
   const [name, setName] = useState("");
@@ -192,6 +403,8 @@ export default withRouter(({ }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [picture, setPicture] = useState(null);
   const history = useHistory();
   const { data, loading } = useQuery(ME);
   const [isEditProfilePicOpen, setIsEditProfilePicOpen] = useState(false);
@@ -205,6 +418,13 @@ export default withRouter(({ }) => {
   const goBack = (e) => {
     history.push(`/${username}`);
   };
+
+  const openModal = () => {
+    setIsOpen(true);
+  }
+  const closeModal = () => {
+    setIsOpen(false);
+  }
 
   useEffect(() => {
     if (loading) return;
@@ -248,28 +468,17 @@ export default withRouter(({ }) => {
       toast.error("An username & email are required.");
       return;
     }
-    // const formData = new FormData();
-    // formData.append("file", picture);
     try {
       setLoadingA(true);
-      // const {
-      //   data: { location },
-      // } = await axios.post("http://localhost:4000/api/upload", formData, {
-      //   headers: {
-      //     "content-type": "multipart/form-data",
-      //   },
-      // });
+
       const {
         data: { editUser },
       } = await editUserMutation({
         variables: {
-          // files: [location],
           name, username, bio, email, phone: parseInt(phone), gender
         },
       });
-      console.log(editUser);
       if (editUser) {
-        console.log(editUser.username);
         history.push(`/${editUser.username}`);
       }
     } catch (e) {
@@ -277,6 +486,54 @@ export default withRouter(({ }) => {
       console.log(e);
     } finally {
       setLoadingA(false);
+    }
+  };
+
+  const addProfPic = async (e) => {
+    const pic = e.currentTarget.files[0];
+    let formData;
+    if (pic) {
+      formData = new FormData();
+      formData.append("file", pic);
+    }
+
+    try {
+      const {
+        data: { location },
+      } = await axios.post("http://localhost:4000/api/upload", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      });
+      const {
+        data: { editUser },
+      } = await editUserMutation({
+        variables: { avatar: location },
+      });
+      if (editUser) {
+        closeModal();
+      } else {
+        toast.error("Cannot update at this time please try again.");
+      }
+    } catch (e) {
+      toast.error("Cannot update profile picture, please try again.");
+      console.log(e);
+    }
+  };
+
+  const removeProfPic = async () => {
+    try {
+      const { data: { editUser }, } = await editUserMutation({
+        variables: { avatar: "https://instapost-clone.s3.us-west-1.amazonaws.com/1597972559986" }
+      });
+      if (editUser) {
+        closeModal();
+      } else {
+        toast.error("Cannot update at this time please try again.");
+      }
+    } catch (e) {
+      toast.error("Cannot update profile picture, please try again.");
+      console.log(e);
     }
   };
 
@@ -294,7 +551,115 @@ export default withRouter(({ }) => {
       </MinHeader>
       {loading && <Loader />}
       {!loading && data.me && (
+        <MinMiddle>
+          <MinPicShow>
+            <img
+              onClick={openModal}
+              src={data.me.avatar}
+              width="90"
+              height="90"
+            />
+            <p onClick={openModal}>Change Profile Photo</p>
+          </MinPicShow>
+          <MinInputs>
+            <BothInputs>
+              <LeftInput>Name</LeftInput>
+              <RightInput>
+                <input
+                  id="name"
+                  name="name"
+                  placeholder={"Name"}
+                  onChange={updateState}
+                  value={name}
+                />
+              </RightInput>
+            </BothInputs>
+            <BothInputs>
+              <LeftInput>Username</LeftInput>
+              <RightInput>
+                <input
+                  id="username"
+                  name="username"
+                  placeholder={"Username"}
+                  onChange={updateState}
+                  value={username}
+                />
+              </RightInput>
+            </BothInputs>
+            <BothInputs>
+              <LeftInput>Bio</LeftInput>
+              <RightInput id="no-border">
+                <Textarea
+                  id="bio"
+                  name="bio"
+                  placeholder={"Bio"}
+                  value={bio}
+                  onChange={updateState}
+                />
+              </RightInput>
+            </BothInputs>
+            <RandomText>Private information</RandomText>
+            <BothInputs>
+              <LeftInput>Email</LeftInput>
+              <RightInput>
+                <input
+                  id="email"
+                  name="email"
+                  placeholder={"Email"}
+                  onChange={updateState}
+                  value={email}
+                />
+              </RightInput>
+            </BothInputs>
+            <BothInputs>
+              <LeftInput>Phone</LeftInput>
+              <RightInput>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="number"
+                  placeholder={"Phone Number"}
+                  onChange={updateState}
+                  value={phone}
+                />
+              </RightInput>
+            </BothInputs>
+            <BothInputs>
+              <LeftInput>Gender</LeftInput>
+              <RightInput id="no-border">
+                <input
+                  id="gender"
+                  name="gender"
+                  placeholder={"Gender"}
+                  onChange={updateState}
+                  value={gender}
+                />
+              </RightInput>
+            </BothInputs>
+          </MinInputs>
+        </MinMiddle>
+      )}
+      {!loading && data.me && (
         <FormOuter>
+          <CompletePart>
+            <FirstPart>
+              <span>Edit Profile</span>
+            </FirstPart>
+          </CompletePart>
+          <CompletePart>
+            <FirstPart>
+              <img
+                onClick={openModal}
+                src={data.me.avatar}
+                width="60"
+                height="60"
+              />
+            </FirstPart>
+            <SecondPart>
+              <h1>{data.me.username}</h1>
+              <p onClick={openModal}>Change Profile Photo</p>
+            </SecondPart>
+          </CompletePart>
           <CompletePart>
             <FirstPart>Name</FirstPart>
             <SecondPart>
@@ -379,6 +744,33 @@ export default withRouter(({ }) => {
           </CompletePart>
         </FormOuter>
       )}
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalWrapper>
+          <h1>Change Profile Photo</h1>
+          <div id="profupload">
+            <label htmlFor="uploadbtn" id="uploadbtnlabel">
+              <input
+                accept="image/*"
+                type="file"
+                onChange={addProfPic}
+                id="uploadbtn"
+              />
+              Upload Photo
+            </label>
+          </div>
+          <div onClick={removeProfPic} id="profremove">
+            Remove Current Photo
+          </div>
+          <div onClick={closeModal} id="profcancel">
+            Cancel
+          </div>
+        </ModalWrapper>
+      </Modal>
     </Wrapper>
   );
 });
