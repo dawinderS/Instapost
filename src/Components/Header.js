@@ -94,7 +94,7 @@ export default withRouter(({ history }) => {
           </Link>
         </HeaderColumn>
         <HeaderColumn>
-          <form onSubmit={onSearchSubmit}>
+          <form onChange={onSearchSubmit}>
             <SearchInput
               value={search.value}
               onChange={search.onChange}

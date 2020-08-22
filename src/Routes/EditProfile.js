@@ -404,14 +404,14 @@ export default withRouter(({ }) => {
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [picture, setPicture] = useState(null);
   const history = useHistory();
   const { data, loading } = useQuery(ME);
-  const [isEditProfilePicOpen, setIsEditProfilePicOpen] = useState(false);
-  const [editUserMutation] = useMutation(EDITUSER
-  ,{
+  const [editUserMutation] = useMutation(EDITUSER, {
     refetchQueries: () => [
-      { query: GET_USER_BY_ID, variables: { id: data.me.id } }
+      {
+        query: GET_USER_BY_ID,
+        variables: { id: data.me.id },
+      },
     ],
   });
   
@@ -482,8 +482,11 @@ export default withRouter(({ }) => {
         history.push(`/${editUser.username}`);
       }
     } catch (e) {
-      toast.error("Cannot update profile, please try again. If you are providing a new username/email, that username/email might already be in use.");
-      console.log(e);
+      if (e.message.split(' ').includes("unique")) {
+        toast.error("The new username or email you have provided is already in use.")
+      } else {
+        toast.error("Cannot update profile, please try again.");
+      }
     } finally {
       setLoadingA(false);
     }
