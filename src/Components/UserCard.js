@@ -11,22 +11,28 @@ const Card = styled.div`
   display:flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   padding: 20px;
+  max-width: 140px;
 `;
 
 const EAvatar = styled(Avatar)`
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 
 const ELink = styled(Link)`
   color: inherit;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const UserCard = ({ id, username, isFollowing, url, isSelf }) => (
   <Card>
-    <EAvatar url={url} size={"md"} />
     <ELink to={`/${username}`}>
+      <EAvatar url={url} size={"md"} />
       <FatText text={username} />
     </ELink>
     {!isSelf && <FollowButton id={id} isFollowing={isFollowing} />}

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, withRouter } from "react-router-dom";
+import { Link, NavLink, withRouter } from "react-router-dom";
 import { Home, HomeLoc, Explore, ExploreLoc, Upload, HeartEmpty, HeartLoc } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
@@ -28,7 +28,7 @@ const Bottom = styled.div`
   }
 `;
 
-const HeaderLink = styled(Link)`
+const HeaderLink = styled(NavLink)`
   width: 20%;
   height: 100%;
   display: flex;

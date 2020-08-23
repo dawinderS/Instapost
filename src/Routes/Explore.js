@@ -157,7 +157,7 @@ export default withRouter(({ history }) => {
       {loading && <Loader />}
       <MinHeader>
         <MinLink to="/search?term=" >
-          <form onSubmit={onSearchSubmit}>
+          <form onKeyUp={onSearchSubmit}>
             <SearchInput
               value={search.value}
               onChange={search.onChange}

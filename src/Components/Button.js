@@ -14,7 +14,8 @@ const Container = styled.button`
   text-overflow: ellipsis;
   cursor: pointer;
   height: 28px;
-  padding: 1px 24px;
+  width: 92px;
+  padding: 1px 0px;
   display: flex;
   align-items: center;
   justify-content: center;

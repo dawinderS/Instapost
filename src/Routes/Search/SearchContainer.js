@@ -6,6 +6,7 @@ import { SEARCH } from "./SearchQueries";
 
 export default withRouter(({ location: { search } }) => {
   const term = search.split("=")[1];
+  const [action, setAction] = useState("logIn");
   const { data, loading } = useQuery(SEARCH, {
     skip: term === undefined,
     variables: {
