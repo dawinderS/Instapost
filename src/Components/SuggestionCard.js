@@ -9,6 +9,7 @@ const SuggestedCard = styled.div`
   margin: 8px 0px 20px 4px;;
   display: flex;
   flex-direction: column;
+  width: 100%;
 `;
 
 const UserLink = styled(Link)`
@@ -47,6 +48,8 @@ const EachCard = styled.div`
     margin: 0;
     margin-left: auto;
     background-color: transparent;
+    text-align: right;
+    width: 47px;
   }
 `;
 

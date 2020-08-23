@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Helmet } from "rl-react-helmet";
 import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
 import { GET_USER_BY_ID } from "../../SharedQueries";
-import { Helmet } from "rl-react-helmet";
 import { toast } from "react-toastify";
 import Loader from "../../Components/Loader";
 import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
-import { FollowUsers } from "../../Components/Icons";
+import { FollowUsers, CancelButton } from "../../Components/Icons";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -108,10 +108,11 @@ const EditUser = styled.div`
   border-radius: 4px;
   color: #262626;
   font-weight: 600;
-  padding: 6px 10px;
+  padding: 6px 0px;
   cursor: pointer;
   text-align: center; 
-  margin-right: 13px;
+  margin-right: 8px;
+  width: 94px;
 `;
 
 const Counts = styled.ul`
@@ -123,6 +124,9 @@ const Count = styled.li`
   font-size: 16px;
   &:not(:last-child) {
     margin-right: 40px;
+  }
+  &:not(:first-child) {
+    cursor: pointer;
   }
 `;
 
@@ -222,6 +226,9 @@ const MinCount = styled.div`
   text-align: center;
   align-items: center;
   line-height: 18px;
+  &:not(:first-child) {
+    cursor: pointer;
+  }
 `;
 
 const SectionHolder = styled.div`
@@ -356,15 +363,109 @@ const ModalWrapper = styled.div`
   }
 `;
 
+const ModalWrapper2 = styled.div`
+  width: 300px;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 0px 16px;
+  div {
+    display: flex;
+    width: 20%;
+    span {
+      margin-left: auto;
+      cursor: pointer;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-size: 18px;
+    line-height 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+`;
+
+const UserShow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overscroll-y: auto;
+  max-height: 355px;
+  min-height: 52px;
+`;
+
+const EachCard = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  div {
+    margin-left: 13px;
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+      margin-bottom: 3px;
+    }
+    h1 {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 14px;
+      color: #8e8e8e;
+      margin-bottom: 5px;
+    }
+    button {
+      margin: 0;
+      margin-left: auto;
+    }
+  }
+`;
+
+const UserLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+  }
+`;
+
 export default ({ loading, data, logOut }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [action, setAction] = useState("UploadPic");
   const [editUserMutation] = useMutation(EDITUSER, {
     refetchQueries: () => [
       { query: GET_USER_BY_ID, variables: { id: data.seeUser.id } },
     ],
   });
-
-  const openModal = () => {
+  const openPicModal = () => {
+    setAction("UploadPic");
+    setIsOpen(true);
+  };
+  const openFollowersModal = () => {
+    setAction("Followers");
+    setIsOpen(true);
+  };
+  const openFollowingModal = () => {
+    setAction("Following");
     setIsOpen(true);
   };
   const closeModal = () => {
@@ -444,6 +545,8 @@ export default ({ loading, data, logOut }) => {
         followersCount,
         postsCount,
         posts,
+        followers,
+        following
       },
     } = data;
     let namee;
@@ -468,7 +571,7 @@ export default ({ loading, data, logOut }) => {
         </MinTopHeader>
         <Header>
           <HeaderColumn>
-            <img src={avatar} onClick={openModal} width="150" height="150" />
+            <img src={avatar} onClick={openPicModal} width="150" height="150" />
           </HeaderColumn>
           <HeaderCol>
             <UsernameRow>
@@ -488,10 +591,10 @@ export default ({ loading, data, logOut }) => {
               <Count>
                 <FatText text={String(postsCount)} /> posts
               </Count>
-              <Count>
+              <Count onClick={openFollowersModal}>
                 <FatText text={String(followersCount)} /> followers
               </Count>
-              <Count>
+              <Count onClick={openFollowingModal}>
                 <FatText text={String(followingCount)} /> following
               </Count>
             </Counts>
@@ -502,7 +605,7 @@ export default ({ loading, data, logOut }) => {
         <MinHeader>
           <MinHeaderCol>
             <MinImage>
-              <img src={avatar} onClick={openModal} width="77" height="77" />
+              <img src={avatar} onClick={openPicModal} width="77" height="77" />
             </MinImage>
             <MinUsernameRow>
               <MinUsername>{username}</MinUsername>
@@ -529,11 +632,11 @@ export default ({ loading, data, logOut }) => {
               <FatText text={String(postsCount)} />
               <p>posts</p>
             </MinCount>
-            <MinCount>
+            <MinCount onClick={openFollowersModal}>
               <FatText text={String(followersCount)} />
               <p>followers</p>
             </MinCount>
-            <MinCount>
+            <MinCount onClick={openFollowingModal}>
               <FatText text={String(followingCount)} />
               <p>following</p>
             </MinCount>
@@ -559,26 +662,78 @@ export default ({ loading, data, logOut }) => {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          <ModalWrapper>
-            <h1>Change Profile Photo</h1>
-            <div id="profupload">
-              <label htmlFor="uploadbtn" id="uploadbtnlabel">
-                <input
-                  accept="image/*"
-                  type="file"
-                  onChange={addProfPic}
-                  id="uploadbtn"
-                />
-                Upload Photo
-              </label>
-            </div>
-            <div onClick={removeProfPic} id="profremove">
-              Remove Current Photo
-            </div>
-            <div onClick={closeModal} id="profcancel">
-              Cancel
-            </div>
-          </ModalWrapper>
+          {action === "UploadPic" && (
+            <ModalWrapper>
+              <h1>Change Profile Photo</h1>
+              <div id="profupload">
+                <label htmlFor="uploadbtn" id="uploadbtnlabel">
+                  <input
+                    accept="image/*"
+                    type="file"
+                    onChange={addProfPic}
+                    id="uploadbtn"
+                  />
+                  Upload Photo
+                </label>
+              </div>
+              <div onClick={removeProfPic} id="profremove">
+                Remove Current Photo
+              </div>
+              <div onClick={closeModal} id="profcancel">
+                Cancel
+              </div>
+            </ModalWrapper>
+          )}
+          {action === "Followers" && (
+            <ModalWrapper2>
+              <ModalHeader>
+                <div></div>
+                <h1>Followers</h1>
+                <div>
+                  <span onClick={closeModal}><CancelButton /></span>
+                </div>
+              </ModalHeader>
+              <UserShow>
+              {followers.map(user => (
+                <EachCard key={user.id}>
+                  <UserLink to={`/${user.username}`}>
+                    <img width="34" height="34" src={user.avatar} />
+                    <div>
+                      <span>{user.username}</span>
+                      <h1>{user.name}</h1>
+                    </div>
+                  </UserLink>
+                  <FollowButton id={user.id} isFollowing={user.isFollowing} />
+                </EachCard>
+              ))}
+              </UserShow>
+            </ModalWrapper2>
+          )}
+          {action === "Following" && (
+            <ModalWrapper2>
+              <ModalHeader>
+                <div></div>
+                <h1>Following</h1>
+                <div>
+                  <span onClick={closeModal}><CancelButton /></span>
+                </div>
+              </ModalHeader>
+              <UserShow>
+                {following.map(user => (
+                  <EachCard key={user.id}>
+                    <UserLink to={`/${user.username}`}>
+                      <img width="34" height="34" src={user.avatar} />
+                      <div>
+                        <span>{user.username}</span>
+                        <h1>{user.name}</h1>
+                      </div>
+                    </UserLink>
+                    <FollowButton id={user.id} isFollowing={user.isFollowing} />
+                  </EachCard>
+                ))}
+              </UserShow>
+            </ModalWrapper2>
+          )}
         </Modal>
       </Wrapper>
     );

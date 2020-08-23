@@ -123,6 +123,22 @@ export const GET_USER = gql`
         commentCount
         createdAt
       }
+      followers {
+        id
+        name
+        username
+        avatar
+        createdAt
+        isFollowing
+      }
+      following {
+        id
+        name
+        username
+        avatar
+        createdAt
+        isFollowing
+      }
     }
   }
 `;

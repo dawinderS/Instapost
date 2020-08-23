@@ -53,6 +53,8 @@ const PostSection = styled(Section)`
 `;
 
 const SearchPresenter = ({ searchTerm, loading, data }) => {
+  // const [action, setAction] = useState("all");
+
   if (searchTerm === undefined || searchTerm.length < 1) {
     return (
       <Wrapper>

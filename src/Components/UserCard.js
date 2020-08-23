@@ -12,7 +12,7 @@ const Card = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 20px 0px;
   max-width: 140px;
 `;
 
@@ -21,12 +21,21 @@ const EAvatar = styled(Avatar)`
 `;
 
 const ELink = styled(Link)`
+  width: 100%;
   color: inherit;
   margin-bottom: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  span {
+    max-width: 75%;
+    overflow-x: auto;
+    ::-webkit-scrollbar {
+      width: 0px; 
+      background: transparent;
+    }
+  }
 `;
 
 const UserCard = ({ id, username, isFollowing, url, isSelf }) => (
