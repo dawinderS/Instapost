@@ -223,3 +223,16 @@ export const CancelButton = ({ size = 24 }) => (
     <path clipRule="evenodd" d="M41.1 9.1l-15 15L41 39c.6.6.6 1.5 0 2.1s-1.5.6-2.1 0L24 26.1l-14.9 15c-.6.6-1.5.6-2.1 0-.6-.6-.6-1.5 0-2.1l14.9-15-15-15c-.6-.6-.6-1.5 0-2.1s1.5-.6 2.1 0l15 15 15-15c.6-.6 1.5-.6 2.1 0 .6.6.6 1.6 0 2.2z" fillRule="evenodd"></path>
   </svg>
 );
+
+export const PostOptions = ({ size = 18}) => (
+  <svg  
+    fill="#262626" 
+    height={size}
+    width={size}
+    viewBox="0 0 48 48" 
+  >
+    <circle clipRule="evenodd" cx="8" cy="24" fillRule="evenodd" r="4.5"></circle>
+    <circle clipRule="evenodd" cx="24" cy="24" fillRule="evenodd" r="4.5"></circle>
+    <circle clipRule="evenodd" cx="40" cy="24" fillRule="evenodd" r="4.5"></circle>
+  </svg>
+);

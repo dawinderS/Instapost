@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import { useQuery } from "react-apollo-hooks";
-import { SUGGESTED } from "../SharedQueries";
+import { SUGGESTED, ME } from "../SharedQueries";
 import FollowButton from "./FollowButton/index";
 
 const SuggestedCard = styled.div`
@@ -55,11 +55,12 @@ const EachCard = styled.div`
 
 export default withRouter(() => {
   const { data, loading } = useQuery(SUGGESTED);
+  const me = useQuery(ME);
 
   return (
     <SuggestedCard>
       {!loading &&
-        data.suggested &&
+        data.suggested && me.data &&
         data.suggested.slice(0, 5).map((user) => (
           <EachCard key={user.id}>
             <UserLink to={`/${user.username}`}>
@@ -69,7 +70,7 @@ export default withRouter(() => {
                 <p>{user.name}</p>
               </div>
             </UserLink>
-            <FollowButton id={user.id} isFollowing={user.isFollowing} />
+            <FollowButton myId={me.data.me.id} id={user.id} isFollowing={user.isFollowing} />
           </EachCard>
         ))}
     </SuggestedCard>

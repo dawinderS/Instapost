@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link, useHistory } from "react-router-dom";
 import { Helmet } from "rl-react-helmet";
 import { useQuery } from "react-apollo-hooks";
-import { SUGGESTED } from "../SharedQueries";
+import { SUGGESTED, ME } from "../SharedQueries";
 import FollowButton from "../Components/FollowButton/index";
 import Loader from "../Components/Loader";
 import { HeaderBackButton } from "../Components/Icons";
@@ -164,6 +164,7 @@ const MinHeader = styled.header`
 
 export default () => {
   const { data, loading } = useQuery(SUGGESTED);
+  const me = useQuery(ME);
   const history = useHistory();
   const goBack = (e) => {
     history.goBack();
@@ -181,8 +182,8 @@ export default () => {
         <div>Discover People</div>
         <span></span>
       </MinHeader>
-      {loading && <Loader />}
-      {!loading && data.suggested && (
+      {loading || me.loading && <Loader />}
+      {!loading && data.suggested && me.data && (
         <Holder>
           <h2>Suggested</h2>
           <SuggestedCard>
@@ -197,7 +198,7 @@ export default () => {
                     <p>Suggested for you</p>
                   </div>
                 </UserLink>
-                <FollowButton id={user.id} isFollowing={user.isFollowing} />
+                <FollowButton myId={me.data.me.id} id={user.id} isFollowing={user.isFollowing} />
               </EachCard>
             ))}
           </SuggestedCard>

@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const PostContainer = ({
   id,
   user,
+  me,
   files,
   likeCount,
   commentCount,
@@ -31,17 +32,17 @@ const PostContainer = ({
     variables: { postId: id, text: comment.value },
   });
   
-  const slide = () => {
-    const totalFiles = files.length;
-    if (currentItem === totalFiles - 1) {
-      setTimeout(() => setCurrentItem(0), 3000);
-    } else {
-      setTimeout(() => setCurrentItem(currentItem + 1), 3000);
-    }
-  };
-  useEffect(() => {
-    slide();
-  }, [currentItem]);
+  // const slide = () => {
+  //   const totalFiles = files.length;
+  //   if (currentItem === totalFiles - 1) {
+  //     setTimeout(() => setCurrentItem(0), 3000);
+  //   } else {
+  //     setTimeout(() => setCurrentItem(currentItem + 1), 3000);
+  //   }
+  // };
+  // useEffect(() => {
+  //   slide();
+  // }, [currentItem]);
 
   const toggleLike = () => {
     toggleLikeMutation();
@@ -56,7 +57,7 @@ const PostContainer = ({
 
   const onKeyPress = async (event) => {
     const { which } = event;
-    if (which === 13) {
+    if (which === 13 && comment.value.length > 0) {
       event.preventDefault();
       try {
         const {
@@ -67,26 +68,31 @@ const PostContainer = ({
       } catch {
         toast.error("Cannot send comment, please try again.");
       }
+    } else if (which === 13) {
+      event.preventDefault();
     }
     return;
   };
 
   const onPostClick = async (event) => {
     event.preventDefault();
-    try {
-      const {
-        data: { addComment },
-      } = await addCommentMutation();
-      setSelfComments([...selfComments, addComment]);
-      comment.setValue("");
-    } catch {
-      toast.error("Cannot send comment, please try again.");
+    if (comment.value.length > 0) {
+      try {
+        const {
+          data: { addComment },
+        } = await addCommentMutation();
+        setSelfComments([...selfComments, addComment]);
+        comment.setValue("");
+      } catch {
+        toast.error("Cannot send comment, please try again.");
+      }
     }
     return;
   };
 
   return (
     <PostPresenter
+      me={me}
       user={user}
       files={files}
       likeCount={likeCountS}
@@ -110,6 +116,13 @@ const PostContainer = ({
 PostContainer.propTypes = {
   id: PropTypes.string.isRequired,
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    avatar: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    isFollowing: PropTypes.bool.isRequired,
+    isSelf: PropTypes.bool.isRequired
+  }).isRequired,
+  me: PropTypes.shape({
     id: PropTypes.string.isRequired,
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired,

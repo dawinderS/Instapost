@@ -84,6 +84,7 @@ const Posts = styled.div`
     justify-content: space-between;
     // row-gap: 0px;
     row-gap: 1px;
+    margin: 0;
   }
 `;
 

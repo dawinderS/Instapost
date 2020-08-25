@@ -12,12 +12,10 @@ import SuggestedCard from "../Components/SuggestionCard";
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  min-height: 80vh;
   max-width: 100%;
   @media screen and (max-width: 770px) {
     width: 100%;
-    min-height: 88vh;
-    max-height: 88vh;
+    height: 89vh;
     justify-content: flex-start;
   }
 `;
@@ -27,10 +25,10 @@ const PostShow = styled.div`
   flex-direction: column;
   align-items: center;
   min-width: 610px;
+  max-width: 610px;
   @media screen and (max-width: 770px) {
     width: 100%;
-    max-height: 88vh;
-    max-width: 100%;
+    min-width: 100%;
   }
 `;
 
@@ -108,7 +106,7 @@ const MinHeader = styled.header`
   align-items: center;
   padding: 11px 0px;
   z-index: 2;
-  height: 6vh;
+  height: 5.5vh;
   max-height: 44px;
   min-height: 44px;
   img {
@@ -149,13 +147,14 @@ export default () => {
         // suggested.data && !suggested.loading &&
         <>
           <PostShow> {
-          data.seeFeed.map((post) => (
-            <Post
+           data.seeFeed.map((post) => (
+             <Post
               key={post.id}
               id={post.id}
               location={post.location}
               caption={post.caption}
               user={post.user}
+              me={me.data.me}
               files={post.files}
               likeCount={post.likeCount}
               commentCount={post.commentCount}

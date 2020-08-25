@@ -13,7 +13,10 @@ const Card = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px 0px;
-  max-width: 140px;
+  width:100%;
+  button {
+    width: 75%;
+  }
 `;
 
 const EAvatar = styled(Avatar)`
@@ -36,21 +39,37 @@ const ELink = styled(Link)`
       background: transparent;
     }
   }
+  p {
+    margin-top: 5px;
+    color: #8e8e8e;
+    font-weight: 400;
+    max-width: 75%;
+    overflow-x: auto;
+    ::-webkit-scrollbar {
+      width: 0px; 
+      background: transparent;
+    }
+    min-height: 14px;
+  }
 `;
 
-const UserCard = ({ id, username, isFollowing, url, isSelf }) => (
+const UserCard = ({ myId, id, name, username, isFollowing, url, isSelf }) => {
+  return (
   <Card>
     <ELink to={`/${username}`}>
       <EAvatar url={url} size={"md"} />
       <FatText text={username} />
+        {name && <p>{name}</p>}
+        {!name && <p>{" "}</p>}
     </ELink>
-    {!isSelf && <FollowButton id={id} isFollowing={isFollowing} />}
+    {!isSelf && <FollowButton myId={myId} id={id} isFollowing={isFollowing} />}
   </Card>
-);
+)};
 
 UserCard.propTypes = {
   id: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   isFollowing: PropTypes.bool.isRequired,
   url: PropTypes.string.isRequired,
   isSelf: PropTypes.bool.isRequired,

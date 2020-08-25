@@ -1,21 +1,47 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useMutation } from "react-apollo-hooks";
+import { GET_USER_BY_ID, SUGGESTED } from '../../SharedQueries';
 import { FOLLOW, UNFOLLOW } from "./FollowButtonQueries";
 import FollowButtonPresenter from "./FollowButtonPresenter";
+import { toast } from "react-toastify";
 
-const FollowButtonContainer = ({ isFollowing, id }) => {
+const FollowButtonContainer = ({ isFollowing, id, myId }) => {
   const [isFollowingS, setIsFollowing] = useState(isFollowing);
-  const [followMutation] = useMutation(FOLLOW, { variables: { id } });
-  const [unfollowMutation] = useMutation(UNFOLLOW, { variables: { id } });
+  const [followMutation] = useMutation(FOLLOW, {
+    refetchQueries: () => [
+      { query: GET_USER_BY_ID, variables: { id: myId } },
+      { query: SUGGESTED },
+    ],
+  });
+  const [unfollowMutation] = useMutation(UNFOLLOW, {
+    refetchQueries: () => [
+      { query: GET_USER_BY_ID, variables: { id: myId } },
+      { query: SUGGESTED },
+    ],
+  });
 
-  const onClick = () => {
+  const onClick = async () => {
     if (isFollowingS === true) {
       setIsFollowing(false);
-      unfollowMutation();
+      try {
+        const { data } = await unfollowMutation({
+          variables: { id }
+        });
+        if (data) return;
+      } catch(e) {
+        toast.error("Please try again.")
+      } 
     } else {
       setIsFollowing(true);
-      followMutation();
+      try {
+        const { data } = await followMutation({
+          variables: { id }
+        });
+        if (data) return;
+      } catch (e) {
+        toast.error("Please try again.")
+      } 
     }
   };
   return <FollowButtonPresenter onClick={onClick} isFollowing={isFollowingS} />;

@@ -132,6 +132,8 @@ const EachCard = styled.div`
   }
   button {
     margin-left: auto;
+    width: 80px;
+    min-width: 80px;
   }
   @media screen and (max-width: 770px) {
     padding: 10px 15px;
@@ -220,7 +222,7 @@ export default () => {
                 started following you. <span className="notif-date">{getDate(notif.createdAt)}</span>
               </span>
             </span>
-            <FollowButton id={notif.id} isFollowing={notif.isFollowing} />
+            <FollowButton myId={data.me.id} id={notif.id} isFollowing={notif.isFollowing} />
           </EachCard>
         );
       } else if (notif.user.username !== data.me.username && notif.text === undefined) {

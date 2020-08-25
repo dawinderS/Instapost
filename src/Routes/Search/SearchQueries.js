@@ -14,6 +14,7 @@ export const SEARCH = gql`
       id
       avatar
       username
+      name
       isFollowing
       isSelf
     }

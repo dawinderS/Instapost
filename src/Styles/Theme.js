@@ -10,7 +10,7 @@ export default {
   redColor: "#ED4956",
   blueColor: "#0095f6",
   darkBlueColor: "#003569",
-  boxBorder: "1px solid #dbdbdb",
+  boxBorder: ".5px solid #dbdbdb",
   borderRadius: "4px",
   whiteBox: `border:${BOX_BORDER};
              border-radius:${BORDER_RADIUS};

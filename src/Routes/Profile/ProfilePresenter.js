@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { Helmet } from "rl-react-helmet";
 import { useMutation } from "react-apollo-hooks";
@@ -13,6 +13,7 @@ import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
 import { FollowUsers, CancelButton } from "../../Components/Icons";
+import { HeaderBackButton } from "../../Components/Icons";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -215,6 +216,7 @@ const MinCounts = styled.div`
   justify-content: space-around;
   align-items: center;
   border-top: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
   p {
     color: #8e8e8e;
   }
@@ -233,8 +235,8 @@ const MinCount = styled.div`
 
 const SectionHolder = styled.div`
   height: 53px;
-  border-top: 1px solid #dbdbdb;
-  justify-content: center;
+  border-bottom: 1px solid #dbdbdb;
+  justify-content: space-around;
   align-items: center;
   @media screen and (max-width: 770px) {
     height: 45px;
@@ -284,8 +286,11 @@ const MinTopHeader = styled.header`
   height: 5.5vh;
   max-height: 44px;
   min-height: 44px;
-  svg {
-    
+  #backbutton {
+    svg {
+      margin: 0;
+      transform: rotate(270deg);
+    }
   }
   div {
     font-size: 16px;
@@ -451,11 +456,17 @@ const UserLink = styled(Link)`
 export default ({ loading, data, logOut }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [action, setAction] = useState("UploadPic");
-  const [editUserMutation] = useMutation(EDITUSER, {
-    refetchQueries: () => [
-      { query: GET_USER_BY_ID, variables: { id: data.seeUser.id } },
-    ],
-  });
+  const [editUserMutation] = useMutation(EDITUSER); 
+  //   , {
+  //   refetchQueries: () => [
+  //     { query: GET_USER_BY_ID, variables: { id: data.seeUser.id } },
+  //   ],
+  // });
+  const history = useHistory();
+  const goBack = (e) => {
+    history.goBack();
+  };
+
   const openPicModal = () => {
     setAction("UploadPic");
     setIsOpen(true);
@@ -559,7 +570,10 @@ export default ({ loading, data, logOut }) => {
           </title>
         </Helmet>
         <MinTopHeader>
-          <span></span>
+          {!isSelf && <span id="backbutton" onClick={goBack}>
+            <HeaderBackButton />
+          </span>}
+          {isSelf && <span></span>}
           <div>{username}</div>
           <span>
             <p>
@@ -571,7 +585,8 @@ export default ({ loading, data, logOut }) => {
         </MinTopHeader>
         <Header>
           <HeaderColumn>
-            <img src={avatar} onClick={openPicModal} width="150" height="150" />
+            {isSelf && <img src={avatar} onClick={openPicModal} width="150" height="150" /> }
+            {!isSelf && <img src={avatar} width="150" height="150" /> }
           </HeaderColumn>
           <HeaderCol>
             <UsernameRow>
@@ -584,7 +599,7 @@ export default ({ loading, data, logOut }) => {
               {isSelf ? (
                 <Button onClick={logOut} text="Log Out" />
               ) : (
-                <FollowButton isFollowing={isFollowing} id={id} />
+                <FollowButton myId={id}isFollowing={isFollowing} id={id} />
               )}
             </UsernameRow>
             <Counts>
@@ -605,7 +620,8 @@ export default ({ loading, data, logOut }) => {
         <MinHeader>
           <MinHeaderCol>
             <MinImage>
-              <img src={avatar} onClick={openPicModal} width="77" height="77" />
+              {isSelf && <img src={avatar} onClick={openPicModal} width="77" height="77" /> }
+              {!isSelf && <img src={avatar} width="77" height="77" /> }
             </MinImage>
             <MinUsernameRow>
               <MinUsername>{username}</MinUsername>
@@ -618,7 +634,7 @@ export default ({ loading, data, logOut }) => {
                 {isSelf ? (
                   <Button onClick={logOut} text="Log Out" />
                 ) : (
-                  <FollowButton isFollowing={isFollowing} id={id} />
+                  <FollowButton myId={id} isFollowing={isFollowing} id={id} />
                 )}
               </MinButtons>
             </MinUsernameRow>
@@ -642,7 +658,9 @@ export default ({ loading, data, logOut }) => {
             </MinCount>
           </MinCounts>
         </MinHeader>
-        {/* <SectionHolder /> */}
+        {/* <SectionHolder>
+
+        </SectionHolder> */}
         <Posts>
           {posts &&
             posts
@@ -660,7 +678,7 @@ export default ({ loading, data, logOut }) => {
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           style={customStyles}
-          contentLabel="Example Modal"
+          contentLabel="Profile Modal"
         >
           {action === "UploadPic" && (
             <ModalWrapper>
@@ -696,14 +714,14 @@ export default ({ loading, data, logOut }) => {
               <UserShow>
               {followers.map(user => (
                 <EachCard key={user.id}>
-                  <UserLink to={`/${user.username}`}>
+                  <UserLink onClick={closeModal} to={`/${user.username}` }>
                     <img width="34" height="34" src={user.avatar} />
                     <div>
                       <span>{user.username}</span>
                       <h1>{user.name}</h1>
                     </div>
                   </UserLink>
-                  <FollowButton id={user.id} isFollowing={user.isFollowing} />
+                  <FollowButton myId={id} id={user.id} isFollowing={user.isFollowing} />
                 </EachCard>
               ))}
               </UserShow>
@@ -721,14 +739,14 @@ export default ({ loading, data, logOut }) => {
               <UserShow>
                 {following.map(user => (
                   <EachCard key={user.id}>
-                    <UserLink to={`/${user.username}`}>
+                    <UserLink onClick={closeModal} to={`/${user.username}`}>
                       <img width="34" height="34" src={user.avatar} />
                       <div>
                         <span>{user.username}</span>
                         <h1>{user.name}</h1>
                       </div>
                     </UserLink>
-                    <FollowButton id={user.id} isFollowing={user.isFollowing} />
+                    <FollowButton myId={id} id={user.id} isFollowing={user.isFollowing} />
                   </EachCard>
                 ))}
               </UserShow>

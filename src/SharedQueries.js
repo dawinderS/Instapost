@@ -67,6 +67,8 @@ export const FEED_QUERY = gql`
         id
         avatar
         username
+        isFollowing
+        isSelf
       }
       files {
         id
@@ -155,6 +157,25 @@ export const GET_USER_BY_ID = gql`
       phone
       gender
       email
+      privateAcc
+      isFollowing
+      isSelf
+      followers {
+        id
+        username
+        name
+        avatar
+        isFollowing
+        createdAt
+      }
+      following {
+        id
+        username
+        name
+        avatar
+        isFollowing
+        createdAt
+      }
       followingCount
       followersCount
       postsCount
