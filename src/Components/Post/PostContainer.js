@@ -92,6 +92,7 @@ const PostContainer = ({
 
   return (
     <PostPresenter
+      id={id}
       me={me}
       user={user}
       files={files}

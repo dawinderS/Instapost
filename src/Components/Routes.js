@@ -10,6 +10,7 @@ import Suggested from "../Routes/Suggested";
 import Upload from "../Routes/Upload";
 import Notifications from "../Routes/Notifications";
 import EditProfile from "../Routes/EditProfile";
+import ShowPost from "../Routes/ShowPost";
 
 const LoggedInRoutes = () => (
   <Switch>
@@ -20,7 +21,8 @@ const LoggedInRoutes = () => (
     <Route path="/upload" component={Upload} />
     <Route path="/notifications" component={Notifications} />
     <Route path="/editprofile" component={EditProfile} />
-    <Route path="/:username" component={Profile} />
+    <Route exact path="/:username" component={Profile} />
+    <Route exact path="/p/:postId" component={ShowPost} />
     <Redirect from="*" to="/" />
   </Switch>
 );

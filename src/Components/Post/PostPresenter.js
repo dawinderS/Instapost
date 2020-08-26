@@ -250,6 +250,11 @@ const CommentHolder = styled.div`
     }
   }
 `;
+const GoPostLink = styled(Link)`
+  display:flex;
+  align-items: center;
+  width: 100%;
+`;
 
 const ModalWrapper = styled.div`
   width: 260px;
@@ -287,8 +292,11 @@ const ModalWrapper = styled.div`
   }
 `;
 
+
+
 export default ({
   user: { username, avatar, isFollowing, isSelf },
+  id,
   me,
   location,
   files,
@@ -405,9 +413,11 @@ export default ({
           <div id="profupload">
             Edit
           </div>
-          <div id="profcancel">
-            Go to post
-          </div>
+          <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink>
           <div onClick={closeModal} id="profcancel">
             Cancel
           </div>
@@ -417,9 +427,11 @@ export default ({
           <div id="profremove">
             Unfollow
           </div>
-          <div id="profcancel">
-            Go to post
-          </div>
+          <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink>
           <div onClick={closeModal} id="profcancel">
             Cancel
           </div>

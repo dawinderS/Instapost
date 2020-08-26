@@ -100,6 +100,49 @@ export const FEED_QUERY = gql`
   }
 `;
 
+export const GET_POST = gql`
+  query seeFullPost($id: String!) {
+    seeFullPost(id: $id) {
+      id
+      location
+      caption
+      user {
+        id
+        avatar
+        username
+        isFollowing
+        isSelf
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      commentCount
+      isLiked
+      likes {
+        id
+        user {
+          username
+          name
+          avatar
+          isFollowing
+        }
+      }
+      comments {
+        id
+        text
+        user {
+          id
+          username
+        }
+        createdAt
+      }
+      createdAt
+    }
+  }
+`;
+
 export const GET_USER = gql`
   query seeUser($username: String!) {
     seeUser(username: $username) {
