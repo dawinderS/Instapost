@@ -15,7 +15,12 @@ export const resolvers = {
     },
     logUserOut: (_, __, { cache }) => {
       localStorage.removeItem("token");
-      window.location = "/";
+      cache.writeData({
+        data: {
+          isLoggedIn: false
+        }
+      });
+      // window.location = "/";
       return null;
     }
   }
