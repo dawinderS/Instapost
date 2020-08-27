@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import { useMutation } from "react-apollo-hooks";
 import TextareaAutosize from "react-autosize-textarea";
 import moment from "moment";
 import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
 import FollowButton from "../FollowButton/index";
+import { toast } from "react-toastify";
+import { EDIT_POST } from "./PostShowQueries";
+import { FEED_QUERY, GET_USER_BY_ID } from "../../SharedQueries";
+
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -271,6 +276,15 @@ const ModalWrapper = styled.div`
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  h1 {
+    width: 100%;
+    margin: 24px 0px 24px 0px;
+    text-align: center;
+    font-size: 18px;
+    line-height 24px;
+    font-weight: 600;
+    color: #262626;
+  }
   div {
     display: flex;
     align-items: center;
@@ -336,6 +350,12 @@ export default ({
   selfComments,
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  
+  const history = useHistory();
+  const goBack = (e) => {
+    history.goBack();
+  };
 
   const openModal = () => {
     setIsOpen(true);
@@ -343,6 +363,41 @@ export default ({
   const closeModal = () => {
     setIsOpen(false);
   }
+
+  const openDeleteModal = () => {
+    setIsOpen(false);
+    setDeleteModal(true);
+  }
+  const closeDeleteModal = () => {
+    setDeleteModal(false);
+  }
+
+  const [editPostMutation] = useMutation(EDIT_POST, {
+    refetchQueries: () => [
+      { query: GET_USER_BY_ID, variables: { id: user.id } },
+      { query: FEED_QUERY },
+    ]
+  });
+  const DELETE = "DELETE";
+  const EDIT = "EDIT";
+
+  const deletePost = async (event) => {
+    event.preventDefault();
+    closeDeleteModal();
+    try {
+      const {
+        data: { editPost }
+      } = await editPostMutation({
+        variables: { id, action: DELETE }
+      });
+      if (editPost) {
+        goBack();
+        toast.info("Post deleted successfully.");
+      }
+    } catch {
+      toast.error("Cannot delete at the moment, please try later.");
+    }
+  };
 
   return (
   <Post>
@@ -433,7 +488,7 @@ export default ({
       <ModalWrapper>
         {user.isSelf ? (
         <>
-          <div id="profremove">
+          <div onClick={openDeleteModal} id="profremove">
             Delete
           </div>
           <div id="profupload">
@@ -470,6 +525,22 @@ export default ({
           </div>
         </>
         )}
+      </ModalWrapper>
+    </Modal>
+    <Modal
+      isOpen={deleteModal}
+      onRequestClose={closeDeleteModal}
+      style={customStyles}
+      contentLabel="Post Modal"
+    >
+      <ModalWrapper>
+        <h1>Delete Post?</h1>
+        <div onClick={deletePost} id="profremove">
+          Delete
+        </div>
+        <div onClick={closeDeleteModal} id="profcancel">
+          Cancel
+        </div>
       </ModalWrapper>
     </Modal>
   </Post>

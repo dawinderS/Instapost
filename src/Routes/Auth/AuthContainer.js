@@ -82,7 +82,7 @@ export default () => {
           } else if (!requestSecret) {
             toast.error("The username you entered doesn't belong to an account. Please check your username and try again.");
           } else {
-            toast.success("Check your inbox for your login passcode.");
+            toast.info("Check your inbox for your login passcode.");
             setAction("confirm");
           }
         } catch {
@@ -104,7 +104,7 @@ export default () => {
           if (!createAccount) {
             toast.error("Cannot create account, please try again");
           } else {
-            toast.success("Your account has been created! Log in now.");
+            toast.info("Your account has been created! Log in now.");
             setTimeout(() => setAction("logIn"), 2500);
           }
         } catch (e) {

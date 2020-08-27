@@ -17,3 +17,14 @@ export const ADD_COMMENT = gql`
     }
   }
 `;
+
+export const EDIT_POST = gql`
+  mutation editPost($id: String!, $caption: String, $location: String, $action: ACTIONS!) {
+    editPost(id: $id, caption: $caption, location: $location, action: $action) {
+      id
+      caption
+      location
+      action
+    }
+  }
+`;
