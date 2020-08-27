@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useMutation } from "react-apollo-hooks";
-import { GET_USER_BY_ID, SUGGESTED } from '../../SharedQueries';
+import { GET_USER_BY_ID, SUGGESTED, FEED_QUERY } from '../../SharedQueries';
 import { FOLLOW, UNFOLLOW } from "./FollowButtonQueries";
 import FollowButtonPresenter from "./FollowButtonPresenter";
 import { toast } from "react-toastify";
@@ -12,12 +12,14 @@ const FollowButtonContainer = ({ isFollowing, id, myId }) => {
     refetchQueries: () => [
       { query: GET_USER_BY_ID, variables: { id: myId } },
       { query: SUGGESTED },
+      { query: FEED_QUERY },
     ],
   });
   const [unfollowMutation] = useMutation(UNFOLLOW, {
     refetchQueries: () => [
       { query: GET_USER_BY_ID, variables: { id: myId } },
       { query: SUGGESTED },
+      { query: FEED_QUERY },
     ],
   });
 

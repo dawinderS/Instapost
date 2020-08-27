@@ -62,7 +62,7 @@ export default withRouter(() => {
           <img src="profilePic.jpg" width="24" height="24" />
         </HeaderLink>
       ) : (
-        <HeaderLink to={data.me.username}>
+          <HeaderLink to={`/${data.me.username}`}>
           <img src={data.me.avatar} width="24" height="24" />
         </HeaderLink>
       )}

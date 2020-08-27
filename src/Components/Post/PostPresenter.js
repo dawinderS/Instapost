@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-autosize-textarea";
 import moment from "moment";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
-import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
+import FollowButton from "../FollowButton/index";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -142,6 +143,11 @@ const Meta = styled.div`
   p {
     color: #8e8e8e;
     cursor: pointer;
+  }
+  #viewcomments {
+    max-width: 30%;
+    margin: 0;
+    padding: 0;
   }
 `;
 
@@ -285,6 +291,23 @@ const ModalWrapper = styled.div`
     color: #ed4956;
     font-size: 14px;
     font-weight: 700;
+    button {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      color: #ed4956;
+    }
+  }
+  #profremove2 {
+    color: #0095f6;
+    font-size: 14px;
+    font-weight: 700;
+    button {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      color: #0095f6;
+    }
   }
   #profcancel {
     color: #000000;
@@ -292,10 +315,9 @@ const ModalWrapper = styled.div`
   }
 `;
 
-
-
 export default ({
-  user: { username, avatar, isFollowing, isSelf },
+  // user: { id, username, avatar, isFollowing, isSelf },
+  user,
   id,
   me,
   location,
@@ -325,12 +347,12 @@ export default ({
   return (
   <Post>
     <Header>
-      <Link to={`/${username}`}>
-        <Avatar size="sm" url={avatar} />
+      <Link to={`/${user.username}`}>
+        <Avatar size="sm" url={user.avatar} />
       </Link>
       <UserColumn>
-        <UsernameLink to={`/${username}`}>
-          <FatText text={username} />
+        <UsernameLink to={`/${user.username}`}>
+          <FatText text={user.username} />
         </UsernameLink>
         {location && <Location>{location}</Location>}
       </UserColumn>
@@ -348,19 +370,23 @@ export default ({
           {isLiked ? <HeartFull /> : <HeartEmpty />}
         </Button>
         <Button>
-          <CommentIcon />
+          <Link to={`p/${id}`}>
+            <CommentIcon />
+          </Link>
         </Button>
       </Buttons>
       <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
       <Caption>
-        <Link to={`/${username}`}>
-          <FatText text={username} /> 
+        <Link to={`/${user.username}`}>
+          <FatText text={user.username} /> 
         </Link>
         {caption}
       </Caption>
       {
         (comments.length + selfComments.length > 2) &&
-       <p>View all {comments.length + selfComments.length} comments</p>
+        <Link to={`p/${id}`}>
+          <p id="viewcomments">View all {comments.length + selfComments.length} comments</p>
+        </Link>
       }
       {comments && (
         <Comments>
@@ -405,7 +431,7 @@ export default ({
       contentLabel="Post Modal"
     >
       <ModalWrapper>
-        {isSelf ? (
+        {user.isSelf ? (
         <>
           <div id="profremove">
             Delete
@@ -424,9 +450,16 @@ export default ({
         </>
         ) : (
         <>
-          <div id="profremove">
-            Unfollow
-          </div>
+          {user.isFollowing &&
+            <div onClick={closeModal} id="profremove">
+              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+            </div>
+          }
+          {!user.isFollowing &&
+            <div id="profremove2">
+              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+            </div>
+          }
           <GoPostLink to={`p/${id}`}>
             <div id="profcancel">
               Go to post

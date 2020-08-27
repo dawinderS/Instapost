@@ -6,7 +6,6 @@ import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import Loader from "../Components/Loader";
 import SquarePost from "../Components/SquarePost";
-import Post from "../Components/Post/index";
 import useInput from "../Hooks/useInput";
 import Input from "../Components/Input";
 
@@ -86,6 +85,11 @@ const Posts = styled.div`
     row-gap: 1px;
     margin: 0;
   }
+`;
+
+const PostLink = styled(Link)`
+  width: 100%;
+  height: 100%;
 `;
 
 const MinHeader = styled.header`
@@ -170,12 +174,14 @@ export default withRouter(({ history }) => {
       {!loading && data && data.seeExplore && (
         <Posts>
           {data.seeExplore.map((post) => (
-            <SquarePost
-              key={post.id}
-              likeCount={post.likeCount}
-              commentCount={post.commentCount}
-              file={post.files[0]}
-            />
+            <PostLink key={post.id} to={`p/${post.id}`}>
+              <SquarePost
+                key={post.id}
+                likeCount={post.likeCount}
+                commentCount={post.commentCount}
+                file={post.files[0]}
+              />
+            </PostLink>
           ))}
         </Posts>
       )}

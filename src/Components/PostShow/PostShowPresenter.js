@@ -3,9 +3,10 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-autosize-textarea";
 import moment from "moment";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
-import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
+import FollowButton from "../FollowButton/index";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -143,6 +144,11 @@ const Meta = styled.div`
     color: #8e8e8e;
     cursor: pointer;
   }
+  #viewcomments {
+    max-width: 30%;
+    margin: 0;
+    padding: 0;
+  }
 `;
 
 const Buttons = styled.div`
@@ -250,6 +256,11 @@ const CommentHolder = styled.div`
     }
   }
 `;
+const GoPostLink = styled(Link)`
+  display:flex;
+  align-items: center;
+  width: 100%;
+`;
 
 const ModalWrapper = styled.div`
   width: 260px;
@@ -280,6 +291,23 @@ const ModalWrapper = styled.div`
     color: #ed4956;
     font-size: 14px;
     font-weight: 700;
+    button {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      color: #ed4956;
+    }
+  }
+  #profremove2 {
+    color: #0095f6;
+    font-size: 14px;
+    font-weight: 700;
+    button {
+      width: 100%;
+      height: 100%;
+      background-color: #fff;
+      color: #0095f6;
+    }
   }
   #profcancel {
     color: #000000;
@@ -288,7 +316,9 @@ const ModalWrapper = styled.div`
 `;
 
 export default ({
-  user: { username, avatar, isFollowing, isSelf },
+  // user: { username, avatar, isFollowing, isSelf },
+  user,
+  id,
   me,
   location,
   files,
@@ -315,118 +345,132 @@ export default ({
   }
 
   return (
-    <Post>
-      <Header>
-        <Link to={`/${username}`}>
-          <Avatar size="sm" url={avatar} />
-        </Link>
-        <UserColumn>
-          <UsernameLink to={`/${username}`}>
-            <FatText text={username} />
-          </UsernameLink>
-          {location && <Location>{location}</Location>}
-        </UserColumn>
-        <p onClick={openModal}><PostOptions /></p>
-      </Header>
-      <Files onDoubleClick={toggleLike}>
-        {files &&
-          files.map((file, index) => (
-            <File key={file.id} src={file.url} showing={index === currentItem} />
-          ))}
-      </Files>
-      <Meta>
-        <Buttons>
-          <Button onClick={toggleLike}>
-            {isLiked ? <HeartFull /> : <HeartEmpty />}
-          </Button>
-          <Button>
+  <Post>
+    <Header>
+      <Link to={`/${user.username}`}>
+        <Avatar size="sm" url={user.avatar} />
+      </Link>
+      <UserColumn>
+        <UsernameLink to={`/${user.username}`}>
+          <FatText text={user.username} />
+        </UsernameLink>
+        {location && <Location>{location}</Location>}
+      </UserColumn>
+      <p onClick={openModal}><PostOptions /></p>
+    </Header>
+    <Files onDoubleClick={toggleLike}>
+      {files &&
+      files.map((file, index) => (
+        <File key={file.id} src={file.url} showing={index === currentItem} />
+      ))}
+    </Files>
+    <Meta>
+      <Buttons>
+        <Button onClick={toggleLike}>
+          {isLiked ? <HeartFull /> : <HeartEmpty />}
+        </Button>
+        <Button>
+          <Link to={`p/${id}`}>
             <CommentIcon />
-          </Button>
-        </Buttons>
-        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
-        <Caption>
-          <Link to={`/${username}`}>
-            <FatText text={username} />
           </Link>
-          {caption}
-        </Caption>
-        {
-          (comments.length + selfComments.length > 2) &&
-          <p>View all {comments.length + selfComments.length} comments</p>
-        }
-        {comments && (
-          <Comments>
-            {comments.slice(-2).map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
-            ))}
-            {selfComments.map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
-            ))}
-          </Comments>
+        </Button>
+      </Buttons>
+      <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+      <Caption>
+        <Link to={`/${user.username}`}>
+          <FatText text={user.username} />
+        </Link>
+        {caption}
+      </Caption>
+      {
+      (comments.length + selfComments.length > 2) &&
+        <Link to={`p/${id}`}>
+          <p id="viewcomments">View all {comments.length + selfComments.length} comments</p>
+        </Link>
+      }
+      {comments && (
+        <Comments>
+          {comments.slice(-2).map((comment) => (
+            <Comment key={comment.id}>
+              <Link to={`/${comment.user.username}`}>
+                <FatText text={comment.user.username} />
+              </Link>
+              {comment.text}
+            </Comment>
+          ))}
+          {selfComments.map((comment) => (
+            <Comment key={comment.id}>
+              <Link to={`/${comment.user.username}`}>
+                <FatText text={comment.user.username} />
+              </Link>
+              {comment.text}
+            </Comment>
+          ))}
+        </Comments>
+      )}
+      <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+    </Meta>
+    <CommentHolder>
+      <img src={me.avatar} width="26" height="26" />
+      <div>
+        <Textarea
+          onKeyPress={onKeyPress}
+          placeholder={`Add a comment...`}
+          value={newComment.value}
+          onChange={newComment.onChange}
+        />
+        {newComment.value.length < 1 && <p id="postComment">Post</p>}
+        {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
+      </div>
+    </CommentHolder>
+    <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      style={customStyles}
+      contentLabel="Post Modal"
+    >
+      <ModalWrapper>
+        {user.isSelf ? (
+        <>
+          <div id="profremove">
+            Delete
+          </div>
+          <div id="profupload">
+            Edit
+          </div>
+          <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink>
+          <div onClick={closeModal} id="profcancel">
+            Cancel
+          </div>
+        </>
+        ) : (
+        <>
+          {user.isFollowing &&
+            <div onClick={closeModal} id="profremove">
+              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+            </div>
+          }
+          {!user.isFollowing &&
+            <div id="profremove2">
+              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+            </div>
+          }
+          <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink>
+          <div onClick={closeModal} id="profcancel">
+            Cancel
+          </div>
+        </>
         )}
-        <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
-      </Meta>
-      <CommentHolder>
-        <img src={me.avatar} width="26" height="26" />
-        <div>
-          <Textarea
-            onKeyPress={onKeyPress}
-            placeholder={`Add a comment...`}
-            value={newComment.value}
-            onChange={newComment.onChange}
-          />
-          {newComment.value.length < 1 && <p id="postComment">Post</p>}
-          {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
-        </div>
-      </CommentHolder>
-      <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Post Modal"
-      >
-        <ModalWrapper>
-          {isSelf ? (
-            <>
-              <div id="profremove">
-                Delete
-          </div>
-              <div id="profupload">
-                Edit
-          </div>
-              <div id="profcancel">
-                Go to post
-          </div>
-              <div onClick={closeModal} id="profcancel">
-                Cancel
-          </div>
-            </>
-          ) : (
-              <>
-                <div id="profremove">
-                  Unfollow
-          </div>
-                <div id="profcancel">
-                  Go to post
-          </div>
-                <div onClick={closeModal} id="profcancel">
-                  Cancel
-          </div>
-              </>
-            )}
-        </ModalWrapper>
-      </Modal>
-    </Post>
-  )
-};
+      </ModalWrapper>
+    </Modal>
+  </Post>
+)};

@@ -29,6 +29,7 @@ const Container = styled.div`
       opacity: 1;
     }
   }
+  height: 100%;
 `;
 
 const Number = styled.span`

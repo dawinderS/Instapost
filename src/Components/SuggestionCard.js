@@ -26,7 +26,7 @@ const EachCard = styled.div`
     margin-left: 15px;
     display: flex;
     flex-direction: column;
-    align-items: space-between;
+    justify-content: space-around;
     span {
       font-size: 14px;
       font-weight: 600;

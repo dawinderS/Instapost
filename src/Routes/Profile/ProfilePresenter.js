@@ -666,12 +666,14 @@ export default ({ loading, data, logOut }) => {
             posts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((post) => (
-                <SquarePost
-                  key={post.id}
-                  likeCount={post.likeCount}
-                  commentCount={post.commentCount}
-                  file={post.files[0]}
-                />
+                <Link key={post.id} to={`p/${post.id}`}>
+                  <SquarePost
+                    key={post.id}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount}
+                    file={post.files[0]}
+                  />
+                </Link>
               ))}
         </Posts>
         <Modal
