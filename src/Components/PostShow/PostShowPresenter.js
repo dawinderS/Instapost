@@ -11,7 +11,6 @@ import FollowButton from "../FollowButton/index";
 import { toast } from "react-toastify";
 import { EDIT_POST } from "./PostShowQueries";
 import { FEED_QUERY, GET_USER_BY_ID } from "../../SharedQueries";
-
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -150,7 +149,6 @@ const Meta = styled.div`
     cursor: pointer;
   }
   #viewcomments {
-    max-width: 30%;
     margin: 0;
     padding: 0;
   }
@@ -295,6 +293,10 @@ const ModalWrapper = styled.div`
     min-height: 48px;
     padding: 4px 0px;
     text-align: center;
+    span {
+      color: #8e8e8e;
+      margin-right: 10px;
+    }
   }
   #profupload {
     color: #0095f6;
@@ -328,6 +330,61 @@ const ModalWrapper = styled.div`
     font-size: 14px;
   }
 `;
+const ModalWrapper2 = styled.div`
+  width: 310px;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  h1 {
+    width: 100%;
+    margin: 24px 0px 24px 0px;
+    text-align: center;
+    font-size: 18px;
+    line-height 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    border-top: 1px solid #dbdbdb;
+    cursor: pointer;
+    min-height: 48px;
+    padding: 4px 0px;
+    text-align: center;
+    span {
+      color: #8e8e8e;
+      margin-right: 10px;
+    }
+  }
+  #captionedit {
+    justify-content: flex-start;
+    padding: 4px 15px;
+  }
+  #locationedit {
+    justify-content: flex-start;
+    padding: 4px 15px;
+    input {
+      border: none;
+      outline: none;
+    }
+  }
+  #profupload {
+    color: #0095f6;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  #profcancel {
+    color: #000000;
+    font-size: 14px;
+  }
+`;
 
 export default ({
   // user: { username, avatar, isFollowing, isSelf },
@@ -351,6 +408,9 @@ export default ({
 }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [captionInput, setCaptionInput] = useState(caption);
+  const [locationInput, setLocationInput] = useState(location);
   
   const history = useHistory();
   const goBack = (e) => {
@@ -371,6 +431,13 @@ export default ({
   const closeDeleteModal = () => {
     setDeleteModal(false);
   }
+  const openEditModal = () => {
+    setIsOpen(false);
+    setEditModal(true);
+  }
+  const closeEditModal = () => {
+    setEditModal(false);
+  }
 
   const [editPostMutation] = useMutation(EDIT_POST, {
     refetchQueries: () => [
@@ -378,6 +445,7 @@ export default ({
       { query: FEED_QUERY },
     ]
   });
+  const [editPostMutation2] = useMutation(EDIT_POST);
   const DELETE = "DELETE";
   const EDIT = "EDIT";
 
@@ -393,6 +461,42 @@ export default ({
       if (editPost) {
         goBack();
         toast.info("Post deleted successfully.");
+      }
+    } catch {
+      toast.error("Cannot delete at the moment, please try later.");
+    }
+  };
+
+  const updateState = (e) => {
+    const value = e.target.value;
+    switch (e.target.getAttribute("name")) {
+      case "caption":
+        setCaptionInput(value);
+        break;
+      case "location":
+        setLocationInput(value);
+        break;
+      default:
+        return;
+    }
+  };
+
+  const editPostSubmit = async (event) => {
+    event.preventDefault();
+    closeEditModal();
+    try {
+      const {
+        data: { editPost }
+      } = await editPostMutation2({
+        variables: {
+          id,
+          caption: captionInput,
+          location: locationInput,
+          action: EDIT
+        }
+      });
+      if (editPost) {
+        toast.info("Post edited successfully.");
       }
     } catch {
       toast.error("Cannot delete at the moment, please try later.");
@@ -491,14 +595,14 @@ export default ({
           <div onClick={openDeleteModal} id="profremove">
             Delete
           </div>
-          <div id="profupload">
+          <div onClick={openEditModal} id="profupload">
             Edit
           </div>
-          <GoPostLink to={`p/${id}`}>
+          {/* <GoPostLink to={`p/${id}`}>
             <div id="profcancel">
               Go to post
             </div>
-          </GoPostLink>
+          </GoPostLink> */}
           <div onClick={closeModal} id="profcancel">
             Cancel
           </div>
@@ -515,11 +619,11 @@ export default ({
               <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
             </div>
           }
-          <GoPostLink to={`p/${id}`}>
+          {/* <GoPostLink to={`p/${id}`}>
             <div id="profcancel">
               Go to post
             </div>
-          </GoPostLink>
+          </GoPostLink> */}
           <div onClick={closeModal} id="profcancel">
             Cancel
           </div>
@@ -542,6 +646,42 @@ export default ({
           Cancel
         </div>
       </ModalWrapper>
+    </Modal>
+    <Modal
+      isOpen={editModal}
+      onRequestClose={closeEditModal}
+      style={customStyles}
+      contentLabel="Post Modal"
+    >
+      <ModalWrapper2>
+        <h1>Edit Post</h1>
+        <div id="captionedit">
+          <span>Caption:</span>
+          <Textarea
+            id="caption"
+            name="caption"
+            placeholder={"Write a caption..."}
+            onChange={updateState}
+            value={captionInput}
+          />
+        </div>
+        <div id="locationedit">
+          <span>Location:</span>
+          <input
+            id="location"
+            name="location"
+            placeholder={"Add a location..."}
+            onChange={updateState}
+            value={locationInput}
+          />
+        </div>
+        <div onClick={editPostSubmit} id="profupload">
+          Submit
+      </div>
+        <div onClick={closeEditModal} id="profcancel">
+          Cancel
+      </div>
+      </ModalWrapper2>
     </Modal>
   </Post>
 )};

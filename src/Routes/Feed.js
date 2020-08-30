@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "rl-react-helmet";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { useQuery } from "react-apollo-hooks";
 import { ME, FEED_QUERY } from "../SharedQueries";
@@ -8,6 +8,7 @@ import Loader from "../Components/Loader";
 import Post from "../Components/Post/index";
 import Avatar from "../Components/Avatar";
 import SuggestedCard from "../Components/SuggestionCard";
+import { MessagingIcon, MessagingIconLoc } from "../Components/Icons";
 
 const Wrapper = styled.div`
   display: flex;
@@ -102,15 +103,20 @@ const MinHeader = styled.header`
   border-bottom: ${(props) => props.theme.boxBorder};
   border-radius: 0px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 11px 0px;
+  padding: 11px 16px;
   z-index: 2;
   height: 5.5vh;
   max-height: 44px;
   min-height: 44px;
+  div {
+    width: 10%;
+    display: flex;
+    justify-content: flex-end;
+  }
   img {
-    max-width: 24%;
+    width: 80px;
     height: auto;
   }
   @media screen and (min-width: 770px) {
@@ -126,9 +132,10 @@ const MinLink = styled(Link)`
   align-items: center;
 `;
 
-export default () => {
+export default withRouter(({ history }) => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
+  const pathname = history.location.pathname;
   
   return (
     <Wrapper>
@@ -137,9 +144,13 @@ export default () => {
       </Helmet>
       {loading && <Loader />}
       <MinHeader>
+        <div></div>
         <MinLink to="/" replace>
           <img src="instalogo.png" alt="instalogo" />
         </MinLink>
+        <Link to ="/direct">
+          {pathname === "/direct" ? <MessagingIconLoc /> : <MessagingIcon />}
+        </Link>
       </MinHeader>
       {!loading &&
         data && data.seeFeed &&
@@ -189,4 +200,4 @@ export default () => {
       }
     </Wrapper>
   );
-};
+});

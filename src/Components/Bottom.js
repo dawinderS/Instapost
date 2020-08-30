@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, NavLink, withRouter } from "react-router-dom";
-import { Home, HomeLoc, Explore, ExploreLoc, Upload, HeartEmpty, HeartLoc } from "./Icons";
+import { 
+  Home, HomeLoc, MessagingIcon, MessagingIconLoc, Explore, ExploreLoc, Upload, 
+  UploadLoc, HeartEmpty, HeartLoc } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
 
@@ -39,31 +41,38 @@ const HeaderLink = styled(NavLink)`
     background-size: cover;
   }
 `;
+const ImgLoc = styled.img`
+  border-radius: 50%;
+  border: 1px solid #262626;
+  padding: 1px;
+`;
 
-export default withRouter(() => {
+export default withRouter(({ history }) => {
   const { data } = useQuery(ME);
+  const pathname = history.location.pathname;
 
   return (
     <Bottom>
       <HeaderLink to="/" replace>
-        <Home size={24} />
+        {pathname === "/" ? <HomeLoc size={24} /> : <Home size={24} />}
       </HeaderLink>
       <HeaderLink to="/explore">
-        <Explore size={24} />
+        {pathname === "/explore" ? <ExploreLoc size={24} /> : <Explore size={24} />}
       </HeaderLink>
       <HeaderLink to="/upload">
-        <Upload size={24} />
+        {pathname === "/upload" ? <UploadLoc size={24} /> : <Upload size={24} />}
       </HeaderLink>
       <HeaderLink to="/notifications">
-        <HeartEmpty size={24} />
+        {pathname === "/notifications" ? <HeartLoc size={24} /> : <HeartEmpty size={24} />}
       </HeaderLink>
       {data === undefined || !data.me ? (
         <HeaderLink to="/#">
           <img src="profilePic.jpg" width="24" height="24" />
         </HeaderLink>
       ) : (
-          <HeaderLink to={`/${data.me.username}`}>
-          <img src={data.me.avatar} width="24" height="24" />
+        <HeaderLink to={`/${data.me.username}`}>
+          {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="24" height="24" />}
+          {pathname === `/${data.me.username}` && <ImgLoc src={data.me.avatar} width="24" height="24" />}
         </HeaderLink>
       )}
     </Bottom>

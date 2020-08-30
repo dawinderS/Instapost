@@ -337,7 +337,10 @@ export default ({ props }) => {
   const history = useHistory();
   const me = useQuery(ME);
   const [uploadMutation] = useMutation(UPLOAD, {
-    refetchQueries: () => [{ query: FEED_QUERY }, { query: GET_USER, variables: { username: me.data.me.username } }],
+    refetchQueries: () => [
+      { query: FEED_QUERY }, 
+      { query: GET_USER, variables: { username: me.data.me.username } }
+    ],
   });
 
   const onDrop = (e) => {

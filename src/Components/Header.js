@@ -3,7 +3,9 @@ import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Home, Compass, HeartEmpty, Logo, Upload } from "./Icons";
+import { 
+  Home, HomeLoc, MessagingIcon, MessagingIconLoc, Compass, CompassLoc, 
+  HeartEmpty, HeartLoc, Logo, Upload, UploadLoc } from "./Icons";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME, LOG_OUT } from "../SharedQueries";
 
@@ -23,6 +25,9 @@ const Header = styled.header`
   z-index: 2;
   @media screen and (max-width: 770px) {
     display: none;
+  }
+  @media screen and (max-width: 950px) {
+    padding: 11px 15px;
   }
 `;
 
@@ -67,12 +72,16 @@ const SearchInput = styled(Input)`
 
 const HeaderLink = styled(Link)`
   &:not(:last-child) {
-    margin-right: 30px;
+    margin-right: 24px;
   }
   img {
     border-radius: 50%;
-    border: 1px solid grey;
   }
+`;
+const ImgLoc = styled.img`
+  border-radius: 50%;
+  border: 1px solid #262626;
+  padding: 1px;
 `;
 
 export default withRouter(({ history }) => {
@@ -82,7 +91,7 @@ export default withRouter(({ history }) => {
     e.preventDefault();
     history.push(`/search?term=${search.value}`);
   };
-
+  const pathname = history.location.pathname;
   const [logOut] = useMutation(LOG_OUT);
 
   return (
@@ -104,16 +113,19 @@ export default withRouter(({ history }) => {
         </HeaderColumn>
         <HeaderColumn>
           <HeaderLink to="/" replace>
-            <Home />
+            {pathname === "/" ? <HomeLoc /> : <Home />}
+          </HeaderLink>
+          <HeaderLink to="/direct">
+            {pathname === "/direct" ? <MessagingIconLoc /> : <MessagingIcon />}
           </HeaderLink>
           <HeaderLink to="/explore">
-            <Compass />
+            {pathname === "/explore" || pathname === "/search" ? <CompassLoc /> : <Compass />}
           </HeaderLink>
           <HeaderLink to="/upload">
-            <Upload size={22} />
+            {pathname === "/upload" ? <UploadLoc size = {22} /> : <Upload size={22} />}
           </HeaderLink>
           <HeaderLink to="/notifications">
-            <HeartEmpty size={22} />
+            {pathname === "/notifications" ? <HeartLoc size={22} /> : <HeartEmpty size={22} />}
           </HeaderLink>
           {data === undefined || !data.me ? (
             <HeaderLink to="/#">
@@ -121,7 +133,8 @@ export default withRouter(({ history }) => {
             </HeaderLink>
           ) : (
             <HeaderLink to={`/${data.me.username}`}>
-              <img src={data.me.avatar} width="23" height="23" />
+              {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="23" height="23" />}
+              {pathname === `/${data.me.username}` && <ImgLoc src={data.me.avatar} width="23" height="23" />}
             </HeaderLink>
           )}
         </HeaderColumn>
