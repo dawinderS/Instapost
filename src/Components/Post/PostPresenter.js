@@ -94,7 +94,7 @@ const Files = styled.div`
 const File = styled.img`
   width: 100%;
   height: auto;
-  max-height: 750px;
+  max-height: 770px;
   background-size: cover;
   background-position: center;
   @media screen and (max-width: 770px) {

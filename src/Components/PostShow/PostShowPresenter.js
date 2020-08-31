@@ -4,7 +4,8 @@ import { Link, useHistory } from "react-router-dom";
 import { useMutation } from "react-apollo-hooks";
 import TextareaAutosize from "react-autosize-textarea";
 import moment from "moment";
-import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, 
+  PostOptions, HeaderBackButton } from "../Icons";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
 import FollowButton from "../FollowButton/index";
@@ -32,10 +33,20 @@ const customStyles = {
   },
 };
 
+const Wrapper = styled.div`
+  user-select: none;
+  a {
+    color: inherit;
+  }
+  @media screen and (min-width: 770px) {
+    max-width: 935px;
+    max-height: 80vh;
+  }
+`;
+
 const Post = styled.div`
   ${(props) => props.theme.whiteBox};
   width: 100%;
-  margin-bottom: 50px;
   user-select: none;
   a {
     color: inherit;
@@ -43,6 +54,11 @@ const Post = styled.div`
   @media screen and (max-width: 770px) {
     margin: 0;
     border: none;
+    max-height: 89vh;
+    overflow-y: scroll;
+  }
+  @media screen and (min-width: 770px) {
+    display: none;
   }
 `;
 
@@ -59,6 +75,9 @@ const Header = styled.header`
     align-items: center;
     justify-content: flex-end;
     cursor: pointer;
+  }
+  @media screen and (min-width: 770px) {
+    border-bottom: 1px solid #efefef;
   }
 `;
 
@@ -101,42 +120,9 @@ const File = styled.img`
     width: 100%;
     height: auto;
     min-height: 30vh;
-    max-height: 75vh;
+    max-height: 80vh;
   }
 `;
-
-// const Files = styled.div`
-//   position: relative;
-//   // padding-bottom: 60%;
-//   padding-bottom: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: stretch;
-//   flex-shrink: 0;
-//   cursor: pointer;
-//   max-height: 608px;
-//   @media screen and (max-width: 770px) {
-//     width: 100%;
-//     height: auto;
-//     max-height: 50vh;
-//     // display: none;
-//   }
-// `;
-
-
-// const File = styled.img`
-//   // max-width: 100%;
-//   width: 100%;
-//   // height: auto;
-//   height: 608px;
-//   position: absolute;
-//   top: 0;
-//   background-size: cover;
-//   background-position: center;
-//   opacity: ${(props) => (props.showing ? 1 : 0)};
-//   transition: opacity 0.5s linear;
-// `;
 
 const Button = styled.span`
   cursor: pointer;
@@ -192,6 +178,10 @@ const Timestamp2 = styled.span`
 
 const Comments = styled.ul`
   margin-top: 8px;
+  @media screen and (min-width: 770px) {
+    overflow-y: scroll; 
+    max-height: 100%;
+  }
 `;
 
 const Comment = styled.li`
@@ -199,12 +189,21 @@ const Comment = styled.li`
   span {
     margin-right: 5px;
   }
+  @media screen and (min-width: 770px) {
+    padding: 8px 16px 10px 22px;
+    margin-bottom: 0px;
+  }
 `;
 
 const Caption = styled.div`
   margin: 10px 0px 8px 0px;
   span {
     margin-right: 5px;
+  }
+  @media screen and (min-width: 770px) {
+    padding: 12px 16px 16px 22px;
+    margin-bottom: 0px;
+    border-bottom: 1px solid #efefef;
   }
 `;
 
@@ -258,11 +257,6 @@ const CommentHolder = styled.div`
       padding: 6px 12px 6px 10px;
     }
   }
-`;
-const GoPostLink = styled(Link)`
-  display:flex;
-  align-items: center;
-  width: 100%;
 `;
 
 const ModalWrapper = styled.div`
@@ -386,6 +380,84 @@ const ModalWrapper2 = styled.div`
   }
 `;
 
+const MinHeader = styled.header`
+  width: 100%;
+  border: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: white;
+  border-bottom: ${(props) => props.theme.boxBorder};
+  border-radius: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 16px;
+  z-index: 2;
+  height: 5.5vh;
+  max-height: 44px;
+  min-height: 44px;
+  svg {
+    margin: 0;
+    transform: rotate(270deg);
+  }
+  div {
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+  }
+  span {
+    font-size: 16px;
+    font-weight: 600;
+    width: 20%;
+    display: flex;
+    p {
+      margin-left: auto;
+      color: #0095f6;
+    }
+  }
+  @media screen and (min-width: 770px) {
+    display: none;
+  }
+`;
+
+const Post2 = styled.div`
+  ${(props) => props.theme.whiteBox};
+  display: flex;
+  max-width: 935px;
+  min-height: 450px;
+  max-height: 80vh;
+  @media screen and (max-width: 770px) {
+    display: none;
+  }
+`;
+
+const MetaHolder = styled.div`
+  margin-top: auto;
+  border-top: 1px solid #efefef;
+`;
+const Files2 = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  min-height: 450px;
+  border-right: 1px solid #efefef;
+`;
+
+const File2 = styled.img`
+  max-width: 600px;
+  max-height: 80vh;
+  background-size: cover;
+  background-position: center;
+`;
+
+const Info = styled.div`
+  display: flex;
+  width: 335px;
+  flex-direction: column;
+`;
+
 export default ({
   // user: { username, avatar, isFollowing, isSelf },
   user,
@@ -411,7 +483,7 @@ export default ({
   const [editModal, setEditModal] = useState(false);
   const [captionInput, setCaptionInput] = useState(caption);
   const [locationInput, setLocationInput] = useState(location);
-  
+ 
   const history = useHistory();
   const goBack = (e) => {
     history.goBack();
@@ -504,85 +576,165 @@ export default ({
   };
 
   return (
-  <Post>
-    <Header>
-      <Link to={`/${user.username}`}>
-        <Avatar size="sm" url={user.avatar} />
-      </Link>
-      <UserColumn>
-        <UsernameLink to={`/${user.username}`}>
-          <FatText text={user.username} />
-        </UsernameLink>
-        {location && <Location>{location}</Location>}
-      </UserColumn>
-      <p onClick={openModal}><PostOptions /></p>
-    </Header>
-    <Files onDoubleClick={toggleLike}>
-      {files &&
-      files.map((file, index) => (
-        <File key={file.id} src={file.url} showing={index === currentItem} />
-      ))}
-    </Files>
-    <Meta>
-      <Buttons>
-        <Button onClick={toggleLike}>
-          {isLiked ? <HeartFull /> : <HeartEmpty />}
-        </Button>
-        <Button>
-          <Link to={`p/${id}`}>
-            <CommentIcon />
-          </Link>
-        </Button>
-      </Buttons>
-      <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
-      <Caption>
+  <Wrapper>
+    <MinHeader>
+      <span onClick={goBack}>
+        <HeaderBackButton />
+      </span>
+      <div>Photo</div>
+      <span></span>
+    </MinHeader>
+    <Post>
+      <Header>
         <Link to={`/${user.username}`}>
-          <FatText text={user.username} />
+          <Avatar size="sm" url={user.avatar} />
         </Link>
-        {caption}
-      </Caption>
-      {
-      (comments.length + selfComments.length > 2) &&
-        <Link to={`p/${id}`}>
-          <p id="viewcomments">View all {comments.length + selfComments.length} comments</p>
-        </Link>
-      }
-      {comments && (
-        <Comments>
-          {comments.slice(-2).map((comment) => (
-            <Comment key={comment.id}>
-              <Link to={`/${comment.user.username}`}>
-                <FatText text={comment.user.username} />
-              </Link>
-              {comment.text}
-            </Comment>
+        <UserColumn>
+          <UsernameLink to={`/${user.username}`}>
+            <FatText text={user.username} />
+          </UsernameLink>
+          {location && <Location>{location}</Location>}
+        </UserColumn>
+        <p onClick={openModal}><PostOptions /></p>
+      </Header>
+      <Files onDoubleClick={toggleLike}>
+        {files &&
+        files.map((file, index) => (
+          <File key={file.id} src={file.url} showing={index === currentItem} />
+        ))}
+      </Files>
+      <Meta>
+        <Buttons>
+          <Button onClick={toggleLike}>
+            {isLiked ? <HeartFull /> : <HeartEmpty />}
+          </Button>
+          <Button>
+            <CommentIcon />
+          </Button>
+        </Buttons>
+        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+        <Caption>
+          <Link to={`/${user.username}`}>
+            <FatText text={user.username} />
+          </Link>
+          {caption}
+        </Caption>
+        {comments && (
+          <Comments>
+            {comments.map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+            {selfComments.map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+          </Comments>
+        )}
+        <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+      </Meta>
+      <CommentHolder>
+        <img src={me.avatar} width="26" height="26" />
+        <div>
+          <Textarea
+            id="usercomment"
+            onKeyPress={onKeyPress}
+            placeholder={`Add a comment...`}
+            value={newComment.value}
+            onChange={newComment.onChange}
+          />
+          {newComment.value.length < 1 && <p id="postComment">Post</p>}
+          {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
+        </div>
+      </CommentHolder>
+      <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
+    </Post>
+    
+    <Post2>
+      <Files2 onDoubleClick={toggleLike}>
+        {files &&
+          files.map((file, index) => (
+            <File2 key={file.id} src={file.url} showing={index === currentItem} />
           ))}
-          {selfComments.map((comment) => (
-            <Comment key={comment.id}>
-              <Link to={`/${comment.user.username}`}>
-                <FatText text={comment.user.username} />
-              </Link>
-              {comment.text}
-            </Comment>
-          ))}
-        </Comments>
-      )}
-      <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
-    </Meta>
-    <CommentHolder>
-      <img src={me.avatar} width="26" height="26" />
-      <div>
-        <Textarea
-          onKeyPress={onKeyPress}
-          placeholder={`Add a comment...`}
-          value={newComment.value}
-          onChange={newComment.onChange}
-        />
-        {newComment.value.length < 1 && <p id="postComment">Post</p>}
-        {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
-      </div>
-    </CommentHolder>
-    <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
+      </Files2>
+      <Info>
+        <Header>
+          <Link to={`/${user.username}`}>
+            <Avatar size="sm" url={user.avatar} />
+          </Link>
+          <UserColumn>
+            <UsernameLink to={`/${user.username}`}>
+              <FatText text={user.username} />
+            </UsernameLink>
+            {location && <Location>{location}</Location>}
+          </UserColumn>
+          <p onClick={openModal}><PostOptions /></p>
+        </Header>
+        <Caption>
+          <Link to={`/${user.username}`}>
+            <FatText text={user.username} />
+          </Link>
+          {caption}
+        </Caption>
+        {comments && (
+          <Comments>
+            {comments.map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+            {selfComments.map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+          </Comments>
+        )}
+        <MetaHolder>
+        <Meta>
+          <Buttons>
+            <Button onClick={toggleLike}>
+              {isLiked ? <HeartFull /> : <HeartEmpty />}
+            </Button>
+            <Button>
+              <CommentIcon />
+            </Button>
+          </Buttons>
+          <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+          <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+        </Meta>
+        <CommentHolder>
+          <img src={me.avatar} width="26" height="26" />
+          <div>
+            <Textarea
+              id="usercomment"
+              onKeyPress={onKeyPress}
+              placeholder={`Add a comment...`}
+              value={newComment.value}
+              onChange={newComment.onChange}
+            />
+            {newComment.value.length < 1 && <p id="postComment">Post</p>}
+            {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
+          </div>
+        </CommentHolder>
+        </MetaHolder>
+      </Info> 
+    </Post2>
+
     <Modal
       isOpen={modalIsOpen}
       onRequestClose={closeModal}
@@ -683,5 +835,5 @@ export default ({
       </div>
       </ModalWrapper2>
     </Modal>
-  </Post>
+  </Wrapper>
 )};
