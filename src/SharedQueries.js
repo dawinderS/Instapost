@@ -20,6 +20,7 @@ export const ME = gql`
         isFollowing
       }
       posts {
+        id
         files {
           url
         }
@@ -32,6 +33,7 @@ export const ME = gql`
             avatar
           }
           post {
+            id
             files {
               url
             }
@@ -47,6 +49,7 @@ export const ME = gql`
             avatar
           }
           post {
+            id
             files {
               url
             }

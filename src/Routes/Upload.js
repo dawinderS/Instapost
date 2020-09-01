@@ -69,17 +69,18 @@ const UploadWrapper = styled.div`
   }
   img {
     opacity: 0;
-    // max-width: 100vw;
+    max-width: 100%;
     // min-width: 80vw;
-    width: 100vw;
-    min-width: 100vw;
-    height: auto;
+    // width: 100vw;
+    // min-width: 100vw;
+    width: auto;
     max-height: 60vh;
     animation: ${fadeIn} 1s forwards;
     object-fit: cover;
     overflow: hidden;
     background-color: #fafafa;
     color: #262626;
+    border-bottom: 1px solid #dbdbdb;
     @media screen and (min-width: 770px) {
       height: auto;
       max-height: 60vh;
@@ -94,8 +95,8 @@ const UploadWrapper = styled.div`
     justify-content: center;
     align-items: center;
     // height: 400px;
-    width: 80vw;
-    max-width: 100%;
+    // width: 80vw;
+    // max-width: 100%;
   }
   .labelWrapper {
     display: flex;
@@ -353,6 +354,10 @@ export default ({ props }) => {
   const goBack = (e) => {
     history.push("/");
   };
+  const returnBack = (e) => {
+    history.goBack();
+  };
+
 
   const handleSubmit = async () => {
     if (captionInput.value === "") {
@@ -397,7 +402,7 @@ export default ({ props }) => {
         <title>Upload • Instapost</title>
       </Helmet>
       <MinHeader>
-        <span onClick={goBack}>
+        <span onClick={returnBack}>
           <HeaderBackButton />
         </span>
         <div>New Post</div>

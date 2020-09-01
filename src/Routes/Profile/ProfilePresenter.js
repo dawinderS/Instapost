@@ -13,7 +13,7 @@ import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
 import { FollowUsers, CancelButton } from "../../Components/Icons";
-import { HeaderBackButton } from "../../Components/Icons";
+import { HeaderBackButton, Logo } from "../../Components/Icons";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -235,7 +235,6 @@ const MinCount = styled.div`
 
 const SectionHolder = styled.div`
   height: 53px;
-  border-bottom: 1px solid #dbdbdb;
   justify-content: space-around;
   align-items: center;
   @media screen and (max-width: 770px) {
@@ -243,6 +242,10 @@ const SectionHolder = styled.div`
     display: flex;
     color: #8e8e8e;
     justify-content: space-around;
+    border-bottom: 1px solid #dbdbdb;
+  }
+  @media screen and (min-width: 770px) {
+    border-top: 1px solid #dbdbdb;
   }
 `;
 
@@ -453,6 +456,16 @@ const UserLink = styled(Link)`
   }
 `;
 
+const Empty = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  padding: 40px 0px;
+  div {
+    margin: 15px 0px 25px 0px;
+  }
+`;
+
 export default ({ loading, data, logOut }) => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [action, setAction] = useState("UploadPic");
@@ -658,9 +671,17 @@ export default ({ loading, data, logOut }) => {
             </MinCount>
           </MinCounts>
         </MinHeader>
-        {/* <SectionHolder>
+        <SectionHolder>
 
-        </SectionHolder> */}
+        </SectionHolder>
+        {posts.length < 1 && 
+          <Empty>
+            <Logo size={60} />
+            <div>No Posts Yet</div>
+            {isSelf && <Link to="/upload">Share a new post?</Link>}
+          </Empty>
+          
+        }
         <Posts>
           {posts &&
             posts

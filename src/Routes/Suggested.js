@@ -162,6 +162,13 @@ const MinHeader = styled.header`
   }
 `;
 
+const Empty = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  padding: 40px 0px;
+`;
+
 export default () => {
   const { data, loading } = useQuery(SUGGESTED);
   const me = useQuery(ME);
@@ -188,6 +195,7 @@ export default () => {
           <h2>Suggested</h2>
           <SuggestedCard>
             <div className="suggesttext">Suggested</div>
+            {data.suggested.length < 1 && <Empty>No new suggestions</Empty>}
             {data.suggested.map((user) => (
               <EachCard key={user.id}>
                 <UserLink to={`/${user.username}`}>

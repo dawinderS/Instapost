@@ -8,6 +8,7 @@ import Loader from "../Components/Loader";
 import SquarePost from "../Components/SquarePost";
 import useInput from "../Hooks/useInput";
 import Input from "../Components/Input";
+import { Logo } from "../Components/Icons";
 
 const EXPLORE_QUERY = gql`
   {
@@ -145,6 +146,19 @@ const SearchInput = styled(Input)`
   }
 `;
 
+const Empty = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  padding: 80px 0px 40px 0px;
+  div {
+    margin: 15px 0px 25px 0px;
+  }
+  @media screen and (max-width: 770px) {
+    font-size: 20px;
+  }
+`;
+
 export default withRouter(({ history }) => {
   const { data, loading } = useQuery(EXPLORE_QUERY);
   const search = useInput("");
@@ -172,18 +186,28 @@ export default withRouter(({ history }) => {
         </MinLink>
       </MinHeader>
       {!loading && data && data.seeExplore && (
-        <Posts>
-          {data.seeExplore.map((post) => (
-            <PostLink key={post.id} to={`p/${post.id}`}>
-              <SquarePost
-                key={post.id}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                file={post.files[0]}
-              />
-            </PostLink>
-          ))}
-        </Posts>
+        <>
+          {data.seeExplore.length < 1 &&
+            <Empty>
+              <Logo size={60} />
+              <div>Nothing left to explore</div>
+              <Link to="/">Return to your feed?</Link>
+            </Empty>
+
+          }
+          <Posts>
+            {data.seeExplore.map((post) => (
+              <PostLink key={post.id} to={`p/${post.id}`}>
+                <SquarePost
+                  key={post.id}
+                  likeCount={post.likeCount}
+                  commentCount={post.commentCount}
+                  file={post.files[0]}
+                />
+              </PostLink>
+            ))}
+          </Posts>
+        </>
       )}
     </Wrapper>
   );

@@ -8,7 +8,7 @@ import Loader from "../Components/Loader";
 import Post from "../Components/Post/index";
 import Avatar from "../Components/Avatar";
 import SuggestedCard from "../Components/SuggestionCard";
-import { MessagingIcon, MessagingIconLoc } from "../Components/Icons";
+import { MessagingIcon, MessagingIconLoc, Logo } from "../Components/Icons";
 
 const Wrapper = styled.div`
   display: flex;
@@ -132,6 +132,20 @@ const MinLink = styled(Link)`
   align-items: center;
 `;
 
+const Empty = styled.div`
+  width: 65%;
+  text-align: center;
+  font-size: 24px;
+  padding: 80px 0px 40px 0px;
+  div {
+    margin: 15px 0px 25px 0px;
+  }
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    font-size: 20px;
+  }
+`;
+
 export default withRouter(({ history }) => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
@@ -157,6 +171,14 @@ export default withRouter(({ history }) => {
         me.data && !me.loading && me.data.me &&
         // suggested.data && !suggested.loading &&
         <>
+          {data.seeFeed.length < 1 &&
+            <Empty>
+              <Logo size={60} />
+              <div>Nothing in your feed right now</div>
+              <Link to="/suggested">See suggested accounts to follow?</Link>
+            </Empty>
+
+          }
           <PostShow> {
            data.seeFeed.map((post) => (
              <Post

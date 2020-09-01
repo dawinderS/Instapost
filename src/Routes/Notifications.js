@@ -109,7 +109,6 @@ const EachCard = styled.div`
   border-bottom: 1px solid #dbdbdb;
   img {
     border-radius: 0%;
-    margin-left: auto;
   }
   span {
     margin-left: 12px;
@@ -147,7 +146,9 @@ const EachCard = styled.div`
     }
   }
 `;
-
+const ImgLink = styled(Link)`
+  margin-left: auto;
+`;
 const MinHeader = styled.header`
   width: 100%;
   border: 0;
@@ -173,6 +174,13 @@ const MinHeader = styled.header`
   @media screen and (min-width: 770px) {
     display: none;
   }
+`;
+
+const Empty = styled.div`
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  padding: 40px 0px;
 `;
 
 export default () => {
@@ -209,7 +217,7 @@ export default () => {
     comment_notifs = data.me.posts.map(post => post.comments);
     all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];
     all_notifs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
-    notifs = all_notifs.map(notif => {
+    notifs = all_notifs.slice(0, 50).map(notif => {
       if (notif.user === undefined) {
         return (
           <EachCard key={notif.id}>
@@ -238,7 +246,9 @@ export default () => {
                 <span className="notif-date">{getDate(notif.createdAt)}</span>
               </span>
             </span>
-            <img width="36" height="36" src={notif.post.files[0].url} />
+            <ImgLink to={`/p/${notif.post.id}`}>
+              <img width="36" height="36" src={notif.post.files[0].url} />
+            </ImgLink>
           </EachCard>
         );
       } else if (notif.user.username !== data.me.username) {
@@ -256,7 +266,9 @@ export default () => {
                 <span className="notif-date">{getDate(notif.createdAt)}</span>
               </span>
             </span>
-            <img width="36" height="36" src={notif.post.files[0].url} />
+            <ImgLink to={`/p/${notif.post.id}`}>
+              <img width="36" height="36" src={notif.post.files[0].url} />
+            </ImgLink>
           </EachCard>
         );
       }
@@ -287,6 +299,7 @@ export default () => {
                 </div>
               </SuggestedFollowers>
             </SuggestedLink>
+            {notifs.length < 1 && <Empty>No new notifications</Empty>}
             {notifs}
           </SuggestedCard>
         </Holder>

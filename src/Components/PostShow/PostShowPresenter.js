@@ -94,6 +94,26 @@ const UsernameLink = styled(Link)`
   align-items: center;
 `;
 
+const FollowHolder = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    margin-right: 5px;
+  }
+  button {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 10px;
+    color: #0095f6;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    width: auto;
+    height: auto;
+    margin-top: 1px;
+  }
+`;
+
 const Location = styled.span`
   display: block;
   // margin-top: 3px;
@@ -590,9 +610,17 @@ export default ({
           <Avatar size="sm" url={user.avatar} />
         </Link>
         <UserColumn>
-          <UsernameLink to={`/${user.username}`}>
-            <FatText text={user.username} />
-          </UsernameLink>
+          <FollowHolder>
+            <UsernameLink to={`/${user.username}`}>
+              <FatText text={user.username} />
+            </UsernameLink>
+            {!user.isFollowing && !user.isSelf &&
+              <>
+                <span>•</span>
+                <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+              </>
+            }
+          </FollowHolder>
           {location && <Location>{location}</Location>}
         </UserColumn>
         <p onClick={openModal}><PostOptions /></p>
@@ -671,9 +699,17 @@ export default ({
             <Avatar size="sm" url={user.avatar} />
           </Link>
           <UserColumn>
-            <UsernameLink to={`/${user.username}`}>
-              <FatText text={user.username} />
-            </UsernameLink>
+            <FollowHolder>
+              <UsernameLink to={`/${user.username}`}>
+                <FatText text={user.username} />
+              </UsernameLink>
+              {!user.isFollowing && !user.isSelf &&
+                <>
+                  <span>•</span>
+                  <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+                </>
+              }
+            </FollowHolder>
             {location && <Location>{location}</Location>}
           </UserColumn>
           <p onClick={openModal}><PostOptions /></p>
@@ -767,7 +803,7 @@ export default ({
             </div>
           }
           {!user.isFollowing &&
-            <div id="profremove2">
+            <div onClick={closeModal} id="profremove2">
               <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
             </div>
           }

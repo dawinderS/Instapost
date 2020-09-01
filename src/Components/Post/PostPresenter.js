@@ -73,6 +73,23 @@ const UserColumn = styled.div`
 const UsernameLink = styled(Link)`
   display: flex;
   align-items: center;
+  span {
+    margin-right: 5px;
+  }
+  button {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 10px;
+    color: #0095f6;
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    background-color: transparent;
+    text-align: right;
+    width: auto;
+    height: auto;
+    margin-top: 2px;
+  }
 `;
 
 const Location = styled.span`
@@ -505,6 +522,12 @@ export default ({
       <UserColumn>
         <UsernameLink to={`/${user.username}`}>
           <FatText text={user.username} />
+          {!user.isFollowing && !user.isSelf &&
+          <>
+            <span>•</span>
+            <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+          </>
+          }
         </UsernameLink>
         {location && <Location>{location}</Location>}
       </UserColumn>
