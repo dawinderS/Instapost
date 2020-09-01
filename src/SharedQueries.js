@@ -164,11 +164,40 @@ export const GET_USER = gql`
       postsCount
       posts {
         id
+        location
+        caption
+        user {
+          id
+          avatar
+          username
+          isFollowing
+          isSelf
+        }
         files {
+          id
           url
         }
         likeCount
         commentCount
+        isLiked
+        likes {
+          id
+          user {
+            username
+            name
+            avatar
+            isFollowing
+          }
+        }
+        comments {
+          id
+          text
+          user {
+            id
+            username
+          }
+          createdAt
+        }
         createdAt
       }
       followers {

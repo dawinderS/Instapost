@@ -11,9 +11,10 @@ import Loader from "../../Components/Loader";
 import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
+import Post from "../../Components/Post/index";
 import Button from "../../Components/Button";
 import { FollowUsers, CancelButton } from "../../Components/Icons";
-import { HeaderBackButton, Logo } from "../../Components/Icons";
+import { HeaderBackButton, Logo, MultiView, SingleView } from "../../Components/Icons";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -55,7 +56,7 @@ const Wrapper = styled.div`
     overflow-y: auto;
     width: 100%;
     background: #fff;
-    min-height: 94vh;
+    height: 89vh;
   }
 `;
 
@@ -234,18 +235,48 @@ const MinCount = styled.div`
 `;
 
 const SectionHolder = styled.div`
+  width: 100%;
   height: 53px;
+  display: flex;
   justify-content: space-around;
   align-items: center;
+  div {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    cursor: pointer;
+    border-top: 2px solid #fafafa;
+    text-transform: uppercase;
+    font: 12px;
+    font-weight: 600;
+    color: #8e8e8e;
+    letter-spaceing: 1px;
+    p {
+      margin-left: 6px;
+    }
+  }
+  #multidiv {
+    border-top: 2px solid #262626;
+    color: #262626;
+  }
   @media screen and (max-width: 770px) {
     height: 45px;
-    display: flex;
     color: #8e8e8e;
     justify-content: space-around;
     border-bottom: 1px solid #dbdbdb;
+    div {
+      width: 50%;
+      display: flex;
+      justify-content: center;
+    }
   }
   @media screen and (min-width: 770px) {
     border-top: 1px solid #dbdbdb;
+    padding: 0px 80px;
+    justify-content: center;
+    div {
+      margin: 0px 80px;
+    }
   }
 `;
 
@@ -466,7 +497,23 @@ const Empty = styled.div`
   }
 `;
 
-export default ({ loading, data, logOut }) => {
+const SinglePost = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+const SinglePostHold = styled.div`
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  @media screen and (min-width: 770px) {
+    width: 65%;
+  }
+`;
+
+
+export default ({ me, loading, data, logOut }) => {
+  const [viewtype, setViewtype] = useState("multi");
   const [modalIsOpen, setIsOpen] = useState(false);
   const [action, setAction] = useState("UploadPic");
   const [editUserMutation] = useMutation(EDITUSER); 
@@ -495,6 +542,21 @@ export default ({ loading, data, logOut }) => {
   const closeModal = () => {
     setIsOpen(false);
   };
+
+  const setMulti = () => {
+    setViewtype("multi");
+    document.getElementById("multidiv").style.borderTopColor = "#262626"; 
+    document.getElementById("singlediv").style.borderTopColor = "#fafafa";
+    document.getElementById("multidiv").style.color = "#262626";
+    document.getElementById("singlediv").style.color = "#8e8e8e"; 
+  }
+  const setSingle = () => {
+    setViewtype("single");
+    document.getElementById("singlediv").style.borderTopColor = "#262626";
+    document.getElementById("multidiv").style.borderTopColor = "#fafafa"; 
+    document.getElementById("singlediv").style.color = "#262626"; 
+    document.getElementById("multidiv").style.color = "#8e8e8e"; 
+  }
 
   const addProfPic = async (e) => {
     const pic = e.currentTarget.files[0];
@@ -555,7 +617,7 @@ export default ({ loading, data, logOut }) => {
         <Loader />
       </Wrapper>
     );
-  } else if (!loading && data && data.seeUser) {
+  } else if (!loading && data && data.seeUser && !me.loading && me.data && me.data.me) {
     const {
       seeUser: {
         id,
@@ -573,6 +635,7 @@ export default ({ loading, data, logOut }) => {
         following
       },
     } = data;
+
     let namee;
     name ? namee = name : namee = '';
     return (
@@ -672,7 +735,14 @@ export default ({ loading, data, logOut }) => {
           </MinCounts>
         </MinHeader>
         <SectionHolder>
-
+          <div id="multidiv" onClick={setMulti}>
+            <MultiView />
+            <p>Multi</p>
+          </div>
+          <div id="singlediv" onClick={setSingle}>
+            <SingleView />
+            <p>Single</p>
+          </div>
         </SectionHolder>
         {posts.length < 1 && 
           <Empty>
@@ -682,21 +752,49 @@ export default ({ loading, data, logOut }) => {
           </Empty>
           
         }
-        <Posts>
+        {viewtype === "multi" &&
+          <Posts>
+            {posts &&
+              posts
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map((post) => (
+                  <Link key={post.id} to={`p/${post.id}`}>
+                    <SquarePost
+                      key={post.id}
+                      likeCount={post.likeCount}
+                      commentCount={post.commentCount}
+                      file={post.files[0]}
+                    />
+                  </Link>
+              ))}
+          </Posts>
+        }
+        {viewtype === "single" &&
+        <SinglePost>
+          <SinglePostHold>
           {posts &&
             posts
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((post) => (
-                <Link key={post.id} to={`p/${post.id}`}>
-                  <SquarePost
-                    key={post.id}
-                    likeCount={post.likeCount}
-                    commentCount={post.commentCount}
-                    file={post.files[0]}
-                  />
-                </Link>
-              ))}
-        </Posts>
+                <Post
+                  key={post.id}
+                  id={post.id}
+                  location={post.location}
+                  caption={post.caption}
+                  user={post.user}
+                  me={me.data.me}
+                  files={post.files}
+                  likeCount={post.likeCount}
+                  commentCount={post.commentCount}
+                  isLiked={post.isLiked}
+                  likes={post.likes}
+                  comments={post.comments}
+                  createdAt={post.createdAt}
+                />
+            ))}
+          </SinglePostHold>
+        </SinglePost>
+        }
         <Modal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
