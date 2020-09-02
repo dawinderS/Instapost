@@ -670,7 +670,7 @@ export default ({
         <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
       </Meta>
       <CommentHolder>
-        <img src={me.avatar} width="26" height="26" />
+        <img src={me.avatar} width="26" height="26" alt="avatar"/>
         <div>
           <Textarea
             id="usercomment"
@@ -754,7 +754,7 @@ export default ({
           <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
         </Meta>
         <CommentHolder>
-          <img src={me.avatar} width="26" height="26" />
+          <img src={me.avatar} width="26" height="26" alt="avatar"/>
           <div>
             <Textarea
               id="usercomment"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "rl-react-helmet";
-import { Link, withRouter, useHistory } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
@@ -117,14 +117,6 @@ const MinHeader = styled.header`
   @media screen and (min-width: 770px) {
     display: none;
   }
-`;
-
-const MinLink = styled(Link)`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const FormOuter = styled.div`
@@ -561,6 +553,7 @@ export default withRouter(({ }) => {
               src={data.me.avatar}
               width="90"
               height="90"
+              alt="avatar"
             />
             <p onClick={openModal}>Change Profile Photo</p>
           </MinPicShow>
@@ -656,6 +649,7 @@ export default withRouter(({ }) => {
                 src={data.me.avatar}
                 width="60"
                 height="60"
+                alt="avatar"
               />
             </FirstPart>
             <SecondPart>

@@ -45,12 +45,12 @@ export default () => {
 
   const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
-  const clearErrors = () => {
-    const allInputs = document.querySelectorAll("input");
-    for (let i = 0; i < allInputs.length; i++) {
-      allInputs[i].value = "";
-    }
-  };
+  // const clearErrors = () => {
+  //   const allInputs = document.querySelectorAll("input");
+  //   for (let i = 0; i < allInputs.length; i++) {
+  //     allInputs[i].value = "";
+  //   }
+  // };
 
   const onDemo = async e => {
     e.preventDefault();

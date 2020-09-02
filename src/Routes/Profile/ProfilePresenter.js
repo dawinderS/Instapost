@@ -5,7 +5,7 @@ import axios from "axios";
 import { Helmet } from "rl-react-helmet";
 import { useMutation } from "react-apollo-hooks";
 import { gql } from "apollo-boost";
-import { GET_USER_BY_ID } from "../../SharedQueries";
+// import { GET_USER_BY_ID } from "../../SharedQueries";
 import { toast } from "react-toastify";
 import Loader from "../../Components/Loader";
 import FatText from "../../Components/FatText";
@@ -661,8 +661,8 @@ export default ({ me, loading, data, logOut }) => {
         </MinTopHeader>
         <Header>
           <HeaderColumn>
-            {isSelf && <img src={avatar} onClick={openPicModal} width="150" height="150" /> }
-            {!isSelf && <img src={avatar} width="150" height="150" /> }
+            {isSelf && <img src={avatar} onClick={openPicModal} width="150" height="150" alt="avatar"/> }
+            {!isSelf && <img src={avatar} width="150" height="150" alt="avatar"/> }
           </HeaderColumn>
           <HeaderCol>
             <UsernameRow>
@@ -696,8 +696,8 @@ export default ({ me, loading, data, logOut }) => {
         <MinHeader>
           <MinHeaderCol>
             <MinImage>
-              {isSelf && <img src={avatar} onClick={openPicModal} width="77" height="77" /> }
-              {!isSelf && <img src={avatar} width="77" height="77" /> }
+              {isSelf && <img src={avatar} onClick={openPicModal} width="77" height="77" alt="avatar"/> }
+              {!isSelf && <img src={avatar} width="77" height="77" alt="avatar"/> }
             </MinImage>
             <MinUsernameRow>
               <MinUsername>{username}</MinUsername>
@@ -836,7 +836,7 @@ export default ({ me, loading, data, logOut }) => {
               {followers.map(user => (
                 <EachCard key={user.id}>
                   <UserLink onClick={closeModal} to={`/${user.username}` }>
-                    <img width="34" height="34" src={user.avatar} />
+                    <img width="34" height="34" src={user.avatar} alt="avatar"/>
                     <div>
                       <span>{user.username}</span>
                       <h1>{user.name}</h1>
@@ -861,7 +861,7 @@ export default ({ me, loading, data, logOut }) => {
                 {following.map(user => (
                   <EachCard key={user.id}>
                     <UserLink onClick={closeModal} to={`/${user.username}`}>
-                      <img width="34" height="34" src={user.avatar} />
+                      <img width="34" height="34" src={user.avatar} alt="avatar"/>
                       <div>
                         <span>{user.username}</span>
                         <h1>{user.name}</h1>

@@ -60,10 +60,6 @@ const Wrapper = styled.div`
   overflow-y: auto;
 `;
 
-const Explore = styled.div`
-
-`;
-
 const Posts = styled.div`
   display: grid;
   width: 100%;

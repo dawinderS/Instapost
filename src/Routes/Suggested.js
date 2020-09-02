@@ -189,7 +189,7 @@ export default () => {
         <div>Discover People</div>
         <span></span>
       </MinHeader>
-      {loading || me.loading && <Loader />}
+      {loading && me.loading && <Loader />}
       {!loading && data.suggested && me.data && (
         <Holder>
           <h2>Suggested</h2>
@@ -199,7 +199,7 @@ export default () => {
             {data.suggested.map((user) => (
               <EachCard key={user.id}>
                 <UserLink to={`/${user.username}`}>
-                  <img width="46" height="46" src={user.avatar} />
+                  <img alt="avatar" width="46" height="46" src={user.avatar} />
                   <div>
                     <span>{user.username}</span>
                     <h1>{user.name}</h1>

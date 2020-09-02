@@ -1,8 +1,7 @@
 import React from "react";
-import { gql } from "apollo-boost";
-import { Link, withRouter, useHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
-import { useQuery, useMutation } from "react-apollo-hooks";
+import { useQuery } from "react-apollo-hooks";
 import Loader from "../Components/Loader";
 import Post from "../Components/PostShow";
 import { GET_POST, ME } from "../SharedQueries";

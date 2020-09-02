@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, NavLink, withRouter } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import { 
-  Home, HomeLoc, MessagingIcon, MessagingIconLoc, Explore, ExploreLoc, Upload, 
+  Home, HomeLoc, Explore, ExploreLoc, Upload, 
   UploadLoc, HeartEmpty, HeartLoc } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
@@ -67,11 +67,11 @@ export default withRouter(({ history }) => {
       </HeaderLink>
       {data === undefined || !data.me ? (
         <HeaderLink to="/#">
-          <img src="profilePic.jpg" width="24" height="24" />
+          <img src="profilePic.jpg" width="24" height="24" alt="avatar"/>
         </HeaderLink>
       ) : (
         <HeaderLink to={`/${data.me.username}`}>
-          {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="24" height="24" />}
+          {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="24" height="24" alt="avatar"/>}
           {pathname === `/${data.me.username}` && <ImgLoc src={data.me.avatar} width="24" height="24" />}
         </HeaderLink>
       )}

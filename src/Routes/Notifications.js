@@ -222,7 +222,7 @@ export default () => {
         return (
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.username}`}>
-              <img width="36" height="36" src={notif.avatar} />
+              <img width="36" height="36" src={notif.avatar} alt="avatar" />
             </UserLink>
             <span>
               <NameLink to={`/${notif.username}`}>{notif.username}</NameLink>
@@ -237,7 +237,7 @@ export default () => {
         return (
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.user.username}`}>
-              <img width="36" height="36" src={notif.user.avatar} />
+              <img width="36" height="36" src={notif.user.avatar} alt="avatar" />
             </UserLink>
             <span>
               <NameLink to={`/${notif.user.username}`}>{notif.user.username}</NameLink>
@@ -247,7 +247,7 @@ export default () => {
               </span>
             </span>
             <ImgLink to={`/p/${notif.post.id}`}>
-              <img width="36" height="36" src={notif.post.files[0].url} />
+              <img width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
             </ImgLink>
           </EachCard>
         );
@@ -255,7 +255,7 @@ export default () => {
         return (
           <EachCard key={notif.id}>
             <UserLink to={`/${notif.user.username}`}>
-              <img width="36" height="36" src={notif.user.avatar} />
+              <img width="36" height="36" src={notif.user.avatar} alt="avatar" />
             </UserLink>
             <span>
               <NameLink to={`/${notif.user.username}`}>
@@ -267,7 +267,7 @@ export default () => {
               </span>
             </span>
             <ImgLink to={`/p/${notif.post.id}`}>
-              <img width="36" height="36" src={notif.post.files[0].url} />
+              <img width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
             </ImgLink>
           </EachCard>
         );

@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import FatText from "../../Components/FatText";
-import Loader from "../../Components/Loader";
 import UserCard from "../../Components/UserCard";
 import SquarePost from "../../Components/SquarePost";
 import useInput from "../../Hooks/useInput";
@@ -188,6 +187,9 @@ const SearchPresenter = ({ searchTerm, loading, data, me, history }) => {
 
   return (
     <Wrapper>
+      <Helmet>
+        <title>Instapost</title>
+      </Helmet>
       <MinHeader>
         <form onKeyUp={onSearchSubmit}>
           <SearchInput
@@ -210,7 +212,7 @@ const SearchPresenter = ({ searchTerm, loading, data, me, history }) => {
         </Message>
       </>
       }
-      {loading || me.loading &&
+      {loading && me.loading &&
         <div></div>
       }
       {searchTerm.length > 0 && searchTerm && 
@@ -241,7 +243,7 @@ const SearchPresenter = ({ searchTerm, loading, data, me, history }) => {
             data.searchUser.map((user) => (
               <EachMinCard>
                 <MinCardLink to={`/${user.username}`}>
-                  <img src={user.avatar} width="44" height="44" />
+                  <img src={user.avatar} width="44" height="44" alt="avatar" />
                   <MinInfo>
                     <FatText text={user.username} />
                     <p>{user.name}</p>

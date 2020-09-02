@@ -129,11 +129,11 @@ export default withRouter(({ history }) => {
           </HeaderLink>
           {data === undefined || !data.me ? (
             <HeaderLink to="/#">
-              <img src="profilePic.jpg" width="23" height="23" />
+              <img src="profilePic.jpg" width="23" height="23" alt="avatar"/>
             </HeaderLink>
           ) : (
             <HeaderLink to={`/${data.me.username}`}>
-              {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="23" height="23" />}
+              {pathname !== `/${data.me.username}` && <img src={data.me.avatar} width="23" height="23" alt="avatar"/>}
               {pathname === `/${data.me.username}` && <ImgLoc src={data.me.avatar} width="23" height="23" />}
             </HeaderLink>
           )}
