@@ -345,7 +345,7 @@ const ModalWrapper = styled.div`
     margin: 24px 0px 24px 0px;
     text-align: center;
     font-size: 18px;
-    line-height 24px;
+    line-height: 24px;
     font-weight: 600;
     color: #262626;
   }
