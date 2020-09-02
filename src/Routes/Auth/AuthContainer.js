@@ -60,7 +60,7 @@ export default () => {
       } = await confirmDemoMutation();
       if (token !== "" && token !== undefined) {
         localLogInMutation({ variables: { token } });
-        // window.location = "/";
+        window.location = "/";
       } else {
         throw Error();
       }
@@ -121,7 +121,7 @@ export default () => {
           } = await confirmSecretMutation();
           if (token !== "" && token !== undefined) {
             localLogInMutation({ variables: { token } });
-            // window.location = "/";
+            window.location = "/";
           } else {
             throw Error();
           }
