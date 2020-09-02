@@ -223,7 +223,7 @@ const BeforeBtns = styled.div`
   width: 100%;
   display: flex;
   align-items: flex-end;
-  margin-top 15px;
+  margin-top: 15px;
   border-top: 1px solid #dbdbdb;
   button {
     width: 50%;

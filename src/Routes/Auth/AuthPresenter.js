@@ -108,7 +108,7 @@ const DemoLog = styled.div`
   font-weight: 600;
   display: flex;
   justify-content: center;
-  align items: center;
+  align-items: center;
   div {
     height: 20px;
     display: flex;
