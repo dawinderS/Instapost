@@ -250,7 +250,7 @@ const SectionHolder = styled.div`
     font: 12px;
     font-weight: 600;
     color: #8e8e8e;
-    letter-spaceing: 1px;
+    letter-spacing: 1px;
     p {
       margin-left: 6px;
     }
@@ -442,7 +442,7 @@ const UserShow = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
-  overscroll-y: auto;
+  overflow-y: auto;
   max-height: 355px;
   min-height: 52px;
 `;

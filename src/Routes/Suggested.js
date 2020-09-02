@@ -28,7 +28,7 @@ const Holder = styled.div`
     font-size: 22px;
     line-height: 24px;
     font-weight: 600;
-    font-color: #262626;
+    color: #262626;
     margin-bottom: 15px;
   }
   @media screen and (max-width: 770px) {
