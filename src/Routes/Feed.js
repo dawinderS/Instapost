@@ -179,25 +179,26 @@ export default withRouter(({ history }) => {
             </Empty>
 
           }
-          <PostShow> {
-           data.seeFeed.map((post) => (
-             <Post
-              key={post.id}
-              id={post.id}
-              location={post.location}
-              caption={post.caption}
-              user={post.user}
-              me={me.data.me}
-              files={post.files}
-              likeCount={post.likeCount}
-              commentCount={post.commentCount}
-              isLiked={post.isLiked}
-              likes={post.likes}
-              comments={post.comments}
-              createdAt={post.createdAt}
-            />
-          ))}
-          </PostShow>
+          {data.seeFeed.length > 0 &&
+            <PostShow> {
+            data.seeFeed.map((post) => (
+              <Post
+                key={post.id}
+                id={post.id}
+                location={post.location}
+                caption={post.caption}
+                user={post.user}
+                me={me.data.me}
+                files={post.files}
+                likeCount={post.likeCount}
+                commentCount={post.commentCount}
+                isLiked={post.isLiked}
+                likes={post.likes}
+                comments={post.comments}
+                createdAt={post.createdAt}
+              />
+            ))}
+          </PostShow>}
           <FeedSide>
             <UserFeed>
               <UserLink to={`/${me.data.me.username}`}>

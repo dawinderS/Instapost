@@ -171,7 +171,7 @@ export default withRouter(({ history }) => {
       </Helmet>
       {loading && <Loader />}
       <MinHeader>
-        <MinLink to="/search?term=" >
+        <MinLink to="/search?term=">
           <form onKeyUp={onSearchSubmit}>
             <SearchInput
               value={search.value}
@@ -181,16 +181,17 @@ export default withRouter(({ history }) => {
           </form>
         </MinLink>
       </MinHeader>
-      {!loading && data && data.seeExplore && (
+      {!loading && data && data.seeExplore && data.seeExplore.length < 1 && (
         <>
-          {data.seeExplore.length < 1 &&
-            <Empty>
-              <Logo size={60} />
-              <div>Nothing left to explore</div>
-              <Link to="/">Return to your feed?</Link>
-            </Empty>
-
-          }
+          <Empty>
+            <Logo size={60} />
+            <div>Nothing left to explore</div>
+            <Link to="/">Return to your feed?</Link>
+          </Empty>
+        </>
+      )}
+      {!loading && data && data.seeExplore && data.seeExplore.length > 0 && (
+        <>
           <Posts>
             {data.seeExplore.map((post) => (
               <PostLink key={post.id} to={`p/${post.id}`}>

@@ -210,13 +210,18 @@ export default () => {
     }
   };
 
-  let follow_notifs, like_notifs, comment_notifs, all_notifs, notifs;
+  let follow_notifs, like_notifs, comment_notifs, notifs;
+  let all_notifs = [];
   if (!loading && data.me) {
     follow_notifs = data.me.followers;
     like_notifs = data.me.posts.map(post => post.likes);
     comment_notifs = data.me.posts.map(post => post.comments);
-    all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];
+    all_notifs.concat(follow_notifs);
+    if (like_notifs[0]) all_notifs.concat(like_notifs[0]);
+    if (comment_notifs[0]) all_notifs.concat(comment_notifs[0]);
+    // all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];
     all_notifs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
+    
     notifs = all_notifs.slice(0, 50).map(notif => {
       if (notif.user === undefined) {
         return (
