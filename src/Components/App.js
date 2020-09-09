@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     min-height: 85vh;
   }
   @media screen and (max-width: 770px) {
-    height: 89vh;
+    min-height: 75vh;
     max-width: 100%;
     width: 100%;
     margin: 0;

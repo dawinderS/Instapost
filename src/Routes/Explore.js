@@ -54,8 +54,8 @@ const EXPLORE_QUERY = gql`
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  min-height: 89vh;
-  max-height: 89vh;
+  min-height: 75vh;
+  /* max-height: 89vh; */
   width: 100%;
   overflow-y: auto;
 `;

@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   @media screen and (max-width: 770px) {
     width: 100%;
-    height: 89vh;
+    min-height: 75vh;
     justify-content: flex-start;
   }
 `;
@@ -216,15 +216,12 @@ export default withRouter(({ history }) => {
                     <div>{me.data.me.username}</div>
                     <span>{me.data.me.name}</span>
                   </UserFeedText>
-                </UserLink>
-                {me.data.me.avatar === 
-                  "https://instapost-clone.s3.us-west-1.amazonaws.com/1597972559986" && 
-                  <p>
-                    <Link to="/editprofile">
-                      Edit Profile
-                    </Link>
-                  </p>
-                }
+                </UserLink> 
+                <p>
+                  <Link to="/editprofile">
+                    Edit Profile
+                  </Link>
+                </p>
               </UserFeed>
               <Suggestions>
                 <span>

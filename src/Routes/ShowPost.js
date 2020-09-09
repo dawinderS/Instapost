@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   @media screen and (max-width: 770px) {
     width: 100%;
-    height: 89vh;
+    min-height: 75vh;
     justify-content: flex-start;
   }
 `;

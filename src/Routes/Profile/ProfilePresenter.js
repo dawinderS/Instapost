@@ -56,7 +56,7 @@ const Wrapper = styled.div`
     overflow-y: auto;
     width: 100%;
     background: #fff;
-    height: 89vh;
+    min-height: 75vh;
   }
 `;
 
