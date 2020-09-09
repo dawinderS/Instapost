@@ -49,6 +49,11 @@ const UserFeed = styled.div`
   height: 56px;
   margin: 23px 0px 21px 5px;
   align-items: center;
+  p {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 600;
+  }
 `;
 
 const UserLink = styled(Link)`
@@ -162,65 +167,77 @@ export default withRouter(({ history }) => {
         <MinLink to="/" replace>
           <img src="instalogo.png" alt="instalogo" />
         </MinLink>
-        <Link to ="/direct">
+        <Link to="/direct">
           {pathname === "/direct" ? <MessagingIconLoc /> : <MessagingIcon />}
         </Link>
       </MinHeader>
       {!loading &&
-        data && data.seeFeed &&
-        me.data && !me.loading && me.data.me &&
-        // suggested.data && !suggested.loading &&
-        <>
-          {data.seeFeed.length < 1 &&
-            <Empty>
-              <Logo size={60} />
-              <div>Nothing in your feed right now</div>
-              <Link to="/suggested">See suggested accounts to follow?</Link>
-            </Empty>
-
-          }
-          {data.seeFeed.length > 0 &&
-            <PostShow> {
-            data.seeFeed.map((post) => (
-              <Post
-                key={post.id}
-                id={post.id}
-                location={post.location}
-                caption={post.caption}
-                user={post.user}
-                me={me.data.me}
-                files={post.files}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                isLiked={post.isLiked}
-                likes={post.likes}
-                comments={post.comments}
-                createdAt={post.createdAt}
-              />
-            ))}
-          </PostShow>}
-          <FeedSide>
-            <UserFeed>
-              <UserLink to={`/${me.data.me.username}`}>
-                <Avatar size="md" url={me.data.me.avatar} />
-                <UserFeedText>
-                  <div>{me.data.me.username}</div>
-                  <span>{me.data.me.name}</span>
-                </UserFeedText>
-              </UserLink>
-            </UserFeed>
-            <Suggestions>
-              <span>
-                <span>Suggestions For You</span>
-                <Link to="/suggested">
-                  <p>See All</p>
-                </Link>
-              </span>
-              <SuggestedCard />
-            </Suggestions>
-          </FeedSide>
-        </>
-      }
+        data &&
+        data.seeFeed &&
+        me.data &&
+        !me.loading &&
+        me.data.me && (
+          // suggested.data && !suggested.loading &&
+          <>
+            {data.seeFeed.length < 1 && (
+              <Empty>
+                <Logo size={60} />
+                <div>Nothing in your feed right now</div>
+                <Link to="/suggested">See suggested accounts to follow?</Link>
+              </Empty>
+            )}
+            {data.seeFeed.length > 0 && (
+              <PostShow>
+                {" "}
+                {data.seeFeed.map((post) => (
+                  <Post
+                    key={post.id}
+                    id={post.id}
+                    location={post.location}
+                    caption={post.caption}
+                    user={post.user}
+                    me={me.data.me}
+                    files={post.files}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount}
+                    isLiked={post.isLiked}
+                    likes={post.likes}
+                    comments={post.comments}
+                    createdAt={post.createdAt}
+                  />
+                ))}
+              </PostShow>
+            )}
+            <FeedSide>
+              <UserFeed>
+                <UserLink to={`/${me.data.me.username}`}>
+                  <Avatar size="md" url={me.data.me.avatar} />
+                  <UserFeedText>
+                    <div>{me.data.me.username}</div>
+                    <span>{me.data.me.name}</span>
+                  </UserFeedText>
+                </UserLink>
+                {me.data.me.avatar === 
+                  "https://instapost-clone.s3.us-west-1.amazonaws.com/1597972559986" && 
+                  <p>
+                    <Link to="/editprofile">
+                      Edit Profile
+                    </Link>
+                  </p>
+                }
+              </UserFeed>
+              <Suggestions>
+                <span>
+                  <span>Suggestions For You</span>
+                  <Link to="/suggested">
+                    <p>See All</p>
+                  </Link>
+                </span>
+                <SuggestedCard />
+              </Suggestions>
+            </FeedSide>
+          </>
+        )}
     </Wrapper>
   );
 });

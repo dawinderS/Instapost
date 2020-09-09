@@ -92,10 +92,14 @@ export default () => {
         toast.error("Email field is required.");
       }
     } else if (action === "signUp") {
+      if (username.value.includes(" ")) {
+        toast.error("Username cannot include any spaces.")
+        return;
+      }
       if (
         email.value !== "" &&
-        username.value !== "" &&
-        name.value !== ""
+        username.value !== ""
+        // && name.value !== ""
       ) {
         try {
           const {

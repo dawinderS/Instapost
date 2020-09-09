@@ -6,9 +6,9 @@ import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import TextareaAutosize from "react-autosize-textarea";
-import { ME, GET_USER_BY_ID } from "../SharedQueries";
+import { ME, GET_USER_BY_ID } from "../../SharedQueries";
 import { toast } from "react-toastify";
-import Loader from "../Components/Loader";
+import Loader from "../../Components/Loader";
 import Modal from "react-modal";
 
 Modal.setAppElement('#root');

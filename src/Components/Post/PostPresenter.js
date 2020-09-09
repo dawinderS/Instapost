@@ -449,6 +449,8 @@ export default ({
   }
   const closeEditModal = () => {
     setEditModal(false);
+    setCaptionInput(caption);
+    setLocationInput(location);
   }
 
   const [editPostMutation] = useMutation(EDIT_POST, {

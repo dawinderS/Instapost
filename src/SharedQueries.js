@@ -19,6 +19,14 @@ export const ME = gql`
         createdAt
         isFollowing
       }
+      following {
+        id
+        name
+        username
+        avatar
+        createdAt
+        isFollowing
+      }
       posts {
         id
         files {
