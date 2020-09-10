@@ -38,7 +38,8 @@ const Wrapper = styled.div`
   max-width: 100%;
   @media screen and (max-width: 770px) {
     width: 100%;
-    min-height: 75vh;
+    min-height: 85vh;
+    /* max-height: 85vh; */
     justify-content: flex-start;
   }
 `;
@@ -116,6 +117,9 @@ const RoomsList = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  #myroom {
+    background-color: #fafafa;
+  }
 `;
 
 const EachCard = styled.div`
@@ -181,6 +185,7 @@ const SideMessage = styled.div`
   }
   @media screen and (max-width: 770px) {
     width: 100%;
+    height: calc(100vh - 88px);
   }
 `;
 
@@ -192,6 +197,7 @@ const MessageTop = styled.div`
   min-height: 60px;
   padding: 0px 20px;
   border-bottom: 1px solid #dbdbdb;
+  z-index: 10;
   div {
     display: flex;
     align-items: center;
@@ -232,6 +238,7 @@ const MessageTop = styled.div`
     min-height: 44px;
     max-height: 44px;
     padding: 0px 16px;
+    z-index: 100;
   }
 `;
 
@@ -539,11 +546,13 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
   });
 
   let room, toUser;
-  if (!loading && data.seeRooms && !me.loading) {
+  if (!loading && !!data && !!data.seeRooms && !me.loading) {
     room = data.seeRooms.find((room) => room.id === roomId);
-    toUser = room.participants.filter(user => user.id !== me.data.me.id)[0];
-    console.log(toUser);
-  }
+    toUser = room.participants.find(user => user.id !== me.data.me.id);
+    if (!toUser) {
+      history.push("/direct");
+    }
+  };
 
   const term = searchInput;
   const search = useQuery(SEARCH, {
@@ -552,7 +561,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
   });
   const onSearchSubmit = (e) => {
     e.preventDefault();
-    
+    return;
   };
 
   const returnBack = (e) => {
@@ -725,17 +734,31 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
                     let message = room.messages[room.messages.length - 1];
                     return (
                       <Link key={room.id} to={`/direct/t/${room.id}`}>
-                        <EachCard key={room.id}>
-                          <Avatar size="md" url={user[0].avatar} />
-                          <UserInfo>
-                            <div>{user[0].username}</div>
-                            <p>
-                              {message.text.slice(0, 26)}
-                              {" • "}
-                              {getDate(message.createdAt)}
-                            </p>
-                          </UserInfo>
-                        </EachCard>
+                        {room.id !== roomId ? (
+                          <EachCard key={room.id}>
+                            <Avatar size="md" url={user[0].avatar} />
+                            <UserInfo>
+                              <div>{user[0].username}</div>
+                              <p>
+                                {message.text.slice(0, 26)}
+                                {" • "}
+                                {getDate(message.createdAt)}
+                              </p>
+                            </UserInfo>
+                          </EachCard>
+                        ) : (
+                          <EachCard id="myroom" key={room.id}>
+                            <Avatar size="md" url={user[0].avatar} />
+                            <UserInfo>
+                              <div>{user[0].username}</div>
+                              <p>
+                                {message.text.slice(0, 26)}
+                                {" • "}
+                                {getDate(message.createdAt)}
+                              </p>
+                            </UserInfo>
+                          </EachCard>
+                        )}
                       </Link>
                     );
                   })}
@@ -810,6 +833,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
                   onChange={updateMessage}
                   value={message}
                   onKeyPress={handleKeySend}
+                  autoFocus
                 />
                 {message.length > 0 && <p onClick={handleChatSend}>Send</p>}
               </MessageContainer>
@@ -845,6 +869,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
               placeholder={"Write a message..."}
               onChange={updateMessage}
               value={message}
+              autoFocus
             />
           </SearchHolder>
           <SearchHolder>

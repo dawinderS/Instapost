@@ -116,7 +116,7 @@ export default withRouter(({ history }) => {
             {pathname === "/" ? <HomeLoc /> : <Home />}
           </HeaderLink>
           <HeaderLink to="/direct">
-            {pathname === "/direct" ? <MessagingIconLoc /> : <MessagingIcon />}
+            {pathname.includes("/direct") ? <MessagingIconLoc /> : <MessagingIcon />}
           </HeaderLink>
           <HeaderLink to="/explore">
             {pathname === "/explore" || pathname === "/search" ? <CompassLoc /> : <Compass />}

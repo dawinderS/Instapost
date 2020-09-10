@@ -21,7 +21,8 @@ const Bottom = styled.div`
     bottom: 0;
     left: 0;
     background-color: white;
-    border-top: ${(props) => props.theme.boxBorder};
+    /* border-top: ${(props) => props.theme.boxBorder}; */
+    border-top: 1px solid #dbdbdb;
     border-radius: 0px;
     display: flex;
     width: 100%;

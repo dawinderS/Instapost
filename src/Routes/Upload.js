@@ -273,7 +273,8 @@ const MinHeader = styled.header`
   top: 0;
   left: 0;
   background-color: white;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  /* border-bottom: ${(props) => props.theme.boxBorder}; */
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   justify-content: space-between;

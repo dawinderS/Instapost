@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   @media screen and (max-width: 770px) {
     width: 100%;
     min-height: 75vh;
+    max-height: calc(100vh - 44px);
     justify-content: flex-start;
   }
 `;
@@ -30,6 +31,7 @@ const PostShow = styled.div`
   @media screen and (max-width: 770px) {
     width: 100%;
     min-width: 100%;
+    max-height: calc(100vh - 88px);
   }
 `;
 
@@ -105,7 +107,8 @@ const MinHeader = styled.header`
   top: 0;
   left: 0;
   background-color: white;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  /* border-bottom: ${(props) => props.theme.boxBorder}; */
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   justify-content: space-between;
@@ -168,7 +171,7 @@ export default withRouter(({ history }) => {
           <img src="instalogo.png" alt="instalogo" />
         </MinLink>
         <Link to="/direct">
-          {pathname === "/direct" ? <MessagingIconLoc /> : <MessagingIcon />}
+          {pathname.includes("/direct") ? <MessagingIconLoc /> : <MessagingIcon />}
         </Link>
       </MinHeader>
       {!loading &&

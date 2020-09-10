@@ -88,7 +88,8 @@ const MinHeader = styled.header`
   top: 0;
   left: 0;
   background-color: white;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  /* border-bottom: ${(props) => props.theme.boxBorder}; */
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   flex-direction: row;
@@ -110,6 +111,21 @@ const MinHeader = styled.header`
   @media screen and (min-width: 770px) {
     display: none;
   }
+  input {
+    background-color: ${(props) => props.theme.bgColor};
+    padding: 5px 3px;
+    font-size: 14px;
+    border-radius: 6px;
+    height: 30px;
+    text-align: center;
+    width: 100%;
+    // border: none;
+    &::placeholder {
+      font-weight: 200;
+    }
+    outline: none;
+    border: 1px solid #dbdbdb;
+  }
 `;
 
 const MinLink = styled(Link)`
@@ -120,21 +136,6 @@ const MinLink = styled(Link)`
   align-items: center;
   color: #262626;
   cursor: pointer;
-`;
-
-const SearchInput = styled(Input)`
-  background-color: ${(props) => props.theme.bgColor};
-  padding: 5px 3px;
-  font-size: 14px;
-  border-radius: 6px;
-  height: 30px;
-  text-align: center;
-  width: 100%;
-  // border: none;
-  &::placeholder {
-    opacity: 0.8;
-    font-weight: 200;
-  }
 `;
 
 const MinUserSection = styled.div`
@@ -192,85 +193,94 @@ const SearchPresenter = ({ searchTerm, loading, data, me, history }) => {
       </Helmet>
       <MinHeader>
         <form onKeyUp={onSearchSubmit}>
-          <SearchInput
+          <input
             value={search.value}
             onChange={search.onChange}
-            placeholder="Search..."
-          />
+            placeholder="Search..." 
+            autoFocus
+          ></input>
         </form>
-        <MinLink to="/explore">
-          Cancel
-        </MinLink>
+        <MinLink to="/explore">Cancel</MinLink>
       </MinHeader>
-      {searchTerm === undefined || searchTerm.length < 1 &&
-      <>
-        <Message>
-          Search for a user by name or username...
-        </Message>
-        <Message>
-          Or search for a post by location or caption...
-        </Message>
-      </>
-      }
-      {loading && me.loading &&
-        <div></div>
-      }
-      {searchTerm.length > 0 && searchTerm && 
-      data && data.searchUser && data.searchPost && me.data &&
-      <>
-        <Section>
-          {data.searchUser.length === 0 ? (
-            <h1>No users found</h1>
-          ) : (
-              data.searchUser.map((user) => (
-                <UserCard
-                  key={user.id}
-                  username={user.username}
-                  name={user.name}
-                  isFollowing={user.isFollowing}
-                  url={user.avatar}
-                  isSelf={user.isSelf}
-                  id={user.id}
-                  myId={me.data.me.id}
-                />
-              ))
-            )}
-        </Section>
-        <MinUserSection>
-          {data.searchUser.length === 0 ? (
-            <h1>No users found</h1>
-          ) : (
-            data.searchUser.map((user) => (
-              <EachMinCard>
-                <MinCardLink to={`/${user.username}`}>
-                  <img src={user.avatar} width="44" height="44" alt="avatar" />
-                  <MinInfo>
-                    <FatText text={user.username} />
-                    <p>{user.name}</p>
-                  </MinInfo>
-                </MinCardLink>
-                {!user.isSelf && <FollowButton myId={me.data.me.id} id={user.id} isFollowing={user.isFollowing} /> }
-              </EachMinCard>
-            ))
-          )}
-        </MinUserSection>
-        {data.searchPost.length === 0 && <h1>No posts found</h1>}
-        <PostSection>
-          {data.searchPost.length === 0 ? (
-            <div></div>
-          ) : (
-            data.searchPost.map((post) => (
-              <SquarePost
-                key={post.id}
-                likeCount={post.likeCount}
-                commentCount={post.commentCount}
-                file={post.files[0]}
-              />
-            ))
-          )}
-        </PostSection>
-      </>
-      }
+      {searchTerm === undefined ||
+        (searchTerm.length < 1 && (
+          <>
+            <Message>Search for a user by name or username...</Message>
+            <Message>Or search for a post by location or caption...</Message>
+          </>
+        ))}
+      {loading && me.loading && <div></div>}
+      {searchTerm.length > 0 &&
+        searchTerm &&
+        data &&
+        data.searchUser &&
+        data.searchPost &&
+        me.data && (
+          <>
+            <Section>
+              {data.searchUser.length === 0 ? (
+                <h1>No users found</h1>
+              ) : (
+                data.searchUser.map((user) => (
+                  <UserCard
+                    key={user.id}
+                    username={user.username}
+                    name={user.name}
+                    isFollowing={user.isFollowing}
+                    url={user.avatar}
+                    isSelf={user.isSelf}
+                    id={user.id}
+                    myId={me.data.me.id}
+                  />
+                ))
+              )}
+            </Section>
+            <MinUserSection>
+              {data.searchUser.length === 0 ? (
+                <h1>No users found</h1>
+              ) : (
+                data.searchUser.map((user) => (
+                  <EachMinCard>
+                    <MinCardLink to={`/${user.username}`}>
+                      <img
+                        src={user.avatar}
+                        width="44"
+                        height="44"
+                        alt="avatar"
+                      />
+                      <MinInfo>
+                        <FatText text={user.username} />
+                        <p>{user.name}</p>
+                      </MinInfo>
+                    </MinCardLink>
+                    {!user.isSelf && (
+                      <FollowButton
+                        myId={me.data.me.id}
+                        id={user.id}
+                        isFollowing={user.isFollowing}
+                      />
+                    )}
+                  </EachMinCard>
+                ))
+              )}
+            </MinUserSection>
+            {data.searchPost.length === 0 && <h1>No posts found</h1>}
+            <PostSection>
+              {data.searchPost.length === 0 ? (
+                <div></div>
+              ) : (
+                data.searchPost.map((post) => (
+                  <SquarePost
+                    key={post.id}
+                    likeCount={post.likeCount}
+                    commentCount={post.commentCount}
+                    file={post.files[0]}
+                  />
+                ))
+              )}
+            </PostSection>
+          </>
+        )}
     </Wrapper>
   );
 };

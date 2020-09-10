@@ -116,6 +116,7 @@ const RoomsList = styled.div`
   padding-top: 8px;
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 88px);
   overflow-y: scroll;
 `;
 
@@ -416,7 +417,7 @@ export default withRouter(({ history }) => {
       });
       if (sendMessage) {
         closeModal();
-        history.push(`/direct/t/${sendMessage.room.id}`)
+        history.push(`/direct`)
       }
     } catch (e) {
       console.log(e);
@@ -541,6 +542,7 @@ export default withRouter(({ history }) => {
               placeholder={"Write a message..."}
               onChange={updateMessage}
               value={message}
+              autoFocus
             />
           </SearchHolder>
           <SearchHolder>

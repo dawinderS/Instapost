@@ -50,8 +50,7 @@ const SuggestedCard = styled.div`
   overflow-y: scroll;
   @media screen and (max-width: 770px) {
     width: 100%;
-    min-height: 89vh;
-    max-height: 89vh;
+    max-height: calc(100vh - 88px);
     overflow-y: auto;
   }
 `;
@@ -156,7 +155,8 @@ const MinHeader = styled.header`
   top: 0;
   left: 0;
   background-color: #fff;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  /* border-bottom: ${(props) => props.theme.boxBorder}; */
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   justify-content: center;
@@ -214,14 +214,17 @@ export default () => {
   let all_notifs = [];
   if (!loading && data.me) {
     follow_notifs = data.me.followers;
+    console.log(follow_notifs);
     like_notifs = data.me.posts.map(post => post.likes);
     comment_notifs = data.me.posts.map(post => post.comments);
-    all_notifs.concat(follow_notifs);
-    if (like_notifs[0]) all_notifs.concat(like_notifs[0]);
-    if (comment_notifs[0]) all_notifs.concat(comment_notifs[0]);
+    all_notifs=[...follow_notifs];
+    console.log(all_notifs)
+    if (like_notifs[0]) all_notifs = [...follow_notifs, ...like_notifs[0]];
+    if (comment_notifs[0]) {
+      all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];
+    }
     // all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];
-    all_notifs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt) );
-    
+    all_notifs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     notifs = all_notifs.slice(0, 50).map(notif => {
       if (notif.user === undefined) {
         return (
@@ -305,7 +308,7 @@ export default () => {
               </SuggestedFollowers>
             </SuggestedLink>
             {notifs.length < 1 && <Empty>No new notifications</Empty>}
-            {notifs}
+            {notifs.length > 0 && notifs}
           </SuggestedCard>
         </Holder>
       )}

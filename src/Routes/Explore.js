@@ -96,7 +96,8 @@ const MinHeader = styled.header`
   top: 0;
   left: 0;
   background-color: white;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  /* border-bottom: ${(props) => props.theme.boxBorder}; */
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   justify-content: center;
@@ -137,7 +138,6 @@ const SearchInput = styled(Input)`
   width: 100%;
   // border: none;
   &::placeholder {
-    opacity: 0.8;
     font-weight: 200;
   }
 `;
