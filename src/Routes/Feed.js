@@ -8,6 +8,7 @@ import Loader from "../Components/Loader";
 import Post from "../Components/Post/index";
 import Avatar from "../Components/Avatar";
 import SuggestedCard from "../Components/SuggestionCard";
+import MinFooter from "../Components/FooterMin";
 import { MessagingIcon, MessagingIconLoc, Logo } from "../Components/Icons";
 
 const Wrapper = styled.div`
@@ -32,6 +33,8 @@ const PostShow = styled.div`
     width: 100%;
     min-width: 100%;
     max-height: calc(100vh - 88px);
+    margin-bottom: 20px;
+    overflow-y: scroll;
   }
 `;
 
@@ -154,6 +157,11 @@ const Empty = styled.div`
   }
 `;
 
+const FooterLinks = styled.div`
+  display: flex;
+  margin-top: 15px;
+`;
+
 export default withRouter(({ history }) => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
@@ -235,6 +243,9 @@ export default withRouter(({ history }) => {
                 </span>
                 <SuggestedCard />
               </Suggestions>
+              <FooterLinks>
+                {!loading && !me.loading && <MinFooter />}
+              </FooterLinks>
             </FeedSide>
           </>
         )}

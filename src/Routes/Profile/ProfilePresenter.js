@@ -57,6 +57,7 @@ const Wrapper = styled.div`
     width: 100%;
     background: #fff;
     min-height: 75vh;
+    overflow-y: scroll;
   }
 `;
 
@@ -310,7 +311,7 @@ const MinTopHeader = styled.header`
   top: 0;
   left: 0;
   background-color: white;
-  border-bottom: ${(props) => props.theme.boxBorder};
+  border-bottom: 1px solid #dbdbdb;
   border-radius: 0px;
   display: flex;
   justify-content: space-between;

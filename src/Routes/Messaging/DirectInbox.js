@@ -108,6 +108,7 @@ const RoomHeader = styled.div`
     left: 0;
     height: 44px;
     z-index: 10;
+    background-color: #fff;
   }
 `;
 
@@ -116,7 +117,7 @@ const RoomsList = styled.div`
   padding-top: 8px;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 88px);
+  /* height: calc(100vh - 88px); */
   overflow-y: scroll;
 `;
 

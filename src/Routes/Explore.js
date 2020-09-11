@@ -81,6 +81,7 @@ const Posts = styled.div`
     // row-gap: 0px;
     row-gap: 1px;
     margin: 0;
+    overflow-y: scroll;
   }
 `;
 

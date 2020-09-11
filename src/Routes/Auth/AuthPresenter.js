@@ -18,6 +18,7 @@ const Box = styled.div`
   border-radius:0px;
   width: 100%;
   max-width: 350px;
+  border: 1px solid #dbdbdb;
 `;
 
 const StateChanger = styled(Box)`
@@ -43,6 +44,9 @@ const Form = styled(Box)`
       width: 100%;
       &:not(:last-child) {
         margin-bottom: 7px;
+      }
+      @media screen and (max-width: 770px) {
+        border: 1px solid #dbdbdb;
       }
     }
     button {

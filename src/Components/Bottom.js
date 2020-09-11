@@ -15,7 +15,7 @@ const Bottom = styled.div`
     height: 5.5vh;
     max-height: 44px;
     min-height: 44px;
-    z-index: 10;
+    z-index: 1000;
     border: 0;
     position: fixed;
     bottom: 0;

@@ -66,6 +66,7 @@ const UploadWrapper = styled.div`
   overflow-y: scroll;
   @media screen and (max-width: 770px) {
     padding-bottom: 20px;
+    overflow-y: scroll;
   }
   img {
     opacity: 0;
@@ -74,7 +75,7 @@ const UploadWrapper = styled.div`
     // width: 100vw;
     // min-width: 100vw;
     width: auto;
-    max-height: 60vh;
+    max-height: 45vh;
     animation: ${fadeIn} 1s forwards;
     object-fit: cover;
     overflow: hidden;
@@ -435,6 +436,7 @@ export default ({ props }) => {
             placeholder={"Write a caption..."}
             value={captionInput.value}
             onChange={captionInput.onChange}
+            autoFocus
           />
           <Input placeholder={"Add Location"} {...locationInput} />
           <BeforeBtns2>

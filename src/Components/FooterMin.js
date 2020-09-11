@@ -1,15 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Footer = styled.footer`
   display: flex;
-  width: 350px;
+  width: 295px;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 11px;
   margin: 50px 0px;
   margin-top: auto;
   @media screen and (max-width: 770px) {
@@ -95,7 +95,9 @@ export default () => (
           </Link>
         </ListItem>
       </List>
-      <Copyright>&copy; {new Date().getFullYear()} Instapost By Dawinder Singh</Copyright>
+      <Copyright>
+        &copy; {new Date().getFullYear()} Instapost By Dawinder Singh
+      </Copyright>
     </Footer>
   </FooterHolder>
 );

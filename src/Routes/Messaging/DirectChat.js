@@ -239,6 +239,7 @@ const MessageTop = styled.div`
     max-height: 44px;
     padding: 0px 16px;
     z-index: 100;
+    background-color: #fff;
   }
 `;
 
@@ -381,6 +382,9 @@ const MessageShow = styled.div`
   overflow-y: scroll;
   @media screen and (max-width: 770px) {
     padding: 16px 16px 0px 16px;
+    border: 0;
+    margin-bottom: 78px;
+    overflow-y: scroll;
   }
 `;
 
@@ -433,6 +437,12 @@ const AddMessage = styled.div`
   align-items: center;
   @media screen and (max-width: 770px) {
     padding: 16px;
+    z-index: 15;
+    border: 0;
+    position: fixed;
+    bottom: 44px;
+    left: 0;
+    background-color: #fff;
   }
 `;
 
@@ -794,8 +804,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
             )}
           </MessageTop>
           {loading && <Loader />}
-          <MessageShow>
-            <div id="scrollbottom"></div>
+          <MessageShow id="messageshow">
             {!loading &&
               data &&
               room.messages.map((message) =>
@@ -817,6 +826,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
                   </EachMessage2>
                 )
               )}
+              <div id="scrollbottom"></div>
           </MessageShow>
           <AddMessage>
             {!me.loading && me.data && (
