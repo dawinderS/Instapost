@@ -116,6 +116,7 @@ const RoomsList = styled.div`
   margin-top: 8px;
   display: flex;
   flex-direction: column;
+  height: calc(85vh - 60px);
   overflow-y: scroll;
   #myroom {
     background-color: #fafafa;
@@ -372,6 +373,13 @@ const Textarea = styled(TextareaAutosize)`
   max-height: 120px;
 `;
 
+const MessageShowWrap = styled.div`
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  height: calc(85vh - 60px);
+`;
 const MessageShow = styled.div`
   display: flex;
   width: 100%;
@@ -379,12 +387,10 @@ const MessageShow = styled.div`
   /* justify-content: flex-end; */
   padding: 20px 20px 0px 20px;
   margin-top: auto;
-  overflow-y: scroll;
   @media screen and (max-width: 770px) {
     padding: 16px 16px 0px 16px;
     border: 0;
-    margin-bottom: 78px;
-    overflow-y: scroll;
+    /* margin-bottom: 78px; */
   }
 `;
 
@@ -397,6 +403,7 @@ const EachMessage = styled.div`
   div {
     padding: 16px;
     max-width: 236px;
+    background-color: #efefef;
     border-radius: 22px;
     border: 1px solid #efefef;
     overflow-x: scroll;
@@ -417,9 +424,10 @@ const EachMessage2 = styled.div`
   div {
     padding: 16px;
     max-width: 236px;
-    background-color: #efefef;
+    color: #fff;
+    background-color: #0095f6;
     border-radius: 22px;
-    border: 1px solid #efefef;
+    border: 1px solid #0095f6;
     overflow-x: scroll;
   }
   p {
@@ -804,30 +812,31 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
             )}
           </MessageTop>
           {loading && <Loader />}
-          <MessageShow id="messageshow">
-            {!loading &&
-              data &&
-              room.messages.map((message) =>
-                message.from.id === toUser.id ? (
-                  <EachMessage key={message.id}>
-                    <div>{message.text}</div>
-                    <p>
-                      {" • "}
-                      {getDate(message.createdAt)}
-                    </p>
-                  </EachMessage>
-                ) : (
-                  <EachMessage2 key={message.id}>
-                    <p>
-                      {getDate(message.createdAt)}
-                      {" • "}
-                    </p>
-                    <div>{message.text}</div>
-                  </EachMessage2>
-                )
-              )}
-              <div id="scrollbottom"></div>
-          </MessageShow>
+          <MessageShowWrap>
+            <MessageShow id="messageshow">
+              {!loading &&
+                data &&
+                room.messages.map((message) =>
+                  message.from.id === toUser.id ? (
+                    <EachMessage key={message.id}>
+                      <div>{message.text}</div>
+                      <p>
+                        {" • "}
+                        {getDate(message.createdAt)}
+                      </p>
+                    </EachMessage>
+                  ) : (
+                    <EachMessage2 key={message.id}>
+                      <p>
+                        {getDate(message.createdAt)}
+                        {" • "}
+                      </p>
+                      <div>{message.text}</div>
+                    </EachMessage2>
+                  )
+                )}
+            </MessageShow>
+          </MessageShowWrap>
           <AddMessage>
             {!me.loading && me.data && (
               <MessageContainer>
@@ -843,7 +852,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
                   onChange={updateMessage}
                   value={message}
                   onKeyPress={handleKeySend}
-                  autoFocus
+                  // autoFocus
                 />
                 {message.length > 0 && <p onClick={handleChatSend}>Send</p>}
               </MessageContainer>
@@ -879,7 +888,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
               placeholder={"Write a message..."}
               onChange={updateMessage}
               value={message}
-              autoFocus
+              // autoFocus
             />
           </SearchHolder>
           <SearchHolder>

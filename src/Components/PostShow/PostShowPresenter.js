@@ -47,6 +47,7 @@ const Wrapper = styled.div`
 const Post = styled.div`
   ${(props) => props.theme.whiteBox};
   width: 100%;
+  max-width: 100%;
   user-select: none;
   a {
     color: inherit;
@@ -54,8 +55,9 @@ const Post = styled.div`
   @media screen and (max-width: 770px) {
     margin: 0;
     border: none;
-    max-height: 89vh;
+    min-height: 75vh;
     overflow-y: scroll;
+    margin-bottom: 45px;
   }
   @media screen and (min-width: 770px) {
     display: none;
@@ -196,33 +198,81 @@ const Timestamp2 = styled.span`
   }
 `;
 
+const CommentsWrap = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  overflow: auto;
+`;
 const Comments = styled.ul`
   margin-top: 8px;
   @media screen and (min-width: 770px) {
     overflow-y: scroll; 
     max-height: 100%;
+    margin: 5px 0px 5px 0px;
+    #nocomments {
+      display: flex;
+      width: 100%;
+      margin-top: 15px;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      color: #8e8e8e;
+    }
   }
 `;
 
 const Comment = styled.li`
-  margin-bottom: 7px;
-  span {
-    margin-right: 5px;
-  }
   @media screen and (min-width: 770px) {
-    padding: 8px 16px 10px 22px;
+    padding: 8px 16px 10px 16px;
     margin-bottom: 0px;
+    display: flex;
+    align-items: center;
+  }
+  @media screen and (max-width: 770px) {
+    margin-bottom: 7px;
+    span {
+      margin-right: 5px;
+    }
+  }
+`;
+
+const AllText = styled.div`
+  display: flex;
+  max-width: 290px;
+  justify-content: center;
+  flex-direction: column;
+  overflow-wrap: break-word;
+  margin-left: 14px;
+  p {
+    /* margin-left: 3px; */
+    color: #8e8e8e;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    margin-top: 1px;
+  }
+  #gapcreate {
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+  #topspan {
+    display: flex;
+    margin-bottom: 3px;
   }
 `;
 
 const Caption = styled.div`
+  display: flex;
+  align-items: center;
   margin: 10px 0px 8px 0px;
-  span {
-    margin-right: 5px;
+  @media screen and (max-width: 770px) {
+    span {
+      margin-right: 5px;
+    }
   }
   @media screen and (min-width: 770px) {
-    padding: 12px 16px 16px 22px;
-    margin-bottom: 0px;
+    padding: 12px 16px 16px 16px;
+    margin: 0px;
     border-bottom: 1px solid #efefef;
   }
 `;
@@ -595,105 +645,40 @@ export default ({
     }
   };
 
+  const getDate = (createdAt) => {
+    let time = moment(createdAt).fromNow();
+    let arr = time.split(" ");
+    if (arr[0].includes("a") && arr[1].includes("few")) {
+      return `1m`;
+    } else if (arr[0].includes("a") && !arr[1].includes("month")) {
+      return `1${arr[1][0]}`;
+    } else if (arr[0].includes("a") && arr[1].includes("month")) {
+      return `4w`;
+    } else if (arr[1].includes("min")) {
+      return `${arr[0]}m`;
+    } else if (arr[1].includes("hour")) {
+      return `${arr[0]}h`;
+    } else if (arr[1].includes("day")) {
+      return `${arr[0]}d`;
+    } else if (arr[1].includes("week")) {
+      return `${arr[0]}w`;
+    } else if (arr[1].includes("month")) {
+      return `${arr[0] * 4}w`;
+    } else if (arr[1].includes("year")) {
+      return `${arr[0]}y`;
+    }
+  };
+
   return (
-  <Wrapper>
-    <MinHeader>
-      <span onClick={goBack}>
-        <HeaderBackButton />
-      </span>
-      <div>Photo</div>
-      <span></span>
-    </MinHeader>
-    <Post>
-      <Header>
-        <Link to={`/${user.username}`}>
-          <Avatar size="sm" url={user.avatar} />
-        </Link>
-        <UserColumn>
-          <FollowHolder>
-            <UsernameLink to={`/${user.username}`}>
-              <FatText text={user.username} />
-            </UsernameLink>
-            {!user.isFollowing && !user.isSelf &&
-              <>
-                <span>•</span>
-                <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
-              </>
-            }
-          </FollowHolder>
-          {location && <Location>{location}</Location>}
-        </UserColumn>
-        <p onClick={openModal}><PostOptions /></p>
-      </Header>
-      <Files onDoubleClick={toggleLike}>
-        {files &&
-        files.map((file, index) => (
-          <File key={file.id} src={file.url} showing={index === currentItem} />
-        ))}
-      </Files>
-      <Meta>
-        <Buttons>
-          <Button onClick={toggleLike}>
-            {isLiked ? <HeartFull /> : <HeartEmpty />}
-          </Button>
-          <Button>
-            <CommentIcon />
-          </Button>
-        </Buttons>
-        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
-        <Caption>
-          <Link to={`/${user.username}`}>
-            <FatText text={user.username} />
-          </Link>
-          {caption}
-        </Caption>
-        {comments && (
-          <Comments>
-            {comments.map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
-            ))}
-            {selfComments.map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
-            ))}
-          </Comments>
-        )}
-        <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
-      </Meta>
-      <CommentHolder>
-        <img src={me.avatar} width="26" height="26" alt="avatar"/>
-        <div>
-          <Textarea
-            id="usercomment"
-            onKeyPress={onKeyPress}
-            placeholder={`Add a comment...`}
-            value={newComment.value}
-            onChange={newComment.onChange}
-          />
-          {newComment.value.length < 1 && <p id="postComment">Post</p>}
-          {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
-        </div>
-      </CommentHolder>
-      <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
-    </Post>
-    
-    <Post2>
-      <Files2 onDoubleClick={toggleLike}>
-        {files &&
-          files.map((file, index) => (
-            <File2 key={file.id} src={file.url} showing={index === currentItem} />
-          ))}
-      </Files2>
-      <Info>
+    <Wrapper>
+      <MinHeader>
+        <span onClick={goBack}>
+          <HeaderBackButton />
+        </span>
+        <div>Photo</div>
+        <span></span>
+      </MinHeader>
+      <Post>
         <Header>
           <Link to={`/${user.username}`}>
             <Avatar size="sm" url={user.avatar} />
@@ -703,44 +688,33 @@ export default ({
               <UsernameLink to={`/${user.username}`}>
                 <FatText text={user.username} />
               </UsernameLink>
-              {!user.isFollowing && !user.isSelf &&
+              {!user.isFollowing && !user.isSelf && (
                 <>
                   <span>•</span>
-                  <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+                  <FollowButton
+                    myId={me.id}
+                    id={user.id}
+                    isFollowing={user.isFollowing}
+                  />
                 </>
-              }
+              )}
             </FollowHolder>
             {location && <Location>{location}</Location>}
           </UserColumn>
-          <p onClick={openModal}><PostOptions /></p>
+          <p onClick={openModal}>
+            <PostOptions />
+          </p>
         </Header>
-        <Caption>
-          <Link to={`/${user.username}`}>
-            <FatText text={user.username} />
-          </Link>
-          {caption}
-        </Caption>
-        {comments && (
-          <Comments>
-            {comments.map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
+        <Files onDoubleClick={toggleLike}>
+          {files &&
+            files.map((file, index) => (
+              <File
+                key={file.id}
+                src={file.url}
+                showing={index === currentItem}
+              />
             ))}
-            {selfComments.map((comment) => (
-              <Comment key={comment.id}>
-                <Link to={`/${comment.user.username}`}>
-                  <FatText text={comment.user.username} />
-                </Link>
-                {comment.text}
-              </Comment>
-            ))}
-          </Comments>
-        )}
-        <MetaHolder>
+        </Files>
         <Meta>
           <Buttons>
             <Button onClick={toggleLike}>
@@ -751,10 +725,36 @@ export default ({
             </Button>
           </Buttons>
           <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+          <Caption>
+            <Link to={`/${user.username}`}>
+              <FatText text={user.username} />
+            </Link>
+            {caption}
+          </Caption>
+          {comments && (
+            <Comments>
+              {comments.map((comment) => (
+                <Comment key={comment.id}>
+                  <Link to={`/${comment.user.username}`}>
+                    <FatText text={comment.user.username} />
+                  </Link>
+                  {comment.text}
+                </Comment>
+              ))}
+              {selfComments.map((comment) => (
+                <Comment key={comment.id}>
+                  <Link to={`/${comment.user.username}`}>
+                    <FatText text={comment.user.username} />
+                  </Link>
+                  {comment.text}
+                </Comment>
+              ))}
+            </Comments>
+          )}
           <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
         </Meta>
         <CommentHolder>
-          <img src={me.avatar} width="26" height="26" alt="avatar"/>
+          <img src={me.avatar} width="26" height="26" alt="avatar" />
           <div>
             <Textarea
               id="usercomment"
@@ -767,109 +767,254 @@ export default ({
             {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
           </div>
         </CommentHolder>
-        </MetaHolder>
-      </Info> 
-    </Post2>
+        <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
+      </Post>
 
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper>
-        {user.isSelf ? (
-        <>
-          <div onClick={openDeleteModal} id="profremove">
+      <Post2>
+        <Files2 onDoubleClick={toggleLike}>
+          {files &&
+            files.map((file, index) => (
+              <File2
+                key={file.id}
+                src={file.url}
+                showing={index === currentItem}
+              />
+            ))}
+        </Files2>
+        <Info>
+          <Header>
+            <Link to={`/${user.username}`}>
+              <Avatar size="sm" url={user.avatar} />
+            </Link>
+            <UserColumn>
+              <FollowHolder>
+                <UsernameLink to={`/${user.username}`}>
+                  <FatText text={user.username} />
+                </UsernameLink>
+                {!user.isFollowing && !user.isSelf && (
+                  <>
+                    <span>•</span>
+                    <FollowButton
+                      myId={me.id}
+                      id={user.id}
+                      isFollowing={user.isFollowing}
+                    />
+                  </>
+                )}
+              </FollowHolder>
+              {location && <Location>{location}</Location>}
+            </UserColumn>
+            <p onClick={openModal}>
+              <PostOptions />
+            </p>
+          </Header>
+          <Caption>
+            <Link to={`/${user.username}`}>
+              <Avatar url={user.avatar} size="sm" />
+            </Link>
+            <AllText>
+              <span id="topspan">
+                <Link to={`/${user.username}`}>
+                  <FatText text={user.username} />
+                </Link>
+                <p>
+                  <p id="gapcreate">{" • "}</p>
+                  <p>{getDate(createdAt)}</p>
+                </p>
+              </span>
+              <div>{caption}</div>
+            </AllText>
+          </Caption>
+          {selfComments.map((comment) => (
+            <Comment key={comment.id}>
+              <Link to={`/${comment.user.username}`}>
+                <Avatar url={user.avatar} size="sm" />
+              </Link>
+              <AllText>
+                <span id="topspan">
+                  <Link to={`/${comment.user.username}`}>
+                    <FatText text={comment.user.username} />
+                  </Link>
+                  <p>
+                    <p id="gapcreate">{" • "}</p>
+                    <p>{getDate(comment.createdAt)}</p>
+                  </p>
+                </span>
+                <div>{comment.text}</div>
+              </AllText>
+            </Comment>
+          ))}
+          {comments && (
+            <CommentsWrap>
+              <Comments>
+                {comments.length < 1 && 
+                  <div id="nocomments">No comments yet</div>
+                }
+                {comments.map((comment) => (
+                  <Comment key={comment.id}>
+                    <Link to={`/${comment.user.username}`}>
+                      <Avatar url={comment.user.avatar} size="sm" />
+                    </Link>
+                    <AllText>
+                      <span id="topspan">
+                        <Link to={`/${comment.user.username}`}>
+                          <FatText text={comment.user.username} />
+                        </Link>
+                        <p>
+                          <p id="gapcreate">{" • "}</p>
+                          <p>{getDate(comment.createdAt)}</p>
+                        </p>
+                      </span>
+                      <div>{comment.text}</div>
+                    </AllText>
+                  </Comment>
+                ))}
+              </Comments>
+            </CommentsWrap>
+          )}
+          <MetaHolder>
+            <Meta>
+              <Buttons>
+                <Button onClick={toggleLike}>
+                  {isLiked ? <HeartFull /> : <HeartEmpty />}
+                </Button>
+                <Button>
+                  <CommentIcon />
+                </Button>
+              </Buttons>
+              <FatText
+                text={likeCount === 1 ? "1 like" : `${likeCount} likes`}
+              />
+              <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+            </Meta>
+            <CommentHolder>
+              <img src={me.avatar} width="26" height="26" alt="avatar" />
+              <div>
+                <Textarea
+                  id="usercomment"
+                  onKeyPress={onKeyPress}
+                  placeholder={`Add a comment...`}
+                  value={newComment.value}
+                  onChange={newComment.onChange}
+                  autoFocus
+                />
+                {newComment.value.length < 1 && <p id="postComment">Post</p>}
+                {newComment.value.length > 0 && (
+                  <p onClick={onPostClick}>Post</p>
+                )}
+              </div>
+            </CommentHolder>
+          </MetaHolder>
+        </Info>
+      </Post2>
+
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper>
+          {user.isSelf ? (
+            <>
+              <div onClick={openDeleteModal} id="profremove">
+                Delete
+              </div>
+              <div onClick={openEditModal} id="profupload">
+                Edit
+              </div>
+              {/* <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink> */}
+              <div onClick={closeModal} id="profcancel">
+                Cancel
+              </div>
+            </>
+          ) : (
+            <>
+              {user.isFollowing && (
+                <div onClick={closeModal} id="profremove">
+                  <FollowButton
+                    myId={me.id}
+                    id={user.id}
+                    isFollowing={user.isFollowing}
+                  />
+                </div>
+              )}
+              {!user.isFollowing && (
+                <div onClick={closeModal} id="profremove2">
+                  <FollowButton
+                    myId={me.id}
+                    id={user.id}
+                    isFollowing={user.isFollowing}
+                  />
+                </div>
+              )}
+              {/* <GoPostLink to={`p/${id}`}>
+            <div id="profcancel">
+              Go to post
+            </div>
+          </GoPostLink> */}
+              <div onClick={closeModal} id="profcancel">
+                Cancel
+              </div>
+            </>
+          )}
+        </ModalWrapper>
+      </Modal>
+      <Modal
+        isOpen={deleteModal}
+        onRequestClose={closeDeleteModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper>
+          <h1>Delete Post?</h1>
+          <div onClick={deletePost} id="profremove">
             Delete
           </div>
-          <div onClick={openEditModal} id="profupload">
-            Edit
-          </div>
-          {/* <GoPostLink to={`p/${id}`}>
-            <div id="profcancel">
-              Go to post
-            </div>
-          </GoPostLink> */}
-          <div onClick={closeModal} id="profcancel">
+          <div onClick={closeDeleteModal} id="profcancel">
             Cancel
           </div>
-        </>
-        ) : (
-        <>
-          {user.isFollowing &&
-            <div onClick={closeModal} id="profremove">
-              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
-            </div>
-          }
-          {!user.isFollowing &&
-            <div onClick={closeModal} id="profremove2">
-              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
-            </div>
-          }
-          {/* <GoPostLink to={`p/${id}`}>
-            <div id="profcancel">
-              Go to post
-            </div>
-          </GoPostLink> */}
-          <div onClick={closeModal} id="profcancel">
+        </ModalWrapper>
+      </Modal>
+      <Modal
+        isOpen={editModal}
+        onRequestClose={closeEditModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper2>
+          <h1>Edit Post</h1>
+          <div id="captionedit">
+            <span>Caption:</span>
+            <Textarea
+              id="caption"
+              name="caption"
+              placeholder={"Write a caption..."}
+              onChange={updateState}
+              value={captionInput}
+            />
+          </div>
+          <div id="locationedit">
+            <span>Location:</span>
+            <input
+              id="location"
+              name="location"
+              placeholder={"Add a location..."}
+              onChange={updateState}
+              value={locationInput}
+            />
+          </div>
+          <div onClick={editPostSubmit} id="profupload">
+            Submit
+          </div>
+          <div onClick={closeEditModal} id="profcancel">
             Cancel
           </div>
-        </>
-        )}
-      </ModalWrapper>
-    </Modal>
-    <Modal
-      isOpen={deleteModal}
-      onRequestClose={closeDeleteModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper>
-        <h1>Delete Post?</h1>
-        <div onClick={deletePost} id="profremove">
-          Delete
-        </div>
-        <div onClick={closeDeleteModal} id="profcancel">
-          Cancel
-        </div>
-      </ModalWrapper>
-    </Modal>
-    <Modal
-      isOpen={editModal}
-      onRequestClose={closeEditModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper2>
-        <h1>Edit Post</h1>
-        <div id="captionedit">
-          <span>Caption:</span>
-          <Textarea
-            id="caption"
-            name="caption"
-            placeholder={"Write a caption..."}
-            onChange={updateState}
-            value={captionInput}
-          />
-        </div>
-        <div id="locationedit">
-          <span>Location:</span>
-          <input
-            id="location"
-            name="location"
-            placeholder={"Add a location..."}
-            onChange={updateState}
-            value={locationInput}
-          />
-        </div>
-        <div onClick={editPostSubmit} id="profupload">
-          Submit
-      </div>
-        <div onClick={closeEditModal} id="profcancel">
-          Cancel
-      </div>
-      </ModalWrapper2>
-    </Modal>
-  </Wrapper>
-)};
+        </ModalWrapper2>
+      </Modal>
+    </Wrapper>
+  );};

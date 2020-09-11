@@ -10,11 +10,11 @@ const Footer = styled.footer`
   text-transform: uppercase;
   font-weight: 600;
   font-size: 12px;
-  margin: 50px 0px;
+  margin: 40px 0px;
   margin-top: auto;
-  @media screen and (max-width: 770px) {
+  /* @media screen and (max-width: 770px) {
     display: none;
-  }
+  } */
 `;
 const FooterHolder = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ export default () => (
             href="https://www.dawindersingh.com/#cta"
             target="_blank"
           >
-            contact dev
+            contact me
           </Link>
         </ListItem>
         <ListItem>

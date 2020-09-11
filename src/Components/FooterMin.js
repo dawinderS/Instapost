@@ -53,7 +53,7 @@ export default () => (
             href="https://www.dawindersingh.com/#cta"
             target="_blank"
           >
-            contact dev
+            contact me
           </Link>
         </ListItem>
         <ListItem>

@@ -146,6 +146,7 @@ export const GET_POST = gql`
         user {
           id
           username
+          avatar
         }
         createdAt
       }

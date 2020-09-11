@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { DemoUser } from "../../Components/Icons";
+import Loader2 from "../../Components/Loader2";
 
 const Wrapper = styled.div`
   min-height: 76vh;
@@ -113,7 +114,7 @@ const DemoLog = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  div {
+  span {
     height: 20px;
     display: flex;
     align-items: center;
@@ -129,14 +130,17 @@ export default ({
   setAction,
   secret,
   onSubmit,
-  onDemo
+  onDemo,
+  demoLog,
+  setLogin,
+  setSignup
 }) => (
   <Wrapper>
     <Form>
       {action === "logIn" && (
         <>
           <Helmet>
-              <title>Login • Instapost</title>
+            <title>Login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <img src="instalogo.png" width="180" alt="instalogo" />
@@ -150,15 +154,20 @@ export default ({
             <OrLine></OrLine>
           </Or>
           <DemoLog onClick={onDemo}>
-            <DemoUser />
-            <div>Log in as Demo User</div>
+            {demoLog === false &&
+              <>
+                <DemoUser />
+                <span>Log in as Demo User</span>
+              </>
+            }
+            {demoLog === true && <span>Loading... Please wait</span>}
           </DemoLog>
         </>
       )}
       {action === "signUp" && (
         <>
           <Helmet>
-              <title>Sign up • Instapost</title>
+            <title>Sign up • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
             <img src="instalogo.png" width="180" alt="instalogo" />
@@ -167,7 +176,10 @@ export default ({
             <Input placeholder={"Full Name"} {...name} />
             <Input placeholder={"Username"} {...username} />
             <Button text={"Sign up"} />
-              <p>By signing up, you agree to contact me for <span>future job opportunities</span> :)</p>
+            <p>
+              By signing up, you agree to contact me for{" "}
+              <span>future job opportunities</span> :)
+            </p>
           </form>
         </>
       )}
@@ -177,7 +189,7 @@ export default ({
             <title>Confirm login • Instapost</title>
           </Helmet>
           <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" alt="instalogo"/>
+            <img src="instalogo.png" width="180" alt="instalogo" />
             <Text>Please enter the passcode we have emailed you.</Text>
             <Input placeholder="Paste your passcode" required {...secret} />
             <Button text={"Confirm to log in"} />
@@ -185,26 +197,25 @@ export default ({
         </>
       )}
     </Form>
-      <StateChanger>
-        {action === "logIn" && (
-          <>
-            Don't have an account?{" "}
-            <Link onClick={() => setAction("signUp")}>Sign up</Link>
-          </>
-        )} 
-        {action === "signUp" && (
-          <>
-            Have an account?{" "}
-            <Link onClick={() => setAction("logIn")}>Log in</Link>
-          </>
-        )}
-        {action === "confirm" && (
-          <>
-            Return back to log in?{" "}
-            <Link onClick={() => setAction("logIn")}>Log in</Link>
-          </>
-        )}
-
-      </StateChanger>
+    <StateChanger>
+      {action === "logIn" && (
+        <>
+          Don't have an account?{" "}
+          <Link onClick={setSignup}>Sign up</Link>
+        </>
+      )}
+      {action === "signUp" && (
+        <>
+          Have an account?{" "}
+          <Link onClick={setLogin}>Log in</Link>
+        </>
+      )}
+      {action === "confirm" && (
+        <>
+          Return back to log in?{" "}
+          <Link onClick={setLogin}>Log in</Link>
+        </>
+      )}
+    </StateChanger>
   </Wrapper>
 );

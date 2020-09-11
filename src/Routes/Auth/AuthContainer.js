@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 export default () => {
   const [action, setAction] = useState("logIn");
+  const [demoLog, setDemoLog] = useState(false);
   const username = useInput("");
   const name = useInput("");
   const email = useInput("");
@@ -45,15 +46,25 @@ export default () => {
 
   const [localLogInMutation] = useMutation(LOCAL_LOG_IN);
 
-  // const clearErrors = () => {
-  //   const allInputs = document.querySelectorAll("input");
-  //   for (let i = 0; i < allInputs.length; i++) {
-  //     allInputs[i].value = "";
-  //   }
-  // };
+  const setLogin = () => {
+    email.setValue("");
+    username.setValue("");
+    name.setValue("");
+    secret.setValue("");
+    setAction("logIn");
+  }
+
+  const setSignup = () => {
+    email.setValue("");
+    username.setValue("");
+    name.setValue("");
+    secret.setValue("");
+    setAction("signUp");
+  }
 
   const onDemo = async e => {
     e.preventDefault();
+    setDemoLog(true);
     try {
       const {
         data: { confirmSecret: token },
@@ -141,12 +152,16 @@ export default () => {
     <AuthPresenter
       setAction={setAction}
       action={action}
+      setDemoLog={setDemoLog}
+      demoLog={demoLog}
       username={username}
       name={name}
       email={email}
       secret={secret}
       onSubmit={onSubmit}
       onDemo={onDemo}
+      setLogin={setLogin}
+      setSignup={setSignup}
     />
   );
 };

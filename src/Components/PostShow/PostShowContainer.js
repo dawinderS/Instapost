@@ -121,7 +121,7 @@ PostShowContainer.propTypes = {
     avatar: PropTypes.string,
     username: PropTypes.string.isRequired,
     isFollowing: PropTypes.bool.isRequired,
-    isSelf: PropTypes.bool.isRequired
+    isSelf: PropTypes.bool.isRequired,
   }).isRequired,
   me: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -143,12 +143,13 @@ PostShowContainer.propTypes = {
       user: PropTypes.shape({
         id: PropTypes.string.isRequired,
         username: PropTypes.string.isRequired,
+        avatar: PropTypes.string.isRequired,
       }).isRequired,
     })
   ).isRequired,
   caption: PropTypes.string.isRequired,
   location: PropTypes.string,
-  createdAt: PropTypes.string.isRequired
+  createdAt: PropTypes.string.isRequired,
 };
 
 export default PostShowContainer;
