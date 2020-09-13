@@ -12,6 +12,9 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  @media screen and (max-width: 770px) {
+    min-height: 65vh;
+  }
 `;
 
 const Box = styled.div`

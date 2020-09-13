@@ -54,8 +54,8 @@ const SuggestedCard = styled.div`
   @media screen and (max-width: 770px) {
     width: 100%;
     border: none;
-    min-height: 88vh;
-    max-height: 88vh;
+    min-height: 75vh;
+    /* max-height: 88vh; */
     overflow-y: auto;
     .suggesttext {
       display: flex;

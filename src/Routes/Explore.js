@@ -119,6 +119,21 @@ const MinHeader = styled.header`
   @media screen and (min-width: 770px) {
     display: none;
   }
+  input {
+    background-color: ${(props) => props.theme.bgColor};
+    padding: 5px 3px;
+    font-size: 14px;
+    border-radius: 6px;
+    height: 30px;
+    text-align: center;
+    width: 100%;
+    // border: none;
+    &::placeholder {
+      font-weight: 200;
+    }
+    outline: none;
+    border: 1px solid #dbdbdb;
+  }
 `;
 
 const MinLink = styled(Link)`
@@ -174,11 +189,11 @@ export default withRouter(({ history }) => {
       <MinHeader>
         <MinLink to="/search?term=">
           <form onKeyUp={onSearchSubmit}>
-            <SearchInput
+            <input
               value={search.value}
               onChange={search.onChange}
               placeholder="Search..."
-            />
+            ></input>
           </form>
         </MinLink>
       </MinHeader>

@@ -378,7 +378,10 @@ const MessageShowWrap = styled.div`
   overflow: auto;
   display: flex;
   flex-direction: column-reverse;
-  height: calc(85vh - 60px);
+  /* height: calc(85vh - 60px); */
+  margin-top: auto;
+  @media screen and (max-width: 770px) {
+  }
 `;
 const MessageShow = styled.div`
   display: flex;
@@ -390,7 +393,7 @@ const MessageShow = styled.div`
   @media screen and (max-width: 770px) {
     padding: 16px 16px 0px 16px;
     border: 0;
-    /* margin-bottom: 78px; */
+    margin-bottom: 78px;
   }
 `;
 
@@ -718,7 +721,7 @@ export default withRouter(({ history,  match: { params: { roomId } }}) => {
   return (
     <Wrapper>
       <Helmet>
-        <title>Inbox • Direct</title>
+        <title>Inbox • Chat</title>
       </Helmet>
       <InboxBox>
         <AllRooms>
