@@ -38,7 +38,7 @@ const Wrapper = styled.div`
   max-width: 100%;
   @media screen and (max-width: 770px) {
     width: 100%;
-    min-height: 75vh;
+    /* min-height: 75vh; */
     /* max-height: 85vh; */
     justify-content: flex-start;
   }
