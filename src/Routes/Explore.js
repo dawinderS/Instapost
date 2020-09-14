@@ -183,7 +183,7 @@ export default withRouter(({ history }) => {
   return (
     <Wrapper id="outside">
       <Helmet>
-        <title>Instapost</title>
+        <title>Explore • Instapost</title>
       </Helmet>
       {loading && <Loader />}
       <MinHeader>

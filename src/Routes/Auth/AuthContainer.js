@@ -93,7 +93,7 @@ export default () => {
           } else if (!requestSecret) {
             toast.error("The username you entered doesn't belong to an account. Please check your username and try again.");
           } else {
-            toast.info("Check your inbox for your login passcode.");
+            toast.info("Check your inbox for your login passcode. If not inbox, check spam/junk as well.");
             setAction("confirm");
           }
         } catch {

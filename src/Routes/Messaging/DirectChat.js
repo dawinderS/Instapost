@@ -389,7 +389,7 @@ const MessageShow = styled.div`
   flex-direction: column;
   /* justify-content: flex-end; */
   padding: 20px 20px 0px 20px;
-  margin-top: auto;
+  /* margin-top: auto; */
   @media screen and (max-width: 770px) {
     padding: 16px 16px 0px 16px;
     border: 0;

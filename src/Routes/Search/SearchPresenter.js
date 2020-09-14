@@ -189,14 +189,14 @@ const SearchPresenter = ({ searchTerm, loading, data, me, history }) => {
   return (
     <Wrapper>
       <Helmet>
-        <title>Instapost</title>
+        <title>Search • Instapost</title>
       </Helmet>
       <MinHeader>
         <form onKeyUp={onSearchSubmit}>
           <input
             value={search.value}
             onChange={search.onChange}
-            placeholder="Search..." 
+            placeholder="Search..."
             autoFocus
           ></input>
         </form>
