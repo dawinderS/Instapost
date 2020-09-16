@@ -332,7 +332,7 @@ const RandomText = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 260px;
+  width: 90vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }

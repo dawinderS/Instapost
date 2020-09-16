@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import { useMutation } from "react-apollo-hooks";
 import TextareaAutosize from "react-autosize-textarea";
 import moment from "moment";
-import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions } from "../Icons";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, PostOptions,
+  HeaderBackButton, CancelButton, LocationLogo } from "../Icons";
 import FatText from "../FatText";
 import Avatar from "../Avatar";
 import FollowButton from "../FollowButton/index";
@@ -12,6 +13,11 @@ import { EDIT_POST } from "./PostQueries";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { FEED_QUERY, GET_USER_BY_ID } from "../../SharedQueries";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from "react-places-autocomplete";
 
 Modal.setAppElement("#root");
 
@@ -283,7 +289,7 @@ const GoPostLink = styled(Link)`
 `;
 
 const ModalWrapper = styled.div`
-  width: 260px;
+  width: 80vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }
@@ -348,7 +354,7 @@ const ModalWrapper = styled.div`
   }
 `;
 const ModalWrapper2 = styled.div`
-  width: 310px;
+  width: 90vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }
@@ -384,14 +390,6 @@ const ModalWrapper2 = styled.div`
     justify-content: flex-start;
     padding: 4px 15px;
   }
-  #locationedit {
-    justify-content: flex-start;
-    padding: 4px 15px;
-    input {
-      border: none;
-      outline: none;
-    }
-  }
   #profupload {
     color: #0095f6;
     font-size: 14px;
@@ -400,6 +398,139 @@ const ModalWrapper2 = styled.div`
   #profcancel {
     color: #000000;
     font-size: 14px;
+  }
+  #location {
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 0;
+    border-top: 0.5px solid #dbdbdb;
+    height: 44px;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 0px 15px;
+    span {
+      margin-left: auto;
+      color: #ed4956;
+      font-weight: 500;
+      font-size: 13px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      svg {
+        margin: 0;
+        transform: rotate(90deg);
+      }
+    }
+    h1 {
+      color: #0095f6;
+      font-weight: 500;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+    }
+    #headerbtn {
+      margin-right: 0px;
+    }
+    #locationset {
+      font-weight: 500;
+      overflow-x: scroll;
+      margin-left: 10px;
+    }
+    h3 {
+      color: #8e8e8e;
+    }
+    h2 {
+      color: #0095f6;
+      font-weight: 500;
+      font-size: 13px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+  }
+`;
+
+const ModalWrapper3 = styled.div`
+  width: 90vw;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
+const ModalHeader3 = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 0px 16px;
+  div {
+    display: flex;
+    width: 20%;
+    span {
+      cursor: pointer;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+`;
+const ModalMid3 = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 8px 0px;
+  min-height: 320px;
+  max-height: 320px;
+  overflow-y: auto;
+  #search {
+    width: 100%;
+    padding: 5px 0px;
+    input {
+      width: calc(100% - 32px);
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background-color: #fafafa;
+      border: 0.5px solid #dbdbdb;
+      border-radius: 10px;
+      margin: 0px 16px;
+      margin-bottom: 10px;
+    }
+    .suggestion-item {
+      padding: 10px 20px;
+      span {
+        font-weight: 500;
+      }
+      p {
+        color: #8e8e8e;
+        font-size: 12px;
+        margin-top: 3px;
+      }
+    }
+    #searching-wait {
+      padding: 16px 20px;
+      font-weight: 500;
+    }
+    #totalshow {
+      display: flex;
+      align-items: center;
+      h1 {
+        margin-right: 10px;
+      }
+    }
   }
 `;
 
@@ -426,8 +557,10 @@ export default ({
   const [modalIsOpen, setIsOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const [locationModal, setLocationModal] = useState(false);
   const [captionInput, setCaptionInput] = useState(caption);
   const [locationInput, setLocationInput] = useState(location);
+  const [locationFind, setLocationFind] = useState("");
   
   const openModal = () => {
     setIsOpen(true);
@@ -451,6 +584,22 @@ export default ({
     setEditModal(false);
     setCaptionInput(caption);
     setLocationInput(location);
+  }
+  const openLocationModal = () => {
+    setEditModal(false);
+    setLocationModal(true);
+  }
+  const closeLocationModal = () => {
+    setLocationModal(false);
+    setEditModal(true);
+    setLocationFind("");
+  }
+  const removeLocation = () => {
+    setLocationInput("");
+  }
+  const handleLocation = value => {
+    setLocationInput(value.split(",")[0]);
+    closeLocationModal();
   }
 
   const [editPostMutation] = useMutation(EDIT_POST, {
@@ -516,190 +665,281 @@ export default ({
   };
 
   return (
-  <Post>
-    <Header>
-      <Link to={`/${user.username}`}>
-        <Avatar size="sm" url={user.avatar} />
-      </Link>
-      <UserColumn>
-        <UsernameLink to={`/${user.username}`}>
-          <FatText text={user.username} />
-          {!user.isFollowing && !user.isSelf &&
-          <>
-            <span>•</span>
-            <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
-          </>
-          }
-        </UsernameLink>
-        {location && <Location>{location}</Location>}
-      </UserColumn>
-      <p onClick={openModal}><PostOptions /></p>
-    </Header>
-    <Files onDoubleClick={toggleLike}>
-      {files &&
-        files.map((file, index) => (
-          <File key={file.id} src={file.url} showing={index === currentItem} />
-        ))}
-    </Files>
-    <Meta>
-      <Buttons>
-        <Button onClick={toggleLike}>
-          {isLiked ? <HeartFull /> : <HeartEmpty />}
-        </Button>
-        <Button>
-          <Link to={`p/${id}`}>
-            <CommentIcon />
-          </Link>
-        </Button>
-      </Buttons>
-      <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
-      <Caption>
+    <Post>
+      <Header>
         <Link to={`/${user.username}`}>
-          <FatText text={user.username} /> 
+          <Avatar size="sm" url={user.avatar} />
         </Link>
-        {caption}
-      </Caption>
-      {
-        (comments.length + selfComments.length > 2) &&
-        <Link to={`p/${id}`}>
-          <p id="viewcomments">View all {comments.length + selfComments.length} comments</p>
-        </Link>
-      }
-      {comments && (
-        <Comments>
-          {comments.slice(-2).map((comment) => (
-            <Comment key={comment.id}>
-              <Link to={`/${comment.user.username}`}>
-                <FatText text={comment.user.username} />
-              </Link>
-              {comment.text}
-            </Comment>
+        <UserColumn>
+          <UsernameLink to={`/${user.username}`}>
+            <FatText text={user.username} />
+            {!user.isFollowing && !user.isSelf && (
+              <>
+                <span>•</span>
+                <FollowButton
+                  myId={me.id}
+                  id={user.id}
+                  isFollowing={user.isFollowing}
+                />
+              </>
+            )}
+          </UsernameLink>
+          {location && <Location>{location}</Location>}
+        </UserColumn>
+        <p onClick={openModal}>
+          <PostOptions />
+        </p>
+      </Header>
+      <Files onDoubleClick={toggleLike}>
+        {files &&
+          files.map((file, index) => (
+            <File
+              key={file.id}
+              src={file.url}
+              showing={index === currentItem}
+            />
           ))}
-          {selfComments.map((comment) => (
-            <Comment key={comment.id}>
-              <Link to={`/${comment.user.username}`}>
-                <FatText text={comment.user.username} />
-              </Link>
-              {comment.text}
-            </Comment>
-          ))}
-        </Comments>
-      )}
-      <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
-    </Meta>
-    <CommentHolder>
+      </Files>
+      <Meta>
+        <Buttons>
+          <Button onClick={toggleLike}>
+            {isLiked ? <HeartFull /> : <HeartEmpty />}
+          </Button>
+          <Button>
+            <Link to={`p/${id}`}>
+              <CommentIcon />
+            </Link>
+          </Button>
+        </Buttons>
+        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+        <Caption>
+          <Link to={`/${user.username}`}>
+            <FatText text={user.username} />
+          </Link>
+          {caption}
+        </Caption>
+        {comments.length + selfComments.length > 2 && (
+          <Link to={`p/${id}`}>
+            <p id="viewcomments">
+              View all {comments.length + selfComments.length} comments
+            </p>
+          </Link>
+        )}
+        {comments && (
+          <Comments>
+            {comments.slice(-2).map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+            {selfComments.map((comment) => (
+              <Comment key={comment.id}>
+                <Link to={`/${comment.user.username}`}>
+                  <FatText text={comment.user.username} />
+                </Link>
+                {comment.text}
+              </Comment>
+            ))}
+          </Comments>
+        )}
+        <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
+      </Meta>
+      <CommentHolder>
         <img src={me.avatar} width="26" height="26" alt="avatar" />
-      <div>
-        <Textarea
-          onKeyPress={onKeyPress}
-          placeholder={`Add a comment...`}
-          value={newComment.value}
-          onChange={newComment.onChange}
-        />
-        {newComment.value.length < 1 && <p id="postComment">Post</p>}
-        {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
-      </div>
-    </CommentHolder>
-    <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper>
-        {user.isSelf ? (
-        <>
-          <div onClick={openDeleteModal} id="profremove">
+        <div>
+          <Textarea
+            onKeyPress={onKeyPress}
+            placeholder={`Add a comment...`}
+            value={newComment.value}
+            onChange={newComment.onChange}
+          />
+          {newComment.value.length < 1 && <p id="postComment">Post</p>}
+          {newComment.value.length > 0 && <p onClick={onPostClick}>Post</p>}
+        </div>
+      </CommentHolder>
+      <Timestamp2>{moment(createdAt).fromNow()}</Timestamp2>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper>
+          {user.isSelf ? (
+            <>
+              <div onClick={openDeleteModal} id="profremove">
+                Delete
+              </div>
+              <div onClick={openEditModal} id="profupload">
+                Edit
+              </div>
+              <GoPostLink to={`p/${id}`}>
+                <div id="profcancel">Go to post</div>
+              </GoPostLink>
+              <div onClick={closeModal} id="profcancel">
+                Cancel
+              </div>
+            </>
+          ) : (
+            <>
+              {user.isFollowing && (
+                <div onClick={closeModal} id="profremove">
+                  <FollowButton
+                    myId={me.id}
+                    id={user.id}
+                    isFollowing={user.isFollowing}
+                  />
+                </div>
+              )}
+              {!user.isFollowing && (
+                <div id="profremove2">
+                  <FollowButton
+                    myId={me.id}
+                    id={user.id}
+                    isFollowing={user.isFollowing}
+                  />
+                </div>
+              )}
+              <GoPostLink to={`p/${id}`}>
+                <div id="profcancel">Go to post</div>
+              </GoPostLink>
+              <div onClick={closeModal} id="profcancel">
+                Cancel
+              </div>
+            </>
+          )}
+        </ModalWrapper>
+      </Modal>
+      <Modal
+        isOpen={deleteModal}
+        onRequestClose={closeDeleteModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper>
+          <h1>Delete Post?</h1>
+          <div onClick={deletePost} id="profremove">
             Delete
           </div>
-          <div onClick={openEditModal} id="profupload">
-            Edit
-          </div>
-          <GoPostLink to={`p/${id}`}>
-            <div id="profcancel">
-              Go to post
-            </div>
-          </GoPostLink>
-          <div onClick={closeModal} id="profcancel">
+          <div onClick={closeDeleteModal} id="profcancel">
             Cancel
           </div>
-        </>
-        ) : (
-        <>
-          {user.isFollowing &&
-            <div onClick={closeModal} id="profremove">
-              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+        </ModalWrapper>
+      </Modal>
+      <Modal
+        isOpen={editModal}
+        onRequestClose={closeEditModal}
+        style={customStyles}
+        contentLabel="Post Modal"
+      >
+        <ModalWrapper2>
+          <h1>Edit Post</h1>
+          <div id="captionedit">
+            <span>Caption:</span>
+            <Textarea
+              id="caption"
+              name="caption"
+              placeholder={"Write a caption..."}
+              onChange={updateState}
+              value={captionInput}
+            />
+          </div>
+          {locationInput.length < 1 ? (
+            <div onClick={openLocationModal} id="location">
+              <p>Add Location</p>
+              <span id="headerbtn">
+                <HeaderBackButton />
+              </span>
             </div>
-          }
-          {!user.isFollowing &&
-            <div id="profremove2">
-              <FollowButton myId={me.id} id={user.id} isFollowing={user.isFollowing} />
+          ) : (
+            <div id="location">
+              <h3>Location:</h3>
+              <p id="locationset">{locationInput}</p>
+              <span onClick={removeLocation}>Remove</span>
+              <h2 onClick={openLocationModal}>Edit</h2>
             </div>
-          }
-          <GoPostLink to={`p/${id}`}>
-            <div id="profcancel">
-              Go to post
-            </div>
-          </GoPostLink>
-          <div onClick={closeModal} id="profcancel">
+          )}
+          <div onClick={editPostSubmit} id="profupload">
+            Submit
+          </div>
+          <div onClick={closeEditModal} id="profcancel">
             Cancel
           </div>
-        </>
-        )}
-      </ModalWrapper>
-    </Modal>
-    <Modal
-      isOpen={deleteModal}
-      onRequestClose={closeDeleteModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper>
-        <h1>Delete Post?</h1>
-        <div onClick={deletePost} id="profremove">
-          Delete
-        </div>
-        <div onClick={closeDeleteModal} id="profcancel">
-          Cancel
-        </div>
-      </ModalWrapper>
-    </Modal>
-    <Modal
-      isOpen={editModal}
-      onRequestClose={closeEditModal}
-      style={customStyles}
-      contentLabel="Post Modal"
-    >
-      <ModalWrapper2>
-        <h1>Edit Post</h1>
-        <div id="captionedit">
-          <span>Caption:</span>
-          <Textarea
-            id="caption"
-            name="caption"
-            placeholder={"Write a caption..."}
-            onChange={updateState}
-            value={captionInput}
-          />
-        </div>
-        <div id="locationedit">
-          <span>Location:</span>
-          <input
-            id="location"
-            name="location"
-            placeholder={"Add a location..."}
-            onChange={updateState}
-            value={locationInput}
-          />
-        </div>
-        <div onClick={editPostSubmit} id="profupload">
-          Submit
-        </div>
-        <div onClick={closeEditModal} id="profcancel">
-          Cancel
-        </div>
-      </ModalWrapper2>
-    </Modal>
-  </Post>
-)};
+        </ModalWrapper2>
+      </Modal>
+      <Modal
+        isOpen={locationModal}
+        onRequestClose={closeLocationModal}
+        style={customStyles}
+        contentLabel="Room Modal"
+      >
+        <ModalWrapper3>
+          <ModalHeader3>
+            <div>
+              <span onClick={closeLocationModal}>
+                <CancelButton size={20} />
+              </span>
+            </div>
+            <h1>Locations</h1>
+            <div></div>
+          </ModalHeader3>
+          <ModalMid3>
+            <PlacesAutocomplete
+              value={locationFind}
+              onChange={setLocationFind}
+              onSelect={handleLocation}
+            >
+              {({
+                getInputProps,
+                suggestions,
+                getSuggestionItemProps,
+                loading,
+              }) => (
+                <div id="search">
+                  <input
+                    {...getInputProps({ placeholder: "Search" })}
+                    autoFocus
+                  />
+                  <div className="autocomplete-dropdown">
+                    {loading && <div id="searching-wait">Searching...</div>}
+                    {suggestions.map((suggestion) => {
+                      const className = "suggestion-item";
+                      const style = suggestion.active
+                        ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                        : { backgroundColor: "#ffffff", cursor: "pointer" };
+                      return (
+                        <div
+                          key={suggestion.placeId}
+                          {...getSuggestionItemProps(suggestion, {
+                            className,
+                            style,
+                          })}
+                        >
+                          <div id="totalshow">
+                            <h1>
+                              <LocationLogo />
+                            </h1>
+                            <div>
+                              <span>
+                                {suggestion.formattedSuggestion.mainText}
+                              </span>
+                              <p>
+                                {suggestion.formattedSuggestion.secondaryText}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </PlacesAutocomplete>
+          </ModalMid3>
+        </ModalWrapper3>
+      </Modal>
+    </Post>
+  )};

@@ -256,7 +256,7 @@ const Empty = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-  width: 300px;
+  width: 90vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }
@@ -497,7 +497,7 @@ const Textarea2 = styled(TextareaAutosize)`
 `;
 
 const ModalWrapper2 = styled.div`
-  width: 260px;
+  width: 90vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }

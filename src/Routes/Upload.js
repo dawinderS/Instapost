@@ -8,9 +8,34 @@ import useInput from "../Hooks/useInput";
 import { useQuery, useMutation } from "react-apollo-hooks";
 import { ME, FEED_QUERY, GET_USER } from "../SharedQueries";
 import { toast } from "react-toastify";
-import Input from "../Components/Input";
 import TextareaAutosize from "react-autosize-textarea";
-import { UploadPicture, HeaderBackButton } from "../Components/Icons";
+import { UploadPicture, HeaderBackButton, CancelButton, LocationLogo } from "../Components/Icons";
+import Modal from "react-modal";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  geocodeByPlaceId,
+  getLatLng,
+} from "react-places-autocomplete";
+
+
+Modal.setAppElement("#root");
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "10px",
+    padding: "0",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    zIndex: "20",
+  },
+};
 
 const UPLOAD = gql`
   mutation upload($caption: String!, $files: [String!]!, $location: String) {
@@ -18,6 +43,87 @@ const UPLOAD = gql`
       id
       caption
       location
+    }
+  }
+`;
+
+const ModalWrapper = styled.div`
+  width: 90vw;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
+const ModalHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 0px 16px;
+  div {
+    display: flex;
+    width: 20%;
+    span {
+      cursor: pointer;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+`;
+
+const ModalMid = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 8px 0px;
+  min-height: 320px;
+  max-height: 320px;
+  overflow-y: auto;
+  #search {
+    width: 100%;
+    padding: 5px 0px;
+    input {
+      width: calc(100% - 32px);
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background-color: #fafafa;
+      border: 0.5px solid #dbdbdb;
+      border-radius: 10px;
+      margin: 0px 16px;
+      margin-bottom: 10px;
+    }
+    .suggestion-item {
+      padding: 10px 20px;
+      span {
+        font-weight: 500;
+      }
+      p {
+        color: #8e8e8e;
+        font-size: 12px;
+        margin-top: 3px;
+      }
+    }
+    #searching-wait {
+      padding: 16px 20px;
+      font-weight: 500;
+    }
+    #totalshow {
+      display: flex;
+      align-items: center;
+      h1 {
+        margin-right: 10px;
+      }
     }
   }
 `;
@@ -326,6 +432,45 @@ const InputHolder = styled.div`
     line-height: 18px;
     padding: 0px 15px;
   }
+  #location {
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 0;
+    border: 0.5px solid #dbdbdb;
+    border-left: none;
+    border-right: none;
+    height: 44px;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 0px 15px;
+    span {
+      margin-left: auto;
+      color: #ed4956;
+      font-weight: 500;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      svg {
+        margin: 0;
+        transform: rotate(90deg);
+      }
+    }
+    h1 {
+      color: #0095f6;
+      font-weight: 500;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+    }
+    #locationset {
+      font-weight: 500;
+    }
+  }
   @media screen and (max-width: 770px) {
     background-color: #fff;
   }
@@ -335,8 +480,10 @@ export default ({ props }) => {
   const [loading, setIsLoading] = useState(false);
   const [picture, setPicture] = useState(null);
   const [imagePreview, setImagePreview] = useState();
+  const [modal, setModal] = useState(false);
   const captionInput = useInput("");
-  const locationInput = useInput("");
+  const [locationInput, setLocationInput] = useState("");
+  const [locationOutput, setLocationOutput] = useState("");
   const history = useHistory();
   const me = useQuery(ME);
   const [uploadMutation] = useMutation(UPLOAD, {
@@ -345,6 +492,21 @@ export default ({ props }) => {
       { query: GET_USER, variables: { username: me.data.me.username } }
     ],
   });
+
+  const handleSelect = value => {
+    setLocationOutput(value.split(",")[0]);
+    closeModal();
+  }
+  const openModal = () => {
+    setModal(true);
+  }
+  const closeModal = () => {
+    setModal(false);
+    setLocationInput("");
+  }
+  const removeLocation = () => {
+    setLocationOutput("");
+  }
 
   const onDrop = (e) => {
     setPicture(e.target.files[0]);
@@ -384,7 +546,7 @@ export default ({ props }) => {
         variables: {
           files: [location],
           caption: captionInput.value,
-          location: locationInput.value,
+          location: locationOutput,
         },
       });
       if (upload.id) {
@@ -427,18 +589,26 @@ export default ({ props }) => {
       </div>
       {picture ? (
         <InputHolder>
-          {/* <Input
-            className="captionInput"
-            placeholder={"Write a caption..."}
-            {...captionInput}
-          /> */}
           <Textarea
             placeholder={"Write a caption..."}
             value={captionInput.value}
             onChange={captionInput.onChange}
             autoFocus
           />
-          <Input placeholder={"Add Location"} {...locationInput} />
+          {locationOutput.length < 1 ? 
+            (
+              <div onClick={openModal} id="location">
+                <p>Add Location</p>
+                <span><HeaderBackButton /></span>
+              </div>
+            ) : (
+              <div id="location">
+                <p id="locationset">{locationOutput}</p>
+                <span onClick={removeLocation}>Remove</span>
+                <h1 onClick={openModal}>Edit</h1>
+              </div>
+            )
+          }
           <BeforeBtns2>
             <input
               className="custom-file-input2"
@@ -465,6 +635,66 @@ export default ({ props }) => {
           />
         </BeforeBtns>
       )}
+      <Modal
+        isOpen={modal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Room Modal"
+      >
+        <ModalWrapper>
+          <ModalHeader>
+            <div>
+              <span onClick={closeModal}>
+                <CancelButton size={20} />
+              </span>
+            </div>
+            <h1>Locations</h1>
+            <div></div>
+          </ModalHeader>
+          <ModalMid>
+            <PlacesAutocomplete
+              value={locationInput}
+              onChange={setLocationInput}
+              onSelect={handleSelect}
+            >
+              {({
+                getInputProps,
+                suggestions,
+                getSuggestionItemProps,
+                loading,
+              }) => (
+                <div id="search">
+                  <input {...getInputProps({ placeholder: "Search" })} autoFocus/>
+                  <div className="autocomplete-dropdown">
+                    {loading && <div id="searching-wait">Searching...</div>}
+                    {suggestions.map((suggestion) => {
+                      const className = "suggestion-item";
+                      const style = suggestion.active
+                        ? { backgroundColor: "#fafafa", cursor: "pointer" }
+                        : { backgroundColor: "#ffffff", cursor: "pointer" };
+                      return (
+                        <div key={suggestion.placeId}
+                          {...getSuggestionItemProps(suggestion, {
+                            className, style,
+                          })}
+                        >
+                          <div id="totalshow">
+                            <h1><LocationLogo /></h1>
+                            <div>
+                              <span>{suggestion.formattedSuggestion.mainText}</span>
+                              <p>{suggestion.formattedSuggestion.secondaryText}</p>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </PlacesAutocomplete>
+          </ModalMid>
+        </ModalWrapper>
+      </Modal>
     </UploadWrapper>
   );
 };

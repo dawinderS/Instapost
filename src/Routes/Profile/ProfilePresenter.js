@@ -348,7 +348,7 @@ const MinTopHeader = styled.header`
 `;
 
 const ModalWrapper = styled.div`
-  width: 260px;
+  width: 90vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }
@@ -404,7 +404,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalWrapper2 = styled.div`
-  width: 300px;
+  width: 80vw;
   @media screen and (min-width: 735px) {
     width: 400px;
   }
