@@ -536,7 +536,7 @@ export default ({ props }) => {
       const {
         data: { location },
       } = await axios.post(
-        "http://instapost-backend.herokuapp.com/api/upload",
+        "http://instapost-backend.herokuapp.com/api/upload/",
         formData,
         {
           headers: {
