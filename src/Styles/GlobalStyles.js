@@ -14,6 +14,7 @@ export default createGlobalStyle`
     font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     padding-top: 85px;
     overflow-wrap: break-word;
+    line-height: 16px;
     @media screen and (max-width: 770px) {
       padding-top: 44px;
       // padding-top: 5.5vh;

@@ -36,9 +36,12 @@ export const ME = gql`
           id
           createdAt
           user {
-            name
+            id
             username
+            name
             avatar
+            isFollowing
+            isSelf
           }
           post {
             id
@@ -91,10 +94,12 @@ export const FEED_QUERY = gql`
       likes {
         id
         user {
+          id
           username
           name
           avatar
           isFollowing
+          isSelf
         }
       }
       comments {
@@ -134,10 +139,12 @@ export const GET_POST = gql`
       likes {
         id
         user {
+          id
           username
           name
           avatar
           isFollowing
+          isSelf
         }
       }
       comments {
@@ -192,10 +199,12 @@ export const GET_USER = gql`
         likes {
           id
           user {
+            id
             username
             name
             avatar
             isFollowing
+            isSelf
           }
         }
         comments {
@@ -267,6 +276,17 @@ export const GET_USER_BY_ID = gql`
         id
         files {
           url
+        }
+        likes {
+          id
+          user {
+            id
+            username
+            name
+            avatar
+            isFollowing
+            isSelf
+          }
         }
         likeCount
         commentCount

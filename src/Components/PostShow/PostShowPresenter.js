@@ -165,6 +165,9 @@ const Meta = styled.div`
     margin: 0;
     padding: 0;
   }
+  #likenames {
+    cursor: pointer;
+  }
 `;
 
 const Buttons = styled.div`
@@ -248,6 +251,9 @@ const AllText = styled.div`
   flex-direction: column;
   overflow-wrap: break-word;
   margin-left: 14px;
+  h3 {
+    display: flex;
+  }
   p {
     /* margin-left: 3px; */
     color: #8e8e8e;
@@ -280,6 +286,7 @@ const Caption = styled.div`
     margin: 0px;
     border-bottom: 1px solid #efefef;
   }
+  line-height: 18px;
 `;
 
 const Textarea = styled(TextareaAutosize)`
@@ -666,6 +673,92 @@ const Info = styled.div`
   flex-direction: column;
 `;
 
+const ModalWrapper4 = styled.div`
+  width: 80vw;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 0px 16px;
+  div {
+    display: flex;
+    width: 20%;
+    span {
+      margin-left: auto;
+      cursor: pointer;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+`;
+
+const UserShow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 355px;
+  min-height: 52px;
+`;
+
+const EachCard = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  min-height: 52px;
+  div {
+    margin-left: 13px;
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+      margin-bottom: 3px;
+    }
+    h1 {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 14px;
+      color: #8e8e8e;
+      margin-bottom: 5px;
+    }
+    button {
+      margin: 0;
+      margin-left: auto;
+    }
+  }
+`;
+
+const UserLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+  }
+`;
+
 export default ({
   // user: { username, avatar, isFollowing, isSelf },
   user,
@@ -676,13 +769,13 @@ export default ({
   caption,
   isLiked,
   likeCount,
-  commentCount,
   createdAt,
   newComment,
   currentItem,
   toggleLike,
   onKeyPress,
   onPostClick,
+  likes,
   comments,
   selfComments,
 }) => {
@@ -690,10 +783,11 @@ export default ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [locationModal, setLocationModal] = useState(false);
+  const [likesModal, setLikesModal] = useState(false);
   const [captionInput, setCaptionInput] = useState(caption);
   const [locationInput, setLocationInput] = useState(location);
   const [locationFind, setLocationFind] = useState("");
- 
+
   const history = useHistory();
   const goBack = (e) => {
     history.goBack();
@@ -701,49 +795,54 @@ export default ({
 
   const openModal = () => {
     setIsOpen(true);
-  }
+  };
   const closeModal = () => {
     setIsOpen(false);
-  }
-
+  };
+  const openLikesModal = () => {
+    setLikesModal(true);
+  };
+  const closeLikesModal = () => {
+    setLikesModal(false);
+  };
   const openDeleteModal = () => {
     setIsOpen(false);
     setDeleteModal(true);
-  }
+  };
   const closeDeleteModal = () => {
     setDeleteModal(false);
-  }
+  };
   const openEditModal = () => {
     setIsOpen(false);
     setEditModal(true);
-  }
+  };
   const closeEditModal = () => {
     setEditModal(false);
     setCaptionInput(caption);
     setLocationInput(location);
-  }
+  };
   const openLocationModal = () => {
     setEditModal(false);
     setLocationModal(true);
-  }
+  };
   const closeLocationModal = () => {
     setLocationModal(false);
     setEditModal(true);
     setLocationFind("");
-  }
+  };
   const removeLocation = () => {
     setLocationInput("");
-  }
-  const handleLocation = value => {
+  };
+  const handleLocation = (value) => {
     setLocationInput(value.split(",")[0]);
     closeLocationModal();
-  }
+  };
 
   const [editPostMutation] = useMutation(EDIT_POST, {
     refetchQueries: () => [
       { query: GET_USER_BY_ID, variables: { id: user.id } },
       { query: FEED_QUERY },
-    ]
+    ],
   });
   const [editPostMutation2] = useMutation(EDIT_POST);
   const DELETE = "DELETE";
@@ -754,9 +853,9 @@ export default ({
     closeDeleteModal();
     try {
       const {
-        data: { editPost }
+        data: { editPost },
       } = await editPostMutation({
-        variables: { id, action: DELETE }
+        variables: { id, action: DELETE },
       });
       if (editPost) {
         goBack();
@@ -786,14 +885,14 @@ export default ({
     closeEditModal();
     try {
       const {
-        data: { editPost }
+        data: { editPost },
       } = await editPostMutation2({
         variables: {
           id,
           caption: captionInput,
           location: locationInput,
-          action: EDIT
-        }
+          action: EDIT,
+        },
       });
       if (editPost) {
         toast.info("Post edited successfully.");
@@ -882,7 +981,9 @@ export default ({
               <CommentIcon />
             </Button>
           </Buttons>
-          <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+          <div id="likenames" onClick={openLikesModal}>
+            <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+          </div>
           <Caption>
             <Link to={`/${user.username}`}>
               <FatText text={user.username} />
@@ -975,10 +1076,10 @@ export default ({
                 <Link to={`/${user.username}`}>
                   <FatText text={user.username} />
                 </Link>
-                <p>
+                <h3>
                   <p id="gapcreate">{" • "}</p>
                   <p>{getDate(createdAt)}</p>
-                </p>
+                </h3>
               </span>
               <div>{caption}</div>
             </AllText>
@@ -1005,9 +1106,9 @@ export default ({
           {comments && (
             <CommentsWrap>
               <Comments>
-                {comments.length < 1 && 
+                {comments.length < 1 && (
                   <div id="nocomments">No comments yet</div>
-                }
+                )}
                 {comments.map((comment) => (
                   <Comment key={comment.id}>
                     <Link to={`/${comment.user.username}`}>
@@ -1040,9 +1141,9 @@ export default ({
                   <CommentIcon />
                 </Button>
               </Buttons>
-              <FatText
-                text={likeCount === 1 ? "1 like" : `${likeCount} likes`}
-              />
+              <div id="likenames" onClick={openLikesModal}>
+                <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+              </div>
               <Timestamp>{moment(createdAt).fromNow()}</Timestamp>
             </Meta>
             <CommentHolder>
@@ -1240,5 +1341,42 @@ export default ({
           </ModalMid3>
         </ModalWrapper3>
       </Modal>
+      <Modal
+        isOpen={likesModal}
+        onRequestClose={closeLikesModal}
+        style={customStyles}
+        contentLabel="Likes Modal"
+      >
+        <ModalWrapper4>
+          <ModalHeader>
+            <div></div>
+            <h1>Likes</h1>
+            <div>
+              <span onClick={closeLikesModal}>
+                <CancelButton />
+              </span>
+            </div>
+          </ModalHeader>
+          <UserShow>
+            {likes.map((like) => (
+              <EachCard key={like.id}>
+                <UserLink onClick={closeModal} to={`/${like.user.username}`}>
+                  <img width="34" height="34" src={like.user.avatar} alt="avatar" />
+                  <div>
+                    <span>{like.user.username}</span>
+                    <h1>{like.user.name}</h1>
+                  </div>
+                </UserLink>
+                <FollowButton
+                  myId={id}
+                  id={like.user.id}
+                  isFollowing={like.user.isFollowing}
+                />
+              </EachCard>
+            ))}
+          </UserShow>
+        </ModalWrapper4>
+      </Modal>
     </Wrapper>
-  )};
+  );
+};

@@ -175,6 +175,9 @@ const Meta = styled.div`
     margin: 0;
     padding: 0;
   }
+  #likenames {
+    cursor: pointer;
+  }
 `;
 
 const Buttons = styled.div`
@@ -229,6 +232,7 @@ const Caption = styled.div`
   span {
     margin-right: 5px;
   }
+  line-height: 18px;
 `;
 
 const Textarea = styled(TextareaAutosize)`
@@ -534,6 +538,92 @@ const ModalMid3 = styled.div`
   }
 `;
 
+const ModalWrapper4 = styled.div`
+  width: 80vw;
+  @media screen and (min-width: 735px) {
+    width: 400px;
+  }
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 0px 16px;
+  div {
+    display: flex;
+    width: 20%;
+    span {
+      margin-left: auto;
+      cursor: pointer;
+    }
+  }
+  h1 {
+    text-align: center;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #262626;
+  }
+`;
+
+const UserShow = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 355px;
+  min-height: 52px;
+`;
+
+const EachCard = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  min-height: 52px;
+  div {
+    margin-left: 13px;
+    display: flex;
+    flex-direction: column;
+    span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #262626;
+      margin-bottom: 3px;
+    }
+    h1 {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 14px;
+      color: #8e8e8e;
+      margin-bottom: 5px;
+    }
+    button {
+      margin: 0;
+      margin-left: auto;
+    }
+  }
+`;
+
+const UserLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    border-radius: 50%;
+    background-size: cover;
+  }
+`;
+
 export default ({
   // user: { id, username, avatar, isFollowing, isSelf },
   id,
@@ -544,13 +634,13 @@ export default ({
   caption,
   isLiked,
   likeCount,
-  commentCount,
   createdAt,
   newComment,
   currentItem,
   toggleLike,
   onKeyPress,
   onPostClick,
+  likes,
   comments,
   selfComments,
 }) => {
@@ -558,6 +648,7 @@ export default ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [locationModal, setLocationModal] = useState(false);
+  const [likesModal, setLikesModal] = useState(false);
   const [captionInput, setCaptionInput] = useState(caption);
   const [locationInput, setLocationInput] = useState(location);
   const [locationFind, setLocationFind] = useState("");
@@ -568,7 +659,12 @@ export default ({
   const closeModal = () => {
     setIsOpen(false);
   }
-
+  const openLikesModal = () => {
+    setLikesModal(true);
+  }
+  const closeLikesModal = () => {
+    setLikesModal(false);
+  }
   const openDeleteModal = () => {
     setIsOpen(false);
     setDeleteModal(true);
@@ -711,7 +807,9 @@ export default ({
             </Link>
           </Button>
         </Buttons>
-        <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+        <div id="likenames" onClick={openLikesModal}>
+          <FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+        </div>
         <Caption>
           <Link to={`/${user.username}`}>
             <FatText text={user.username} />
@@ -941,5 +1039,42 @@ export default ({
           </ModalMid3>
         </ModalWrapper3>
       </Modal>
+      <Modal
+        isOpen={likesModal}
+        onRequestClose={closeLikesModal}
+        style={customStyles}
+        contentLabel="Likes Modal"
+      >
+        <ModalWrapper4>
+          <ModalHeader>
+            <div></div>
+            <h1>Likes</h1>
+            <div>
+              <span onClick={closeLikesModal}>
+                <CancelButton />
+              </span>
+            </div>
+          </ModalHeader>
+          <UserShow>
+            {likes.map((like) => (
+              <EachCard key={like.id}>
+                <UserLink onClick={closeModal} to={`/${like.user.username}`}>
+                  <img width="34" height="34" src={like.user.avatar} alt="avatar" />
+                  <div>
+                    <span>{like.user.username}</span>
+                    <h1>{like.user.name}</h1>
+                  </div>
+                </UserLink>
+                <FollowButton
+                  myId={id}
+                  id={like.user.id}
+                  isFollowing={like.user.isFollowing}
+                />
+              </EachCard>
+            ))}
+          </UserShow>
+        </ModalWrapper4>
+      </Modal>
     </Post>
-  )};
+  );
+};

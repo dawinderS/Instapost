@@ -58,6 +58,9 @@ const Wrapper = styled.div`
   /* max-height: 89vh; */
   width: 100%;
   overflow-y: auto;
+  @media screen and (max-width: 770px) {
+    margin-bottom: 44px;
+  }
 `;
 
 const Posts = styled.div`

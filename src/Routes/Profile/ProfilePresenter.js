@@ -58,6 +58,7 @@ const Wrapper = styled.div`
     background: #fff;
     min-height: 75vh;
     overflow-y: scroll;
+    margin-bottom: 44px;
   }
 `;
 
@@ -454,6 +455,7 @@ const EachCard = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 8px 16px;
+  min-height: 52px;
   div {
     margin-left: 13px;
     display: flex;
@@ -602,7 +604,7 @@ export default ({ me, loading, data, logOut }) => {
       } = await editUserMutation({
         variables: {
           avatar:
-            "https://instapost-clone.s3.us-west-1.amazonaws.com/1597972559986",
+            "https://instapost-clone.s3-us-west-1.amazonaws.com/1597009545181",
         },
       });
       if (editUser) {

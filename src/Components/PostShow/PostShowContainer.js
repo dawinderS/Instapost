@@ -12,8 +12,8 @@ const PostShowContainer = ({
   me,
   files,
   likeCount,
-  commentCount,
   isLiked,
+  likes,
   comments,
   createdAt,
   caption,
@@ -100,6 +100,7 @@ const PostShowContainer = ({
       location={location}
       caption={caption}
       isLiked={isLikedS}
+      likes={likes}
       comments={comments}
       createdAt={createdAt}
       newComment={comment}

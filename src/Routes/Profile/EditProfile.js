@@ -522,7 +522,7 @@ export default withRouter(({ }) => {
   const removeProfPic = async () => {
     try {
       const { data: { editUser }, } = await editUserMutation({
-        variables: { avatar: "https://instapost-clone.s3.us-west-1.amazonaws.com/1597972559986" }
+        variables: { avatar: "https://instapost-clone.s3-us-west-1.amazonaws.com/1597009545181" }
       });
       if (editUser) {
         closeModal();

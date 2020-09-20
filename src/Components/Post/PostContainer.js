@@ -14,6 +14,7 @@ const PostContainer = ({
   likeCount,
   commentCount,
   isLiked,
+  likes,
   comments,
   createdAt,
   caption,
@@ -100,6 +101,7 @@ const PostContainer = ({
       location={location}
       caption={caption}
       isLiked={isLikedS}
+      likes={likes}
       comments={comments}
       createdAt={createdAt}
       newComment={comment}

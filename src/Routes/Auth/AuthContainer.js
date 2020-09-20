@@ -25,7 +25,7 @@ export default () => {
   const [createAccountMutation] = useMutation(CREATE_ACCOUNT, {
     variables: {
       email: email.value,
-      username: username.value,
+      username: username.value.toLowerCase(),
       name: name.value
     }
   });
