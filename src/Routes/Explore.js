@@ -18,8 +18,6 @@ const EXPLORE_QUERY = gql`
       caption
       user {
         id
-        avatar
-        username
       }
       files {
         id
@@ -27,26 +25,6 @@ const EXPLORE_QUERY = gql`
       }
       likeCount
       commentCount
-      isLiked
-      likes {
-        id
-        user {
-          username
-          name
-          avatar
-          isFollowing
-        }
-      }
-      comments {
-        id
-        text
-        user {
-          id
-          username
-        }
-        createdAt
-      }
-      createdAt
     }
   }
 `;
@@ -200,7 +178,7 @@ export default withRouter(({ history }) => {
           </form>
         </MinLink>
       </MinHeader>
-      {!loading && data && data.seeExplore && data.seeExplore.length < 1 && (
+      {!loading && data && data.seeExplore && data.seeExplore.length === 0 && (
         <>
           <Empty>
             <Logo size={60} />
