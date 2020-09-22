@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "rl-react-helmet";
 import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
+import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import { ME, FEED_QUERY } from "../SharedQueries";
 import Loader from "../Components/Loader";
