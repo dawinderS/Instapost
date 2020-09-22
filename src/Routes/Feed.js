@@ -27,6 +27,7 @@ const EXPLORE_QUERY = gql`
       }
       likeCount
       commentCount
+    }
   }
 `;
 
