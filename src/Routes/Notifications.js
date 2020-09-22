@@ -52,6 +52,7 @@ const SuggestedCard = styled.div`
     width: 100%;
     max-height: calc(100vh - 88px);
     overflow-y: auto;
+    margin-bottom: 44px;
   }
 `;
 
@@ -106,8 +107,10 @@ const EachCard = styled.div`
   justify-content: flex-start;
   padding: 14px 20px;
   border-bottom: 1px solid #dbdbdb;
+  min-height: 64px;
   img {
-    border-radius: 0%;
+    border-radius: 50%;
+    background-size: cover;
   }
   span {
     margin-left: 12px;
@@ -214,11 +217,9 @@ export default () => {
   let all_notifs = [];
   if (!loading && data.me) {
     follow_notifs = data.me.followers;
-    console.log(follow_notifs);
     like_notifs = data.me.posts.map(post => post.likes);
     comment_notifs = data.me.posts.map(post => post.comments);
     all_notifs=[...follow_notifs];
-    console.log(all_notifs)
     if (like_notifs[0]) all_notifs = [...follow_notifs, ...like_notifs[0]];
     if (comment_notifs[0]) {
       all_notifs = [...follow_notifs, ...like_notifs[0], ...comment_notifs[0]];

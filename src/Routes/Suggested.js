@@ -55,6 +55,8 @@ const SuggestedCard = styled.div`
     width: 100%;
     border: none;
     min-height: 75vh;
+    max-height: calc(100vh - 44px);
+    margin-bottom: 44px;
     /* max-height: 88vh; */
     overflow-y: auto;
     .suggesttext {
@@ -78,6 +80,7 @@ const UserLink = styled(Link)`
 `;
 const EachCard = styled.div`
   @media screen and (max-width: 770px) {
+    min-height: 70px;
     border: none;
     padding: 8px 16px;
     img {

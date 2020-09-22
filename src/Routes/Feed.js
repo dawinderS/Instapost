@@ -11,6 +11,24 @@ import SuggestedCard from "../Components/SuggestionCard";
 import MinFooter from "../Components/FooterMin";
 import { MessagingIcon, MessagingIconLoc, Logo } from "../Components/Icons";
 
+const EXPLORE_QUERY = gql`
+  {
+    seeExplore {
+      id
+      location
+      caption
+      user {
+        id
+      }
+      files {
+        id
+        url
+      }
+      likeCount
+      commentCount
+  }
+`;
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -165,6 +183,7 @@ const FooterLinks = styled.div`
 export default withRouter(({ history }) => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
+  const explore = useQuery(EXPLORE_QUERY);
   const pathname = history.location.pathname;
   
   return (
@@ -183,11 +202,8 @@ export default withRouter(({ history }) => {
         </Link>
       </MinHeader>
       {!loading &&
-        data &&
-        data.seeFeed &&
-        me.data &&
-        !me.loading &&
-        me.data.me && (
+        data && data.seeFeed &&
+        me.data && !me.loading && me.data.me && !explore.loading && (
           // suggested.data && !suggested.loading &&
           <>
             {data.seeFeed.length < 1 && (

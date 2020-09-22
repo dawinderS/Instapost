@@ -187,6 +187,9 @@ const Buttons = styled.div`
     }
   }
   margin-bottom: 10px;
+  @media screen and (max-width: 770px) {
+    margin-bottom: 8px;
+  }
 `;
 
 const Timestamp = styled.span`
@@ -196,7 +199,7 @@ const Timestamp = styled.span`
   display: block;
   color: rgba(var(--f52, 142, 142, 142), 1);
   font-size: 10px;
-  margin: 8px 0px 0px 0px;
+  margin: 5px 0px 0px 0px;
   padding-bottom: 12px;
   padding-top: 3px;
   @media screen and (max-width: 770px) {
@@ -232,7 +235,10 @@ const Caption = styled.div`
   span {
     margin-right: 5px;
   }
-  line-height: 18px;
+  line-height: 16px;
+  @media screen and (max-width: 770px) {
+    margin: 8px 0px 8px 0px;
+  }
 `;
 
 const Textarea = styled(TextareaAutosize)`
