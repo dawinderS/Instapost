@@ -11,6 +11,7 @@ export const ME = gql`
       bio
       phone
       gender
+      loginSecret
       followers {
         id
         name

@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { DemoUser } from "../../Components/Icons";
-import Loader2 from "../../Components/Loader2";
 
 const Wrapper = styled.div`
   min-height: 76vh;
@@ -74,6 +73,13 @@ const Form = styled(Box)`
         font-weight: 600;
       }
     }
+    #temppassword {
+      color: #385185;
+      margin: 15px 0px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -136,7 +142,8 @@ export default ({
   onDemo,
   demoLog,
   setLogin,
-  setSignup
+  setSignup,
+  setGetEmail,
 }) => (
   <Wrapper>
     <Form>
@@ -147,9 +154,13 @@ export default ({
           </Helmet>
           <form onSubmit={onSubmit}>
             <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Enter your username or email to receive your passcode.</Text>
+            <Text>Enter your credentials to login.</Text>
             <Input placeholder={"Username or email"} {...email} />
+            <Input type="password" placeholder={"Password"} {...secret} />
             <Button text={"Log In"} />
+            <p id="temppassword" onClick={setGetEmail}>
+              Forgot password?
+            </p>
           </form>
           <Or>
             <OrLine></OrLine>
@@ -157,13 +168,39 @@ export default ({
             <OrLine></OrLine>
           </Or>
           <DemoLog onClick={onDemo}>
-            {demoLog === false &&
+            {demoLog === false && (
               <>
                 <DemoUser />
                 <span>Log in as Demo User</span>
               </>
-            }
+            )}
             {demoLog === true && <span>Loading... Please wait</span>}
+          </DemoLog>
+        </>
+      )}
+      {action === "getEmail" && (
+        <>
+          <Helmet>
+            <title>Email Password • Instapost</title>
+          </Helmet>
+          <form onSubmit={onSubmit}>
+            <img src="instalogo.png" width="180" alt="instalogo" />
+            <Text>
+              Enter your username or email and we'll email you your password.
+            </Text>
+            <Input placeholder={"Username or email"} {...email} />
+            <Button text={"Send Password"} />
+          </form>
+          <Or>
+            <OrLine></OrLine>
+            <div>OR</div>
+            <OrLine></OrLine>
+          </Or>
+          <DemoLog onClick={setSignup}>
+            <>
+              <DemoUser />
+              <span>Create New Account</span>
+            </>
           </DemoLog>
         </>
       )}
@@ -174,10 +211,11 @@ export default ({
           </Helmet>
           <form onSubmit={onSubmit}>
             <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Sign up to see photos and videos from your friends.</Text>
+            <Text>Sign up to see photos from your friends and others.</Text>
             <Input placeholder={"Email"} {...email} type="email" />
             <Input placeholder={"Full Name"} {...name} />
             <Input placeholder={"Username"} {...username} />
+            <Input type="password" placeholder={"Password"} {...secret} />
             <Button text={"Sign up"} />
             <p>
               By signing up, you agree to contact me for{" "}
@@ -193,8 +231,8 @@ export default ({
           </Helmet>
           <form onSubmit={onSubmit}>
             <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Please enter the passcode we have emailed you.</Text>
-            <Input placeholder="Paste your passcode" required {...secret} />
+            <Text>Please enter the password we have emailed you.</Text>
+            <Input placeholder="Enter your password" required {...secret} />
             <Button text={"Confirm to log in"} />
           </form>
         </>
@@ -203,20 +241,22 @@ export default ({
     <StateChanger>
       {action === "logIn" && (
         <>
-          Don't have an account?{" "}
-          <Link onClick={setSignup}>Sign up</Link>
+          Don't have an account? <Link onClick={setSignup}>Sign up</Link>
         </>
       )}
       {action === "signUp" && (
         <>
-          Have an account?{" "}
-          <Link onClick={setLogin}>Log in</Link>
+          Have an account? <Link onClick={setLogin}>Log in</Link>
+        </>
+      )}
+      {action === "getEmail" && (
+        <>
+          Return back to log in? <Link onClick={setLogin}>Log in</Link>
         </>
       )}
       {action === "confirm" && (
         <>
-          Return back to log in?{" "}
-          <Link onClick={setLogin}>Log in</Link>
+          Return back to log in? <Link onClick={setLogin}>Log in</Link>
         </>
       )}
     </StateChanger>

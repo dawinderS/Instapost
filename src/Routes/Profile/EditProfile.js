@@ -8,6 +8,8 @@ import { useQuery, useMutation } from "react-apollo-hooks";
 import TextareaAutosize from "react-autosize-textarea";
 import { ME, GET_USER_BY_ID } from "../../SharedQueries";
 import { toast } from "react-toastify";
+import useInput from "../../Hooks/useInput";
+import Input from "../../Components/Input";
 import Loader from "../../Components/Loader";
 import Modal from "react-modal";
 
@@ -31,8 +33,8 @@ const customStyles = {
 };
 
 const EDITUSER = gql`
-  mutation editUser($avatar: String, $name: String, $username: String, $bio: String, $phone: Int, $gender: String) {
-    editUser(avatar: $avatar, name: $name, username: $username, bio: $bio, phone: $phone, gender: $gender) {
+  mutation editUser($avatar: String, $name: String, $username: String, $bio: String, $phone: Int, $gender: String, $loginSecret: String) {
+    editUser(avatar: $avatar, name: $name, username: $username, bio: $bio, phone: $phone, gender: $gender, loginSecret: $loginSecret) {
       id
       avatar
       name
@@ -197,6 +199,10 @@ const SecondPart = styled.div`
     font-weight: 600;
     cursor: pointer;
   }
+  #changepw {
+    color: #ed4956;
+    margin-top: 5px;
+  }
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -266,7 +272,12 @@ const MinPicShow = styled.div`
     line-height: 18px;
     font-weight: 500;
     cursor: pointer;
-    margin: 10px 0px 15px 0px;
+    margin: 10px 0px 5px 0px;
+  }
+  #changepw {
+    color: #ed4956;
+    margin-top: 5px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -385,6 +396,15 @@ const ModalWrapper = styled.div`
     color: #000000;
     font-size: 14px;
   }
+  #profinputs {
+    display: flex;
+    flex-direction: column;
+    padding-top: 5px;
+    input {
+      width: 80%;
+      margin-bottom: 5px;
+    }
+  }
 `;
 
 export default withRouter(({ }) => {
@@ -395,7 +415,11 @@ export default withRouter(({ }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [gender, setGender] = useState("");
+  const oldSecret = useInput("");
+  const newSecret = useInput("");
+  const confirmSecret = useInput("");
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [secretModal, setSecretModal] = useState(false);
   const history = useHistory();
   const { data, loading } = useQuery(ME);
   const [editUserMutation] = useMutation(EDITUSER, {
@@ -416,6 +440,15 @@ export default withRouter(({ }) => {
   }
   const closeModal = () => {
     setIsOpen(false);
+  }
+  const openPwModal = () => {
+    setSecretModal(true);
+  }
+  const closePwModal = () => {
+    setSecretModal(false);
+    oldSecret.setValue("");
+    newSecret.setValue("");
+    confirmSecret.setValue("");
   }
 
   useEffect(() => {
@@ -527,13 +560,46 @@ export default withRouter(({ }) => {
       if (editUser) {
         closeModal();
       } else {
-        toast.error("Cannot update at this time please try again.");
+        toast.error("Cannot update at this time, please try again.");
       }
     } catch (e) {
       toast.error("Cannot update profile picture, please try again.");
       console.log(e);
     }
   };
+
+  const changePassword = async e => {
+    e.preventDefault();
+    if (oldSecret.value !== "" && newSecret.value !== "" && confirmSecret.value !== "") {
+      if (oldSecret.value !== data.me.loginSecret) {
+        toast.error("Your old password was entered incorrectly. Please enter it again.");
+        return;
+      }
+      if (newSecret.length < 5) {
+        toast.error("Create a password at least 5 characters long.");
+      }
+      if (newSecret.value !== confirmSecret.value) {
+        toast.error("Please make sure both passwords match.");
+        return;
+      }
+      try {
+        const { data: { editUser } } = await editUserMutation({
+          variables: { loginSecret: newSecret.value }
+        });
+        if (editUser) {
+          toast.info("Password has been changed.");
+          closePwModal();
+          return;
+        } else {
+          toast.error("Cannot update password at this time, please try later");
+        }
+      } catch (e) {
+        toast.error("Cannot update profile picture, please try again.");
+      }
+    } else {
+      toast.error("Please fill out all fields.")
+    }
+  }
 
   return (
     <Wrapper id="outside">
@@ -559,6 +625,9 @@ export default withRouter(({ }) => {
               alt="avatar"
             />
             <p onClick={openModal}>Change Profile Photo</p>
+            <p id="changepw" onClick={openPwModal}>
+              Change Password
+            </p>
           </MinPicShow>
           <MinInputs>
             <BothInputs>
@@ -658,6 +727,9 @@ export default withRouter(({ }) => {
             <SecondPart>
               <h1>{data.me.username}</h1>
               <p onClick={openModal}>Change Profile Photo</p>
+              <p id="changepw" onClick={openPwModal}>
+                Change Password
+              </p>
             </SecondPart>
           </CompletePart>
           <CompletePart>
@@ -767,6 +839,27 @@ export default withRouter(({ }) => {
             Remove Current Photo
           </div>
           <div onClick={closeModal} id="profcancel">
+            Cancel
+          </div>
+        </ModalWrapper>
+      </Modal>
+      <Modal
+        isOpen={secretModal}
+        onRequestClose={closePwModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <ModalWrapper>
+          <h1>Change Password</h1>
+          <div id="profinputs">
+            <Input placeholder={"Old password"} {...oldSecret} />
+            <Input placeholder={"New password"} {...newSecret} />
+            <Input placeholder={"Confirm new password"} {...confirmSecret} />
+          </div>
+          <div onClick={changePassword} id="profupload">
+            Change Password
+          </div>
+          <div onClick={closePwModal} id="profcancel">
             Cancel
           </div>
         </ModalWrapper>

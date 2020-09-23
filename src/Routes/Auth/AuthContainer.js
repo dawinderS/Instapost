@@ -26,7 +26,8 @@ export default () => {
     variables: {
       email: email.value,
       username: username.value.toLowerCase(),
-      name: name.value
+      name: name.value,
+      loginSecret: secret.value
     }
   });
 
@@ -62,6 +63,14 @@ export default () => {
     setAction("signUp");
   }
 
+  const setGetEmail = () => {
+    email.setValue("");
+    username.setValue("");
+    name.setValue("");
+    secret.setValue("");
+    setAction("getEmail");
+  }
+
   const onDemo = async e => {
     e.preventDefault();
     setDemoLog(true);
@@ -83,6 +92,21 @@ export default () => {
   const onSubmit = async e => {
     e.preventDefault();
     if (action === "logIn") {
+      if (email.value !== "" && secret.value !== "") {
+        const {
+          data: { confirmSecret: token },
+        } = await confirmSecretMutation();
+        if (token !== "" && token !== undefined) {
+          localLogInMutation({ variables: { token } });
+          window.location = "/";
+        } else {
+          throw Error();
+        }
+      } else {
+        toast.error("Please enter all the required fields.")
+        return;
+      }
+    } else if (action === "getEmail") {
       if (email.value !== "") {
         try {
           const {
@@ -93,24 +117,29 @@ export default () => {
           } else if (!requestSecret) {
             toast.error("The username you entered doesn't belong to an account. Please check your username and try again.");
           } else {
-            toast.info("Check your inbox for your login passcode. If not inbox, check spam/junk as well.");
+            toast.info("Check your inbox for your password. If not in inbox, check spam.");
             setAction("confirm");
           }
         } catch {
-          toast.error("Can't request passcode, please try again");
+          toast.error("Cannot request password, please try again");
         }
       } else {
         toast.error("Email field is required.");
+        return;
       }
     } else if (action === "signUp") {
       if (username.value.includes(" ")) {
         toast.error("Username cannot include any spaces.")
         return;
       }
+      if (secret.value.length < 5) {
+        toast.error("Create a password at least 5 characters long.");
+        return;
+      }
       if (
         email.value !== "" &&
-        username.value !== ""
-        // && name.value !== ""
+        username.value !== "" && 
+        secret.value !== ""
       ) {
         try {
           const {
@@ -119,8 +148,15 @@ export default () => {
           if (!createAccount) {
             toast.error("Cannot create account, please try again");
           } else {
-            toast.info("Your account has been created! Log in now.");
-            setTimeout(() => setAction("logIn"), 2500);
+            const {
+              data: { confirmSecret: token },
+            } = await confirmSecretMutation();
+            if (token !== "" && token !== undefined) {
+              localLogInMutation({ variables: { token } });
+              window.location = "/";
+            } else {
+              throw Error();
+            }
           }
         } catch (e) {
           toast.error(e.message.split(' ').slice(2).join(' '));
@@ -141,7 +177,8 @@ export default () => {
             throw Error();
           }
         } catch {
-          toast.error("Incorrect passcode, please try again.");
+          toast.error("Incorrect password, please try again.");
+          return;
         }
       }
     }
@@ -162,6 +199,7 @@ export default () => {
       onDemo={onDemo}
       setLogin={setLogin}
       setSignup={setSignup}
+      setGetEmail={setGetEmail}
     />
   );
 };

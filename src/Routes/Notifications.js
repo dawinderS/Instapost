@@ -112,6 +112,9 @@ const EachCard = styled.div`
     border-radius: 50%;
     background-size: cover;
   }
+  #noborder {
+    border-radius: 0%;
+  }
   span {
     margin-left: 12px;
     align-items: center;
@@ -256,7 +259,7 @@ export default () => {
               </span>
             </span>
             <ImgLink to={`/p/${notif.post.id}`}>
-              <img width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
+              <img id="noborder" width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
             </ImgLink>
           </EachCard>
         );
@@ -276,7 +279,7 @@ export default () => {
               </span>
             </span>
             <ImgLink to={`/p/${notif.post.id}`}>
-              <img width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
+              <img id="noborder" width="36" height="36" src={notif.post.files[0].url} alt="avatar" />
             </ImgLink>
           </EachCard>
         );

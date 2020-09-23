@@ -26,6 +26,6 @@ export default createGlobalStyle`
     text-decoration:none;
   }
   input:focus{
-    outline:none;
+    outline: none;
   }
 `;
