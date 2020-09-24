@@ -2,6 +2,9 @@
 
 [Visit Instapost Now](https://instaapost.netlify.app/#/)
 
+
+ ![feed1](https://user-images.githubusercontent.com/58091313/94135393-41831000-fe18-11ea-9029-556568ff7026.png) &nbsp; &nbsp; ![feedM1](https://user-images.githubusercontent.com/58091313/94135400-434cd380-fe18-11ea-8ff8-7e25ac6501ff.png)
+
 Instapost is a single-page, responsive web application that offers a photo sharing and messaging social networking serivce where users can share photos with friends, explore photos from around the world, and privately message with other users in real time. It is created with GraphQL, React.js, and PostgreSQL with its responsive design and funtionality being inspired by the existing social networking platform, Instagram.
 
 More features will be added over time.
@@ -40,11 +43,11 @@ Instapost is built using:
 
 ## Features
 #### Functionality
-- Users can securely sign up, login, and logout
+- Users can securely sign up, login, logout, and receive password via email if they forget it
 - Users can upload posts containing photo(s), a caption, and a location (optional)
   - using Google Maps API to set location
   - using AWS S3 to store images
-- Users can privately message other users in real time via websockets
+- Users can privately message other users in real time
 - Users can search for a user or a post
 - Users can like/unlike and comment on posts
 - Users can follow/unfollow other users and edit their own profile
@@ -65,9 +68,8 @@ Instapost is built using:
 ### User auth
  - users are able to sign up, login, and logout
  - securely salt and hash users' temporary passcodes using passport-jwt
- - passwordless login --> user enters email and then receives a temporary, generated passcode in their email's inbox
-    - Once a passcode is used its usage will expire --> each login results in a different passcode
-    ##### Nodemailer and Sendgrid are used to manage emailing passcodes
+ - forgot password? User can enter their email or username and then receive their password in their email's inbox
+    ##### Nodemailer and Sendgrid are used to manage emailing passwords
     ```javascript
     const sendMail = email => {
       const options = {
@@ -80,12 +82,12 @@ Instapost is built using:
       return client.sendMail(email);
     };
 
-    export const sendSecretMail = (address, secret) => {
+    export const sendSecretMail = (address, password) => {
       const email = { 
-        from: "instapostadmin@g.com",
+        from: "instapost@g.com",
         to: address,
-        subject: "Login passcode for Instapost",
-        html: `Hello user, your login passcode is <b>${secret}</b>. <br>Copy paste it on the app to log in!`
+        subject: "Your password for Instapost",
+        html: `Hello user, your password is <b>${password}</b>. <br>Copy paste it on the app to log in!`
       }
       return sendMail(email);
     }
@@ -94,7 +96,9 @@ Instapost is built using:
     ```
  
 ### Feed
-- displays your friends' posts as well as your own
+- displays posts of user & users they are following
+  - oredered by latest posts to oldest
+- see pictures posted above for design layout of feed
 
 ### Direct Messaging
 - users can send messages to one another in a private chat room
@@ -151,14 +155,19 @@ Instapost is built using:
     cache: new InMemoryCache(),
   });
   ```
+  #### Design allows chat box to display messages from bottom up
+  ![dms1](https://user-images.githubusercontent.com/58091313/94136231-79d71e00-fe19-11ea-950f-5c2305bc7b43.png) &nbsp; &nbsp; ![dmsM1](https://user-images.githubusercontent.com/58091313/94136237-7ba0e180-fe19-11ea-9e13-ffcba74f833e.png)
 
 ### Explore
-- displays popular posts of users you are not following and posts of friends you have not yet liked
+- displays popular posts of unfollowed users and feed posts user has not yet liked
+  ![explore1](https://user-images.githubusercontent.com/58091313/94139046-de947780-fe1d-11ea-9fc1-bebea3634545.png) &nbsp; &nbsp; ![exploreM1](https://user-images.githubusercontent.com/58091313/94139054-e0f6d180-fe1d-11ea-978f-ba22211e8bdb.png)
 
 ### Search
 - users can search for user or post
-- as user types, the search query updates and returns a new object containing all the possible outcomes
-  ##### Using url location to determine search value
+  - search for user by username or name
+  - search for post by location or caption
+- as user types, the search query updates and returns a new object containing all the results
+  ##### Using url location to determine search value &nbsp; &nbsp; 
   ```javascript
   const onSearchSubmit = e => {
     e.preventDefault();
@@ -175,25 +184,41 @@ Instapost is built using:
     return <SearchPresenter history={history} searchTerm={term} loading={loading} data={data} />;
   });
   ```
+  ##### Search design renders users followed by posts
+  ![search1](https://user-images.githubusercontent.com/58091313/94139970-6929a680-fe1f-11ea-8a1f-918dcb3ada06.png) &nbsp; &nbsp; ![searchM1](https://user-images.githubusercontent.com/58091313/94139976-6b8c0080-fe1f-11ea-9d11-9b14ffd55539.png)
 
 ### Upload and Edit Post
-- uploaded post will contain photos, a caption, and an optional location
+- user selects photo and then adds a caption and optional location
+  - Google Maps API is used for location search
+  - each photo is stored in AWS S3
 - size of image is adjusted to best reflect the current design
-- users can delete their post or edit their posts' caption/location
+- users can delete their posts and edit their posts' caption or location
 
 ### User Profile
 - contains user info such as username, name, bio, posts, followers, following, etc
-- users can edit their profile
-- users can view other users' posts in either multi-view or single view
+- profile posts can be seen in either multi-view or single view
+
+  ![profile1](https://user-images.githubusercontent.com/58091313/94140227-c6255c80-fe1f-11ea-9025-092d8959eeb4.png) &nbsp; &nbsp; ![profileM1](https://user-images.githubusercontent.com/58091313/94140235-c7ef2000-fe1f-11ea-983b-81ef1163ab0a.png)
+
+#### Edit Profile
+  - users can edit their profile picture, password, name, username, bio, email, etc.
 
 ### Notifications and Suggested
 - Notifications
-  - displays notifications of recent users following you or liking/commenting on one of your posts
+  - displays notifications of user's new followers and of likes/coments made on user's posts
 - Suggested
-  - displays users suggested for you to follow
+  - displays other users suggested for user to follow
+
+  ![notifs1](https://user-images.githubusercontent.com/58091313/94140839-ba866580-fe20-11ea-9407-003ae3225a9d.png) &nbsp; &nbsp; &nbsp; &nbsp; ![suggestions1](https://user-images.githubusercontent.com/58091313/94140842-bce8bf80-fe20-11ea-9509-2b83316e408e.png)
 
 ### Full Post Show
 - to not overcrowd pages, if a post has more than 3 comments you can only see all of them at a full post show
+
+#### Functionality of each post
+- can click on options svg in post header to edit or delete post if post belongs to you
+- can like post by double clicking on photo or clicking on heart svg 
+- can click on number of likes to view modal of all users who have liked the post
+- can add message to post by pressing enter of clicking post
 
 ## Status and Future Plans
 Some features I am currently working on and would like to add in the future are
