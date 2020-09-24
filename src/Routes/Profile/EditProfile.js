@@ -403,6 +403,9 @@ const ModalWrapper = styled.div`
     input {
       width: 80%;
       margin-bottom: 5px;
+      @media screen and (max-width: 770px) {
+        border: 1px solid #dbdbdb;
+      }
     }
   }
 `;

@@ -1087,7 +1087,7 @@ export default ({
           {selfComments.map((comment) => (
             <Comment key={comment.id}>
               <Link to={`/${comment.user.username}`}>
-                <Avatar url={user.avatar} size="sm" />
+                <Avatar url={comment.user.avatar} size="sm" />
               </Link>
               <AllText>
                 <span id="topspan">
