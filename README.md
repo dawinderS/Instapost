@@ -2,10 +2,11 @@
 
 [Visit Instapost Now](https://instaapost.netlify.app/#/)
 
+[See Repo for Instapost Backend](https://github.com/dawinderS/instapost-backend)
 
  ![feed1](https://user-images.githubusercontent.com/58091313/94135393-41831000-fe18-11ea-9029-556568ff7026.png) &nbsp; &nbsp; ![feedM1](https://user-images.githubusercontent.com/58091313/94135400-434cd380-fe18-11ea-8ff8-7e25ac6501ff.png)
 
-Instapost is a single-page, responsive web application that offers a photo sharing and messaging social networking serivce where users can share photos with friends, explore photos from around the world, and privately message with other users in real time. It is created with GraphQL, React.js, and PostgreSQL with its responsive design and funtionality being inspired by the existing social networking platform, Instagram.
+Instapost is a single-page, responsive web application that serves as a photo sharing and messaging social networking platform where users can share photos with friends, explore photos from around the world, and privately message with other users in real time. It is created with GraphQL, React.js, and PostgreSQL, with its responsive design and functionality being inspired by the existing social networking platform, Instagram.
 
 More features will be added over time.
 
@@ -29,17 +30,21 @@ More features will be added over time.
 
 ## Technologies Used
 Instapost is built using:
-- GraphQL
-- React.js
-- Node.js/Express
-- AWS S3
-- Google Maps API
+### Backend
 - PostgreSQL
-- Apollo Client & Subscriptions (WebSockets)
+- AWS S3
+- Express.js
 - Prisma Server
 - Nodemailer
-- HTML5 & CSS3
 - Heroku
+### Frontend
+- GraphQL
+- React
+- Node.js
+- Google Maps API
+- Apollo Client & Subscriptions (WebSockets)
+- HTML5 & CSS3
+- Netlify
 
 ## Features
 #### Functionality
@@ -97,13 +102,17 @@ Instapost is built using:
  
 ### Feed
 - displays posts of user & users they are following
-  - oredered by latest posts to oldest
+  - ordered by latest posts to oldest
 - see pictures posted above for design layout of feed
 
 ### Direct Messaging
 - users can send messages to one another in a private chat room
 - either user can delete the chat room
 - messages are sent in real time using Apollo Subscriptions (WebSockets)
+
+#### Design allows chat box to display messages from bottom up
+![dms1](https://user-images.githubusercontent.com/58091313/94136231-79d71e00-fe19-11ea-950f-5c2305bc7b43.png) &nbsp; &nbsp; ![dmsM1](https://user-images.githubusercontent.com/58091313/94136237-7ba0e180-fe19-11ea-9e13-ffcba74f833e.png)
+  
   #### Setting GraphQL Subscription for New Message in Backend
   ```javascript
   export default {
@@ -126,7 +135,7 @@ Instapost is built using:
   ```
   #### Determining whether Apollo Client will use HTTP Link or WebSocket Link on Frontend
   - using Apollo GraphQL, if the page requires a QUERY to fetch data or a MUTATION to change data, a HTTP link will be used
-  - if the page requires a SUBSCRIPTION to create steady connection to clients (i.e. realtime messaging between users), a WS (WebSocket) link will be used
+  - if the page requires a SUBSCRIPTION to create steady connection to clients (i.e. real time messaging between users), a WS (WebSocket) link will be used
   
   ```javascript
   const httpLink = new HttpLink({
@@ -155,19 +164,18 @@ Instapost is built using:
     cache: new InMemoryCache(),
   });
   ```
-  #### Design allows chat box to display messages from bottom up
-  ![dms1](https://user-images.githubusercontent.com/58091313/94136231-79d71e00-fe19-11ea-950f-5c2305bc7b43.png) &nbsp; &nbsp; ![dmsM1](https://user-images.githubusercontent.com/58091313/94136237-7ba0e180-fe19-11ea-9e13-ffcba74f833e.png)
-
+  
 ### Explore
 - displays popular posts of unfollowed users and feed posts user has not yet liked
-  ![explore1](https://user-images.githubusercontent.com/58091313/94139046-de947780-fe1d-11ea-9fc1-bebea3634545.png) &nbsp; &nbsp; ![exploreM1](https://user-images.githubusercontent.com/58091313/94139054-e0f6d180-fe1d-11ea-978f-ba22211e8bdb.png)
+
+![explore1](https://user-images.githubusercontent.com/58091313/94139046-de947780-fe1d-11ea-9fc1-bebea3634545.png) &nbsp; &nbsp; ![exploreM1](https://user-images.githubusercontent.com/58091313/94139054-e0f6d180-fe1d-11ea-978f-ba22211e8bdb.png)
 
 ### Search
 - users can search for user or post
   - search for user by username or name
   - search for post by location or caption
 - as user types, the search query updates and returns a new object containing all the results
-  ##### Using url location to determine search value &nbsp; &nbsp; 
+  ##### Using url location to determine search value
   ```javascript
   const onSearchSubmit = e => {
     e.preventDefault();
@@ -185,7 +193,7 @@ Instapost is built using:
   });
   ```
   ##### Search design renders users followed by posts
-  ![search1](https://user-images.githubusercontent.com/58091313/94139970-6929a680-fe1f-11ea-8a1f-918dcb3ada06.png) &nbsp; &nbsp; ![searchM1](https://user-images.githubusercontent.com/58091313/94139976-6b8c0080-fe1f-11ea-9d11-9b14ffd55539.png)
+![search1](https://user-images.githubusercontent.com/58091313/94139970-6929a680-fe1f-11ea-8a1f-918dcb3ada06.png) &nbsp; &nbsp; ![searchM1](https://user-images.githubusercontent.com/58091313/94139976-6b8c0080-fe1f-11ea-9d11-9b14ffd55539.png)
 
 ### Upload and Edit Post
 - user selects photo and then adds a caption and optional location
@@ -198,7 +206,7 @@ Instapost is built using:
 - contains user info such as username, name, bio, posts, followers, following, etc
 - profile posts can be seen in either multi-view or single view
 
-  ![profile1](https://user-images.githubusercontent.com/58091313/94140227-c6255c80-fe1f-11ea-9025-092d8959eeb4.png) &nbsp; &nbsp; ![profileM1](https://user-images.githubusercontent.com/58091313/94140235-c7ef2000-fe1f-11ea-983b-81ef1163ab0a.png)
+![profile1](https://user-images.githubusercontent.com/58091313/94140227-c6255c80-fe1f-11ea-9025-092d8959eeb4.png) &nbsp; &nbsp; ![profileM1](https://user-images.githubusercontent.com/58091313/94140235-c7ef2000-fe1f-11ea-983b-81ef1163ab0a.png)
 
 #### Edit Profile
   - users can edit their profile picture, password, name, username, bio, email, etc.
@@ -209,7 +217,7 @@ Instapost is built using:
 - Suggested
   - displays other users suggested for user to follow
 
-  ![notifs1](https://user-images.githubusercontent.com/58091313/94140839-ba866580-fe20-11ea-9407-003ae3225a9d.png) &nbsp; &nbsp; &nbsp; &nbsp; ![suggestions1](https://user-images.githubusercontent.com/58091313/94140842-bce8bf80-fe20-11ea-9509-2b83316e408e.png)
+![notifs1](https://user-images.githubusercontent.com/58091313/94140839-ba866580-fe20-11ea-9407-003ae3225a9d.png) &nbsp; &nbsp; &nbsp; &nbsp; ![suggestions1](https://user-images.githubusercontent.com/58091313/94140842-bce8bf80-fe20-11ea-9509-2b83316e408e.png)
 
 ### Full Post Show
 - to not overcrowd pages, if a post has more than 3 comments you can only see all of them at a full post show
