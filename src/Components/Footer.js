@@ -10,8 +10,9 @@ const Footer = styled.footer`
   text-transform: uppercase;
   font-weight: 600;
   font-size: 12px;
-  margin: 50px 0px;
-  margin-top: auto;
+  /* margin: 50px 0px;
+  margin-top: auto; */
+  margin-top: 30px;
   @media screen and (max-width: 770px) {
     margin: 20px 0px;
   }
@@ -62,7 +63,7 @@ export default () => (
             href="https://www.dawindersingh.com/"
             target="_blank"
           >
-            about dev
+            portfolio
           </Link>
         </ListItem>
         <ListItem>

@@ -4,15 +4,29 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { DemoUser } from "../../Components/Icons";
+import Footer from "../../Components/Footer";
 
 const Wrapper = styled.div`
-  min-height: 76vh;
+  min-height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  #authpic {
+    height: 600px;
+    margin-right: 25px;
+  }
   @media screen and (max-width: 770px) {
     min-height: 65vh;
+    /* background-color: #fafafa; */
+    #authpic {
+      display: none;
+    }
+  }
+`;
+
+const Wrapper2 = styled.div`
+  @media screen and (min-width: 770px) {
+    margin-top: 15px;
   }
 `;
 
@@ -146,119 +160,123 @@ export default ({
   setGetEmail,
 }) => (
   <Wrapper>
-    <Form>
-      {action === "logIn" && (
-        <>
-          <Helmet>
-            <title>Login • Instapost</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Enter your credentials to login.</Text>
-            <Input placeholder={"Username or email"} {...email} />
-            <Input type="password" placeholder={"Password"} {...secret} />
-            <Button text={"Log In"} />
-            <p id="temppassword" onClick={setGetEmail}>
-              Forgot password?
-            </p>
-          </form>
-          <Or>
-            <OrLine></OrLine>
-            <div>OR</div>
-            <OrLine></OrLine>
-          </Or>
-          <DemoLog onClick={onDemo}>
-            {demoLog === false && (
+    <img src="feedM.png" alt="authpic" id="authpic" />
+    <Wrapper2>
+      <Form>
+        {action === "logIn" && (
+          <>
+            <Helmet>
+              <title>Login • Instapost</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <img src="instalogo.png" width="180" alt="instalogo" />
+              <Text>Enter your credentials to login.</Text>
+              <Input placeholder={"Username or email"} {...email} />
+              <Input type="password" placeholder={"Password"} {...secret} />
+              <Button text={"Log In"} />
+              <p id="temppassword" onClick={setGetEmail}>
+                Forgot password?
+              </p>
+            </form>
+            <Or>
+              <OrLine></OrLine>
+              <div>OR</div>
+              <OrLine></OrLine>
+            </Or>
+            <DemoLog onClick={onDemo}>
+              {demoLog === false && (
+                <>
+                  <DemoUser />
+                  <span>Log in as Demo User</span>
+                </>
+              )}
+              {demoLog === true && <span>Loading... Please wait</span>}
+            </DemoLog>
+          </>
+        )}
+        {action === "getEmail" && (
+          <>
+            <Helmet>
+              <title>Email Password • Instapost</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <img src="instalogo.png" width="180" alt="instalogo" />
+              <Text>
+                Enter your username or email and we'll email you your password.
+              </Text>
+              <Input placeholder={"Username or email"} {...email} />
+              <Button text={"Send Password"} />
+            </form>
+            <Or>
+              <OrLine></OrLine>
+              <div>OR</div>
+              <OrLine></OrLine>
+            </Or>
+            <DemoLog onClick={setSignup}>
               <>
                 <DemoUser />
-                <span>Log in as Demo User</span>
+                <span>Create New Account</span>
               </>
-            )}
-            {demoLog === true && <span>Loading... Please wait</span>}
-          </DemoLog>
-        </>
-      )}
-      {action === "getEmail" && (
-        <>
-          <Helmet>
-            <title>Email Password • Instapost</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>
-              Enter your username or email and we'll email you your password.
-            </Text>
-            <Input placeholder={"Username or email"} {...email} />
-            <Button text={"Send Password"} />
-          </form>
-          <Or>
-            <OrLine></OrLine>
-            <div>OR</div>
-            <OrLine></OrLine>
-          </Or>
-          <DemoLog onClick={setSignup}>
-            <>
-              <DemoUser />
-              <span>Create New Account</span>
-            </>
-          </DemoLog>
-        </>
-      )}
-      {action === "signUp" && (
-        <>
-          <Helmet>
-            <title>Sign up • Instapost</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Sign up to see photos from your friends and others.</Text>
-            <Input placeholder={"Email"} {...email} type="email" />
-            <Input placeholder={"Full Name"} {...name} />
-            <Input placeholder={"Username"} {...username} />
-            <Input type="password" placeholder={"Password"} {...secret} />
-            <Button text={"Sign up"} />
-            <p>
-              By signing up, you agree to contact me for{" "}
-              <span>future job opportunities</span> :)
-            </p>
-          </form>
-        </>
-      )}
-      {action === "confirm" && (
-        <>
-          <Helmet>
-            <title>Confirm login • Instapost</title>
-          </Helmet>
-          <form onSubmit={onSubmit}>
-            <img src="instalogo.png" width="180" alt="instalogo" />
-            <Text>Please enter the password we have emailed you.</Text>
-            <Input placeholder="Enter your password" required {...secret} />
-            <Button text={"Confirm to log in"} />
-          </form>
-        </>
-      )}
-    </Form>
-    <StateChanger>
-      {action === "logIn" && (
-        <>
-          Don't have an account? <Link onClick={setSignup}>Sign up</Link>
-        </>
-      )}
-      {action === "signUp" && (
-        <>
-          Have an account? <Link onClick={setLogin}>Log in</Link>
-        </>
-      )}
-      {action === "getEmail" && (
-        <>
-          Return back to log in? <Link onClick={setLogin}>Log in</Link>
-        </>
-      )}
-      {action === "confirm" && (
-        <>
-          Return back to log in? <Link onClick={setLogin}>Log in</Link>
-        </>
-      )}
-    </StateChanger>
+            </DemoLog>
+          </>
+        )}
+        {action === "signUp" && (
+          <>
+            <Helmet>
+              <title>Sign up • Instapost</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <img src="instalogo.png" width="180" alt="instalogo" />
+              <Text>Sign up to see photos from your friends and others.</Text>
+              <Input placeholder={"Email"} {...email} type="email" />
+              <Input placeholder={"Full Name"} {...name} />
+              <Input placeholder={"Username"} {...username} />
+              <Input type="password" placeholder={"Password"} {...secret} />
+              <Button text={"Sign up"} />
+              <p>
+                By signing up, you agree to contact me for{" "}
+                <span>future job opportunities</span> :)
+              </p>
+            </form>
+          </>
+        )}
+        {action === "confirm" && (
+          <>
+            <Helmet>
+              <title>Confirm login • Instapost</title>
+            </Helmet>
+            <form onSubmit={onSubmit}>
+              <img src="instalogo.png" width="180" alt="instalogo" />
+              <Text>Please enter the password we have emailed you.</Text>
+              <Input placeholder="Enter your password" required {...secret} />
+              <Button text={"Confirm to log in"} />
+            </form>
+          </>
+        )}
+      </Form>
+      <StateChanger>
+        {action === "logIn" && (
+          <>
+            Don't have an account? <Link onClick={setSignup}>Sign up</Link>
+          </>
+        )}
+        {action === "signUp" && (
+          <>
+            Have an account? <Link onClick={setLogin}>Log in</Link>
+          </>
+        )}
+        {action === "getEmail" && (
+          <>
+            Return back to log in? <Link onClick={setLogin}>Log in</Link>
+          </>
+        )}
+        {action === "confirm" && (
+          <>
+            Return back to log in? <Link onClick={setLogin}>Log in</Link>
+          </>
+        )}
+      </StateChanger>
+      <Footer />
+    </Wrapper2>
   </Wrapper>
 );
