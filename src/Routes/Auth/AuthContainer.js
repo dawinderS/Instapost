@@ -93,14 +93,19 @@ export default () => {
     e.preventDefault();
     if (action === "logIn") {
       if (email.value !== "" && secret.value !== "") {
-        const {
-          data: { confirmSecret: token },
-        } = await confirmSecretMutation();
-        if (token !== "" && token !== undefined) {
-          localLogInMutation({ variables: { token } });
-          window.location = "/";
-        } else {
-          throw Error();
+        try {
+          const {
+            data: { confirmSecret: token },
+          } = await confirmSecretMutation();
+          if (token !== "" && token !== undefined) {
+            localLogInMutation({ variables: { token } });
+            window.location = "/";
+          } else {
+            toast.error("Incorrect email/password combination.");
+            throw Error();
+          }
+        } catch (e) {
+          toast.error(e.message.split(' ').slice(2).join(' '));
         }
       } else {
         toast.error("Please enter all the required fields.")
