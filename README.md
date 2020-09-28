@@ -1,10 +1,12 @@
 # Instapost
 
-[Visit Instapost Now](https://instaapost.netlify.app/#/)
+#### [Visit Instapost Now](https://instaapost.netlify.app/#/)
 
 [See Repo for Instapost Backend](https://github.com/dawinderS/instapost-backend)
 
- ![feed1](https://user-images.githubusercontent.com/58091313/94135393-41831000-fe18-11ea-9029-556568ff7026.png) &nbsp; &nbsp; ![feedM1](https://user-images.githubusercontent.com/58091313/94135400-434cd380-fe18-11ea-8ff8-7e25ac6501ff.png)
+![feedfull](https://user-images.githubusercontent.com/58091313/94362833-d08b6480-0072-11eb-97d4-39717c97d41c.png)
+
+![feedM2](https://user-images.githubusercontent.com/58091313/94362666-d59be400-0071-11eb-8f7e-b71952b33da9.png) &nbsp; &nbsp; ![exploreM2](https://user-images.githubusercontent.com/58091313/94362669-d896d480-0071-11eb-957a-7d432ad51c1d.png) &nbsp; &nbsp; ![dmsM2](https://user-images.githubusercontent.com/58091313/94362670-dc2a5b80-0071-11eb-86cc-3dba91bbf7d5.png)
 
 Instapost is a single-page, responsive web application that serves as a photo sharing and messaging social networking platform where users can share photos with friends, explore photos from around the world, and privately message with other users in real time. It is created with GraphQL, React.js, and PostgreSQL, with its responsive design and functionality being inspired by the existing social networking platform, Instagram.
 
