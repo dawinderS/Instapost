@@ -62,7 +62,7 @@ export default () => (
             href="https://www.dawindersingh.com/"
             target="_blank"
           >
-            about dev
+            portfolio
           </Link>
         </ListItem>
         <ListItem>

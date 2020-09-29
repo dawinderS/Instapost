@@ -182,6 +182,25 @@ const FooterLinks = styled.div`
   margin-top: 15px;
 `;
 
+const LoaderHolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  h2 {
+    width: 70%;
+    margin-top: 30px;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    font-weight: 500;
+    color: #8e8e8e;
+    @media screen and (max-width: 770px) {
+      width: 90%;
+      font-size: 18px;
+    }
+  }
+`;
+
 export default withRouter(({ history }) => {
   const { data, loading } = useQuery(FEED_QUERY);
   const me = useQuery(ME);
@@ -193,7 +212,15 @@ export default withRouter(({ history }) => {
       <Helmet>
         <title>Instapost</title>
       </Helmet>
-      {loading && <Loader />}
+      {loading &&
+        <LoaderHolder>
+          <Loader />
+          <h2>Sorry if initial loading takes a few seconds, I am using free Heroku dynos.
+            (May take 6-8 seconds to wake up backend!)
+          </h2>
+        </LoaderHolder>
+      }
+
       <MinHeader>
         <div></div>
         <MinLink to="/" replace>
