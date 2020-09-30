@@ -90,7 +90,7 @@ const Form = styled(Box)`
     #temppassword {
       color: #385185;
       margin: 15px 0px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       cursor: pointer;
     }
@@ -186,8 +186,8 @@ export default ({
             <DemoLog onClick={onDemo}>
               {demoLog === false && (
                 <>
-                  <DemoUser />
-                  <span>Log in as Demo User</span>
+                  <DemoUser size={22} />
+                  <span id="demologin">Log in as Demo User</span>
                 </>
               )}
               {demoLog === true && <span>Loading... Please wait</span>}

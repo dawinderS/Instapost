@@ -124,11 +124,11 @@ export const CommentFull = ({ size = 24 }) => (
   </svg>
 );
 
-export const DemoUser = ({ size = 24 }) => (
+export const DemoUser = ({ size = 20 }) => (
   <svg 
     xmlns="http://www.w3.org/2000/svg" 
-    width="20" 
-    height="20"
+    width={size} 
+    height={size}
     fill="#385185"
     viewBox="0 0 24 24"
   >
