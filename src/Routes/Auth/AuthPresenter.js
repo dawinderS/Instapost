@@ -5,6 +5,7 @@ import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import { DemoUser } from "../../Components/Icons";
 import Footer from "../../Components/Footer";
+import LoginLoader from "../../Components/LoginLoader";
 
 const Wrapper = styled.div`
   min-height: 70vh;
@@ -190,7 +191,7 @@ export default ({
                   <span id="demologin">Log in as Demo User</span>
                 </>
               )}
-              {demoLog === true && <span>Loading... Please wait</span>}
+              {demoLog === true && <LoginLoader />}
             </DemoLog>
           </>
         )}
