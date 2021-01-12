@@ -33,16 +33,16 @@ More features will be added over time.
 ## Technologies Used
 Instapost is built using:
 ### Backend
+- Node.js
+- Express.js
 - PostgreSQL
 - AWS S3
-- Express.js
 - Prisma Server
 - Nodemailer
 - Heroku
 ### Frontend
 - GraphQL
 - React
-- Node.js
 - Google Maps API
 - Apollo Client & Subscriptions (WebSockets)
 - HTML5 & CSS3
